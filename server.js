@@ -3,17 +3,18 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
 const PORT = 3000;
+require('dotenv').config();
 
 app.use(cors({
   origin: 'http://localhost:5173', // allow frontend dev server
   methods: ['GET', 'POST'],
   credentials: true
 }));
-
+'REDACTED_MONGO_URI'
 // ✅ Middleware to parse JSON
 app.use(express.json());
 
-mongoose.connect('REDACTED_MONGO_URI')
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('Connected to MongoDB Atlas'))
 .catch((err) => console.error('MongoDB connection error:', err));
 
