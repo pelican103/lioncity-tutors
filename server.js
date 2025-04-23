@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 require('dotenv').config();
 
 app.use(cors({
@@ -10,7 +10,7 @@ app.use(cors({
   methods: ['GET', 'POST'],
   credentials: true
 }));
-'REDACTED_MONGO_URI'
+
 // ✅ Middleware to parse JSON
 app.use(express.json());
 
