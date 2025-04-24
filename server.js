@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 });
 
 // Contact form endpoint
-app.post('/api/contact', (req, res) => {
+app.post('/api/requestfortutor', (req, res) => {
   const { name, email, message } = req.body;
   
   // Log received data
