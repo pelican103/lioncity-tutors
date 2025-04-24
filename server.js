@@ -18,6 +18,26 @@ mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('Connected to MongoDB Atlas'))
 .catch((err) => console.error('MongoDB connection error:', err));
 
+const tutorSchema = new mongoose.Schema({
+  fullName: String,
+  contactNumber: String,
+  email: String,
+  dob: {
+    day: String,
+    month: String,
+    year: String
+  },
+  gender: String,
+  age: String,
+  nationality: String,
+  nationalityOther: String,
+  race: String,
+  nricLast4: String
+}, { timestamps: true });
+
+const Tutor = mongoose.model('Tutor', tutorSchema);
+
+
 const contactSchema = new mongoose.Schema({
   name: String,
   email: String,
@@ -61,6 +81,18 @@ app.post('/api/requestfortutor', (req, res) => {
     message: 'Form submitted successfully' 
   });
 });
+
+app.post('/api/registerfortutor', async (req, res) => {
+  try {
+    const newTutor = new Tutor(req.body);
+    await newTutor.save();
+    res.status(200).json({ message: 'Tutor registration saved successfully!' });
+  } catch (err) {
+    console.error('Failed to save tutor registration:', err);
+    res.status(500).json({ error: 'Failed to register tutor.' });
+  }
+});
+
 
 // Start server
 app.listen(PORT, () => {
