@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 require('dotenv').config();
 
 app.use(cors({
-  origin: 'http://localhost:5173', // allow frontend dev server
+  origin: ['http://localhost:5173', 'http://www.lioncitytutors.com', 'http://www.lioncitytutors.com'], // allow frontend dev server
   methods: ['GET', 'POST'],
   credentials: true
 }));
