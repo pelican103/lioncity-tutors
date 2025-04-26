@@ -159,24 +159,30 @@ app.get('/', (req, res) => {
 });
 
 // Contact form endpoint
-app.post('/api/requestfortutor', (req, res) => {
+app.post('/api/requestfortutor', async (req, res) => {
   const { name, email, message } = req.body;
-  
-  // Log received data
-  console.log('Form submission received:');
-  console.log('Name:', name);
-  console.log('Email:', email);
-  console.log('Message:', message);
-  
-  // In a real application, you would save this to a database
-  // or forward it via email
-  
-  // Send success response
-  res.status(200).json({ 
-    success: true, 
-    message: 'Form submitted successfully' 
-  });
+
+  try {
+    const newContact = new Contact({ name, email, message });
+    await newContact.save();
+    console.log('Form submission received and saved:');
+    console.log('Name:', name);
+    console.log('Email:', email);
+    console.log('Message:', message);
+
+    res.status(200).json({ 
+      success: true, 
+      message: 'Form submitted and saved successfully' 
+    });
+  } catch (err) {
+    console.error('Error saving contact:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to save contact information' 
+    });
+  }
 });
+
 
 app.post('/api/registerfortutor', async (req, res) => {
   try {
