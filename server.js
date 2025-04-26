@@ -133,25 +133,16 @@ const tutorSchema = new mongoose.Schema({
 
 const Tutor = mongoose.model('Tutor', tutorSchema);
 
-
 const contactSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  message: String,
-});
+  name: { type: String, required: true },
+  mobile: { type: String, required: true },
+  level: { type: String, required: true },
+  preferredTime: { type: String, required: true },
+  preferences: { type: String, required: true },
+}, { timestamps: true }); // timestamps will auto add createdAt and updatedAt fields
+
 
 const Contact = mongoose.model('Contact', contactSchema);
-
-app.post('/api/contact', async (req, res) => {
-  try {
-    const newContact = new Contact(req.body);
-    await newContact.save();
-    res.status(200).json({ message: 'Saved to database!' });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to save to database' });
-  }
-});
-
 
 // Root route
 app.get('/', (req, res) => {
@@ -160,26 +151,13 @@ app.get('/', (req, res) => {
 
 // Contact form endpoint
 app.post('/api/requestfortutor', async (req, res) => {
-  const { name, email, message } = req.body;
-
   try {
-    const newContact = new Contact({ name, email, message });
+    const newContact = new Contact(req.body);
     await newContact.save();
-    console.log('Form submission received and saved:');
-    console.log('Name:', name);
-    console.log('Email:', email);
-    console.log('Message:', message);
-
-    res.status(200).json({ 
-      success: true, 
-      message: 'Form submitted and saved successfully' 
-    });
+    res.status(200).json({ success: true, message: 'Form submitted and saved successfully!' });
   } catch (err) {
-    console.error('Error saving contact:', err);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Failed to save contact information' 
-    });
+    console.error('Error saving form:', err);
+    res.status(500).json({ success: false, error: 'Failed to save form submission.' });
   }
 });
 
