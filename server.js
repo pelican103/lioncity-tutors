@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 require('dotenv').config();
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://www.lioncitytutors.com', 'http://www.lioncitytutors.com'], // allow frontend dev server
+  origin: ['http://localhost:5173', 'https://www.lioncitytutors.com', 'http://www.lioncitytutors.com'], // allow frontend dev server
   methods: ['GET', 'POST'],
   credentials: true
 }));
@@ -189,6 +189,16 @@ app.post('/api/registerfortutor', async (req, res) => {
   }
 });
 
+if (process.env.NODE_ENV === 'production') {
+  const path = require('path');
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, 'my-tuition-site/dist'))); // Adjust path if needed
+  
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'my-tuition-site/dist', 'index.html'));
+  });
+}
 
 // Start server
 app.listen(PORT, () => {
