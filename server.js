@@ -138,7 +138,7 @@ const contactSchema = new mongoose.Schema({
   mobile: { type: String, required: true },
   level: { type: String, required: true },
   preferredTime: { type: String, required: true },
-  preferences: { type: String, required: true },
+  preferences: { type: String},
 }, { timestamps: true }); // timestamps will auto add createdAt and updatedAt fields
 
 
