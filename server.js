@@ -149,6 +149,10 @@ app.get('/', (req, res) => {
   res.send('Contact form API is running');
 });
 
+app.get("/keep-alive", (req, res) => {
+  res.status(200).send("Backend is awake");
+});
+
 // Contact form endpoint
 app.post('/api/requestfortutor', async (req, res) => {
   try {
