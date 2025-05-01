@@ -11,7 +11,6 @@ app.use(cors({
   credentials: true
 }));
 
-// ✅ Middleware to parse JSON
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI)
@@ -137,8 +136,33 @@ const contactSchema = new mongoose.Schema({
   name: { type: String, required: true },
   mobile: { type: String, required: true },
   level: { type: String, required: true },
-  preferredTime: { type: String},
-  preferences: { type: String},
+  school: { type: String },
+  
+  // Lesson details
+  lessonDuration: { type: String, default: "1.5 Hours" },
+  customDuration: { type: String },
+  lessonFrequency: { type: String, default: "1 Lesson/Week" },
+  customFrequency: { type: String },
+  preferredTime: { type: String },
+  
+  // Tutor preferences
+  tutorType: {
+    partTime: { type: Boolean, default: false },
+    fullTime: { type: Boolean, default: false },
+    moeTeacher: { type: Boolean, default: false }
+  },
+  
+  // Budget information
+  budget: {
+    marketRate: { type: Boolean, default: true },
+    custom: { type: Boolean, default: false },
+    customAmount: { type: String }
+  },
+  
+  // Additional preferences
+  genderPreference: { type: String, default: "No preference" },
+  bilingualRequired: { type: String, default: "No" },
+  preferences: { type: String }
 }, { timestamps: true }); // timestamps will auto add createdAt and updatedAt fields
 
 
