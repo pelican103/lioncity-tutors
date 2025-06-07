@@ -179,12 +179,11 @@ const Contact = mongoose.model('Contact', contactSchema);
 const testPaperLeadSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phone: { type: String, required: true },
-  source: { type: String, default: 'free-test-papers' },
-  downloadedPapers: [{
-    subject: String,
-    year: String,
-    level: String,
-    downloadedAt: Date
+  downloads: [{
+    subject: String,   
+    year: String,      
+    level: String,   
+    downloadedAt: { type: Date, default: Date.now }
   }]
 }, { timestamps: true });
 
@@ -226,12 +225,55 @@ app.post('/api/registerfortutor', async (req, res) => {
 // Test paper leads endpoint
 app.post('/api/test-paper-leads', async (req, res) => {
   try {
-    const newLead = new TestPaperLead(req.body);
-    await newLead.save();
-    res.status(200).json({ success: true, message: 'Lead captured successfully!' });
+    const { email, phone, subject, year, level } = req.body;
+    
+    // Find existing lead or create new one
+    let lead = await TestPaperLead.findOne({ email });
+    
+    if (lead) {
+      // Add new download to existing lead
+      lead.downloads.push({ subject, year, level });
+      await lead.save();
+    } else {
+      // Create new lead
+      lead = new TestPaperLead({
+        email,
+        phone,
+        downloads: [{ subject, year, level }]
+      });
+      await lead.save();
+    }
+    
+    res.status(200).json({ success: true, message: 'Download tracked successfully!' });
   } catch (err) {
-    console.error('Error saving test paper lead:', err);
-    res.status(500).json({ success: false, error: 'Failed to save lead.' });
+    console.error('Error tracking download:', err);
+    res.status(500).json({ success: false, error: 'Failed to track download.' });
+  }
+});
+
+app.get('/api/analytics/popular-papers', async (req, res) => {
+  try {
+    const leads = await TestPaperLead.find({});
+    
+    // Count downloads by subject, level, year
+    const analytics = {};
+    
+    leads.forEach(lead => {
+      lead.downloads.forEach(download => {
+        const key = `${download.level}-${download.subject}-${download.year}`;
+        analytics[key] = (analytics[key] || 0) + 1;
+      });
+    });
+    
+    // Sort by popularity
+    const sorted = Object.entries(analytics)
+      .map(([paper, count]) => ({ paper, count }))
+      .sort((a, b) => b.count - a.count);
+    
+    res.json(sorted);
+  } catch (err) {
+    console.error('Error getting analytics:', err);
+    res.status(500).json({ error: 'Failed to get analytics.' });
   }
 });
 
