@@ -6,8 +6,15 @@ const PORT = process.env.PORT || 3000;
 require('dotenv').config();
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://www.lioncitytutors.com', 'http://www.lioncitytutors.com'], // allow frontend dev server
-  methods: ['GET', 'POST'],
+  origin: [
+    'http://localhost:5173', 
+    'https://www.lioncitytutors.com',
+    'https://lioncitytutors.com',
+    'http://www.lioncitytutors.com',
+    'http://lioncitytutors.com'
+  ],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
   credentials: true
 }));
 
