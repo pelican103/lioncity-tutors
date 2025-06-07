@@ -168,6 +168,21 @@ const contactSchema = new mongoose.Schema({
 
 const Contact = mongoose.model('Contact', contactSchema);
 
+// New schema for test paper leads
+const testPaperLeadSchema = new mongoose.Schema({
+  email: { type: String, required: true },
+  phone: { type: String, required: true },
+  source: { type: String, default: 'free-test-papers' },
+  downloadedPapers: [{
+    subject: String,
+    year: String,
+    level: String,
+    downloadedAt: Date
+  }]
+}, { timestamps: true });
+
+const TestPaperLead = mongoose.model('TestPaperLead', testPaperLeadSchema);
+
 // Root route
 app.get('/', (req, res) => {
   res.send('Contact form API is running');
@@ -198,6 +213,18 @@ app.post('/api/registerfortutor', async (req, res) => {
   } catch (err) {
     console.error('Failed to save tutor registration:', err);
     res.status(500).json({ error: 'Failed to register tutor.' });
+  }
+});
+
+// Test paper leads endpoint
+app.post('/api/test-paper-leads', async (req, res) => {
+  try {
+    const newLead = new TestPaperLead(req.body);
+    await newLead.save();
+    res.status(200).json({ success: true, message: 'Lead captured successfully!' });
+  } catch (err) {
+    console.error('Error saving test paper lead:', err);
+    res.status(500).json({ success: false, error: 'Failed to save lead.' });
   }
 });
 
