@@ -144,6 +144,7 @@ const contactSchema = new mongoose.Schema({
   mobile: { type: String, required: true },
   level: { type: String, required: true },
   school: { type: String },
+  location: { type: String },
   
   // Lesson details
   lessonDuration: { type: String, default: "1.5 Hours" },
