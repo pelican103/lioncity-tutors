@@ -29,6 +29,7 @@ export default function RootLayout({ children }) {
       <body>
         <Toaster />
         <Navbar />
+        <link rel="icon" type="image/png" href="/favicon1.png" />
         <main>{children}</main>
         <Footer />
       </body>
