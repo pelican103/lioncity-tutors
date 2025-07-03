@@ -16,7 +16,7 @@ export const metadata = {
   openGraph: {
     title: 'O Level Preparation Guide 2025: Complete Study Strategy for Singapore Students | LionCity Tutors',
     description: 'Ultimate O Level preparation guide with proven strategies to help Singapore students achieve excellent grades across all GCE O Level subjects.',
-    url: 'https://www.lioncitytutors.com/blog/o-level-preparation-guide-2025',
+    url: 'https://www.lioncitytutors.com/blog/o-level-preparation-guide',
     type: 'article',
   },
 };

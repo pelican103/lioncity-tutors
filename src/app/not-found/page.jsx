@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Footer from '../Footer';
 
 export const metadata = {
   title: '404 Not Found | My Tuition Site',
