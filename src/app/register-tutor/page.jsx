@@ -252,7 +252,7 @@ export default function RegisterAsTutor() {
         {/* Telegram Assignments Section - ADDED AT TOP */}
         <div className="mb-12 bg-blue-50 p-8 rounded-xl shadow-md text-center">
           <h2 className="text-2xl font-bold text-blue-700 mb-4">View Available Assignments</h2>
-          <p className="font-medium mb-2">Fill-up the following form to start signing up for available assignments 🙂</p>
+          <p className="font-medium mb-2">Fill up the form below to start signing up for available assignments 🙂</p>
           <p className="mb-4">(Join our Telegram Group for full-listing & daily updates of assignments)</p>
           
           <a 
@@ -263,7 +263,7 @@ export default function RegisterAsTutor() {
           >
             <FaTelegram size={20} className="mr-2" /> Join Our Telegram Group
           </a>
-          <p className="text-sm mt-2 text-gray-600 italic">(Highly recommended to install)</p>
+          <p className="text-sm mt-2 text-gray-600 italic">(Don't forget to fill up the form below!)</p>
         </div>
         <h1 className="text-4xl font-extrabold text-center text-blue-700 mb-6">Register as a Tutor</h1>
         <p className="text-center text-gray-600 mb-8">Fill out the form below to register as a tutor with LionCity Tutors.</p>
