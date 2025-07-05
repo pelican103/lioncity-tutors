@@ -28,7 +28,7 @@ export default function PrivacyPolicy(){
 
                 Not shared with third parties without your consent
 
-                If you have any questions about how your data is used, please contact us at [your email].
+                If you have any questions about how your data is used, please contact us at admin@lioncitytutors.com.
                 </p>
             </div>
         </main>
