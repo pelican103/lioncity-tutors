@@ -1,5 +1,3 @@
-// src/app/api/meta-capi/route.js
-
 import crypto from 'crypto';
 
 export async function POST(req) {
@@ -33,9 +31,10 @@ export async function POST(req) {
         event_source_url: 'https://www.lioncitytutors.com/',
         user_data,
         action_source: 'website',
-        test_event_code: 'TEST31390'
+        
       },
     ],
+    test_event_code: 'TEST31390'
   };
 
   const url = `https://graph.facebook.com/v19.0/${process.env.META_PIXEL_ID}/events?access_token=${process.env.META_CAPI_TOKEN}`;
