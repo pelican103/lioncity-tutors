@@ -119,7 +119,8 @@ export default function RequestForTutor() {
             email: formData.email || '',
             firstName,
             lastName,
-            eventName: 'Lead'  
+            eventName: 'Lead',
+            test_event_code: 'TEST31390'
           })
         });
         setFormData(initialFormData);
