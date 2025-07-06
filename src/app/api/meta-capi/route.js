@@ -34,7 +34,6 @@ export async function POST(req) {
         
       },
     ],
-    test_event_code: 'TEST31390'
   };
 
   const url = `https://graph.facebook.com/v19.0/${process.env.META_PIXEL_ID}/events?access_token=${process.env.META_CAPI_TOKEN}`;

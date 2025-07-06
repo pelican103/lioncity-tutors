@@ -120,7 +120,6 @@ export default function RequestForTutor() {
             firstName,
             lastName,
             eventName: 'Lead',
-            test_event_code: 'TEST31390'
           })
         });
         setFormData(initialFormData);

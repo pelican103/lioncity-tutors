@@ -204,7 +204,6 @@ export default function RegisterAsTutor() {
           eventName: 'CompleteRegistration'
         })
       });
-      // Reset form after successful submission
       setFormData({
         // Reset all form fields to initial state
         fullName: '',
