@@ -188,7 +188,22 @@ export default function RegisterAsTutor() {
       });
 
       if (!response.ok) throw new Error(await response.text());
+      const [firstName, ...rest] = (formData.fullName || '').trim().split(' ');
+      const lastName = rest.join(' ');
 
+      await fetch('/api/meta-capi', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          phone: formData.contactNumber,
+          email: formData.email,
+          firstName,
+          lastName,
+          eventName: 'CompleteRegistration'
+        })
+      });
       // Reset form after successful submission
       setFormData({
         // Reset all form fields to initial state

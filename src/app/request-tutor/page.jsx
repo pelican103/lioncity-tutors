@@ -8,6 +8,7 @@ export default function RequestForTutor() {
   const initialFormData = {
     name: '',
     mobile: '',
+    email: '',
     level: '',
     school: '',
     location: '',
@@ -100,17 +101,35 @@ export default function RequestForTutor() {
         },
         body: JSON.stringify(formData)
       });
-
+    
       if (response.ok) {
         const result = await response.json();
         console.log('Submission successful:', result);
+    
+        const [firstName, ...rest] = (formData.name || '').trim().split(' ');
+        const lastName = rest.join(' ');
+    
+        await fetch('/api/meta-capi', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            phone: formData.mobile,
+            email: formData.email || '',
+            firstName,
+            lastName,
+            eventName: 'Lead'  
+          })
+        });
         setFormData(initialFormData);
         setStatus({ submitting: false, submitted: true, error: null });
       } else {
         const errorText = await response.text();
         throw new Error(errorText || 'Form submission failed');
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error submitting form:', error);
       setStatus({ submitting: false, submitted: false, error: error.message || 'Failed to submit the form. Please try again.' });
     }
@@ -192,6 +211,20 @@ export default function RequestForTutor() {
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="e.g. 91234567"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email<span className="text-red-500">*</span></label>
+                <input
+                  id="email"
+                  name="email"
+                  type="text"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g. name@gmail.com"
                 />
               </div>
 
