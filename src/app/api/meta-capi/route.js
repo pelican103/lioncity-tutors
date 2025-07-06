@@ -18,7 +18,7 @@ export async function POST(req) {
     ph: hash(phone),
     fn: hash(firstName),
     ln: hash(lastName),
-    country: 'sg',
+    country: hash('sg'),
     client_ip_address: ip,
     client_user_agent: userAgent,
   };
