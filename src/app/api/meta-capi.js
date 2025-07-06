@@ -36,6 +36,7 @@ export default async function handler(req, res) {
         event_source_url: req.headers.referer || 'https://www.lioncitytutors.com/',
         user_data,
         action_source: 'website',
+        test_event_code: 'TEST31390' 
       },
     ],
   };
