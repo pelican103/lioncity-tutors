@@ -1,14 +1,13 @@
+// src/app/api/meta-capi/route.js
+
 import crypto from 'crypto';
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Only POST requests allowed' });
-  }
+export async function POST(req) {
+  const body = await req.json();
+  const { email, phone, name = '', eventName = 'Lead' } = body;
 
-  const { email, phone, name = '', eventName = 'Lead' } = req.body;
-
-  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-  const userAgent = req.headers['user-agent'];
+  const ip = req.headers.get('x-forwarded-for') || '';
+  const userAgent = req.headers.get('user-agent') || '';
 
   const hash = (value) =>
     value ? crypto.createHash('sha256').update(value.trim().toLowerCase()).digest('hex') : undefined;
@@ -31,10 +30,10 @@ export default async function handler(req, res) {
       {
         event_name: eventName,
         event_time: Math.floor(Date.now() / 1000),
-        event_source_url: req.headers.referer || 'https://www.lioncitytutors.com/',
+        event_source_url: 'https://www.lioncitytutors.com/',
         user_data,
         action_source: 'website',
-        test_event_code: 'TEST31390' // for debugging
+        test_event_code: 'TEST31390'
       },
     ],
   };
@@ -54,13 +53,18 @@ export default async function handler(req, res) {
     console.log('Meta CAPI Response:', fbData);
 
     if (!fbRes.ok) {
-      console.error('Meta CAPI Error:', fbData);
-      return res.status(500).json({ error: 'Failed to send to Facebook', details: fbData });
+      return new Response(JSON.stringify({ error: 'Failed to send to Facebook', details: fbData }), {
+        status: 500,
+      });
     }
 
-    return res.status(200).json({ success: true, fbResponse: fbData });
+    return new Response(JSON.stringify({ success: true, fbResponse: fbData }), {
+      status: 200,
+    });
   } catch (err) {
     console.error('API Error:', err);
-    return res.status(500).json({ error: 'Server error' });
+    return new Response(JSON.stringify({ error: 'Server error' }), {
+      status: 500,
+    });
   }
 }
