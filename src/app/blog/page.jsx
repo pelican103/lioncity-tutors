@@ -41,6 +41,7 @@ const blogPosts = [
     title: 'What to Look for in a Tutor',
     description: "Tips for choosing the right tutor for your child's needs.",
     date: 'May 25, 2025',
+    directUrl: '/blog/what-to-look-for-in-a-tutor',
     categories: ['General'],
   },
   {
@@ -48,14 +49,24 @@ const blogPosts = [
     title: 'Benefits of Private Tuition in Singapore',
     description: 'Explore how one-on-one tutoring can improve academic results and confidence.',
     date: 'May 20, 2025',
+    directUrl: '/blog/benefits-of-private-tuition',
     categories: ['General'],
   },
   {
     slug: 'psle-preparation',
     title: 'PSLE Preparation Guide 2025',
     description: 'Complete PSLE preparation guide for Singapore parents. Proven strategies, study schedules, and expert tips to help your child excel in PSLE 2025.',
+    directUrl: '/blog/psle-preparation-guide',
     date: 'May 24, 2025',
     categories: ['PSLE'],
+  },
+  {
+    slug: 'o-level-english',
+    title: 'O-Level English Guide',
+    description: 'Comprehensive guide to O-Level English. Expert strategies, language skills, and proven tips to score A1 in O Level English.',
+    date: 'July 7, 2025',
+    directUrl: '/o-level-english',
+    categories: ['O-Level', 'English'],
   },
   {
     slug: 'o-level-chemistry',
@@ -104,6 +115,14 @@ const blogPosts = [
     date: 'June 12, 2025',
     directUrl: '/o-level-math',
     categories: ['O-Level', 'Math'],
+  },
+  {
+    slug: 'a-level-general-paper',
+    title: 'A-Level General Paper Guide',
+    description: 'Comprehensive A Level General Paper guide with proven strategies to help Singapore JC students achieve A grades in GP essays and comprehension.',
+    date: 'July 7, 2025',
+    directUrl: '/a-level-general-paper',
+    categories: ['A-Level', 'English'],
   },
   {
     slug: 'a-level-chemistry',
@@ -187,7 +206,7 @@ const blogPosts = [
   },
 ];
 
-const categories = ['All', 'Math', 'Physics', 'Chemistry', 'Biology', 'Science', 'PSLE', 'O-Level', 'A-Level', 'IGCSE', 'IBDP', 'General'];
+const categories = ['All', 'English', 'Math', 'Physics', 'Chemistry', 'Biology', 'Science', 'PSLE', 'O-Level', 'A-Level', 'IGCSE', 'IBDP', 'General'];
 
 export default function Blog() {
   const [selectedCategory, setSelectedCategory] = useState('All');
