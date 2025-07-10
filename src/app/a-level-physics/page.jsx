@@ -7,11 +7,11 @@ export const metadata = {
   openGraph: {
     title: 'A Level H2 Physics Guide 2025: Complete Study Strategy for Singapore Students | LionCity Tutors',
     description: 'Comprehensive A Level H2 Physics guide with proven strategies to help Singapore students achieve A grades in GCE A Level Physics.',
-    url: 'https://www.lioncitytutors.com/blog/a-level-h2-physics-guide-2025',
+    url: 'https://www.lioncitytutors.com/a-level-physics',
     type: 'article',
   },
   alternates: {
-    canonical: "https://www.lioncitytutors.com/blog/a-level-h2-physics-guide-2025"
+    canonical: "https://www.lioncitytutors.com/a-level-physics"
   }
 };
 

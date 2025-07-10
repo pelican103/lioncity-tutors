@@ -16,11 +16,11 @@ export const metadata = {
   openGraph: {
     title: 'IGCSE Physics Guide 2025: Complete Study Strategy for Singapore Students',
     description: 'Comprehensive IGCSE Physics guide with proven strategies to help Singapore students achieve A* grades in Cambridge IGCSE Physics.',
-    url: 'https://www.lioncitytutors.com/blog/igcse-physics-guide-2025',
+    url: 'https://www.lioncitytutors.com/igcse-physics',
     type: 'article',
   },
   alternates: {
-    canonical: 'https://www.lioncitytutors.com/blog/igcse-physics-guide-2025',
+    canonical: 'https://www.lioncitytutors.com/igcse-physics',
   },
 };
 

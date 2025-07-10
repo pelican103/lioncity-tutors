@@ -17,10 +17,10 @@ export const metadata = {
     title: 'PSLE Chinese Guide 2025: Complete Preparation Strategy for Singapore Students',
     description: 'Comprehensive PSLE Chinese guide with proven strategies to help Singapore students achieve A* grades in PSLE Chinese.',
     type: 'article',
-    url: 'https://www.lioncitytutors.com/blog/psle-chinese',
+    url: 'https://www.lioncitytutors.com/psle-chinese',
   },
   alternates: {
-    canonical: 'https://www.lioncitytutors.com/blog/psle-chinese',
+    canonical: 'https://www.lioncitytutors.com/psle-chinese',
   },
 };
 

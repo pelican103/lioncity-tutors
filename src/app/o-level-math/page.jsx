@@ -15,11 +15,11 @@ export const metadata = {
   openGraph: {
     title: 'O Level Math Guide 2025: Complete Preparation Strategy for Singapore Students',
     description: 'Comprehensive O Level Mathematics guide with proven strategies to help Singapore students achieve A1 grades in both Elementary and Additional Mathematics.',
-    url: 'https://www.lioncitytutors.com/blog/o-level-math-guide-2025',
+    url: 'https://www.lioncitytutors.com/o-level-math',
     type: 'article',
   },
   alternates: {
-    canonical: 'https://www.lioncitytutors.com/blog/o-level-math-guide-2025',
+    canonical: 'https://www.lioncitytutors.com/o-level-math',
   },
 };
 

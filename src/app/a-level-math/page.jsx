@@ -7,11 +7,11 @@ export const metadata = {
   openGraph: {
     title: 'A Level Math Guide 2025: Complete H1 & H2 Mathematics Strategy for Singapore Students | LionCity Tutors',
     description: 'Comprehensive A Level Mathematics guide with proven strategies to help Singapore JC students achieve A grades in H1 & H2 Mathematics.',
-    url: 'https://www.lioncitytutors.com/blog/a-level-math-guide-2025',
+    url: 'https://www.lioncitytutors.com/a-level-math',
     type: 'article',
   },
   alternates: {
-    canonical: "https://www.lioncitytutors.com/blog/a-level-math-guide-2025"
+    canonical: "https://www.lioncitytutors.com/a-level-math"
   }
 };
 

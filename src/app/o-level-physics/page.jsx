@@ -15,11 +15,11 @@ export const metadata = {
   openGraph: {
     title: 'O Level Physics Guide 2025: Complete Study Strategy for Singapore Students',
     description: 'Comprehensive O Level Physics guide with proven strategies to help Singapore students achieve A1 grades in GCE O Level Physics.',
-    url: 'https://www.lioncitytutors.com/blog/o-level-physics-guide-2025',
+    url: 'https://www.lioncitytutors.com/o-level-physics',
     type: 'article',
   },
   alternates: {
-    canonical: 'https://www.lioncitytutors.com/blog/o-level-physics-guide-2025',
+    canonical: 'https://www.lioncitytutors.com/o-level-physics',
   },
 };
 

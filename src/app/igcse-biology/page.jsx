@@ -16,11 +16,11 @@ export const metadata = {
   openGraph: {
     title: 'IGCSE Biology Guide 2025: Complete Study Strategy for Singapore Students',
     description: 'Comprehensive IGCSE Biology guide with proven strategies to help Singapore students achieve A* grades in Cambridge IGCSE Biology.',
-    url: 'https://www.lioncitytutors.com/blog/igcse-biology-guide-2025',
+    url: 'https://www.lioncitytutors.com/igcse-biology',
     type: 'article',
   },
   alternates: {
-    canonical: 'https://www.lioncitytutors.com/blog/igcse-biology-guide-2025',
+    canonical: 'https://www.lioncitytutors.com/igcse-biology',
   },
 };
 

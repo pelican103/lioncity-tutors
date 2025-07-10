@@ -1544,6 +1544,14 @@ export default function JCTuition() {
                 </CardContent>
               </Card>
             </Link>
+            <Link href="/a-level-general-paper" className="block">
+              <Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer">
+                <CardContent className="p-6">
+                  <h3 className="font-bold text-xl text-indigo-700 mb-2">A-Level General Paper Guide</h3>
+                  <p className="text-gray-600">Learn how to tackle essays and comprehension with ease.</p>
+                </CardContent>
+              </Card>
+            </Link>
             <Link href="/blog/a-level-preparation-guide" className="block">
               <Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer">
                 <CardContent className="p-6">

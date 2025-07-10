@@ -15,11 +15,11 @@ export const metadata = {
   openGraph: {
     title: 'O Level Biology Guide 2025: Complete Study Strategy for Singapore Students',
     description: 'Comprehensive O Level Biology guide with proven strategies to help Singapore students achieve A1 grades in GCE O Level Biology.',
-    url: 'https://www.lioncitytutors.com/blog/o-level-biology-2025',
+    url: 'https://www.lioncitytutors.com/o-level-biology',
     type: 'article',
   },
   alternates: {
-    canonical: 'https://www.lioncitytutors.com/blog/o-level-biology-2025',
+    canonical: 'https://www.lioncitytutors.com/o-level-biology',
   },
 };
 

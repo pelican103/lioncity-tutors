@@ -16,11 +16,11 @@ export const metadata = {
   openGraph: {
     title: 'O Level Chemistry Guide 2025: Complete Study Strategy for Singapore Students',
     description: 'Comprehensive O Level Chemistry guide with proven strategies to help Singapore students achieve A1 grades in GCE O Level Chemistry.',
-    url: 'https://www.lioncitytutors.com/blog/o-level-chemistry-guide-2025',
+    url: 'https://www.lioncitytutors.com/o-level-chemistry',
     type: 'article',
   },
   alternates: {
-    canonical: 'https://www.lioncitytutors.com/blog/o-level-chemistry-guide-2025',
+    canonical: 'https://www.lioncitytutors.com/o-level-chemistry',
   },
 };
 

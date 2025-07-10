@@ -16,10 +16,10 @@ export const metadata = {
     title: 'PSLE Math Guide 2025: Complete Preparation Strategy for Singapore Students',
     description: 'Comprehensive PSLE Math guide with proven strategies to help Singapore students achieve A* grades in PSLE Math.',
     type: 'article',
-    url: 'https://www.lioncitytutors.com/blog/psle-math',
+    url: 'https://www.lioncitytutors.com/psle-math',
   },
   alternates: {
-    canonical: 'https://www.lioncitytutors.com/blog/psle-math',
+    canonical: 'https://www.lioncitytutors.com/psle-math',
   },
 };
 

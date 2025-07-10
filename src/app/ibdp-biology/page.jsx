@@ -16,11 +16,11 @@ export const metadata = {
   openGraph: {
     title: 'IBDP Biology Guide 2025: Complete Study Strategy for Singapore Students',
     description: 'Comprehensive IBDP Biology guide with proven strategies to help Singapore students achieve level 7 in IBDP Biology.',
-    url: 'https://www.lioncitytutors.com/blog/ibdp-biology-guide-2025',
+    url: 'https://www.lioncitytutors.com/ibdp-biology',
     type: 'article',
   },
   alternates: {
-    canonical: 'https://www.lioncitytutors.com/blog/ibdp-biology-guide-2025',
+    canonical: 'https://www.lioncitytutors.com/ibdp-biology',
   },
 };
 

@@ -8,10 +8,10 @@ export const metadata = {
     title: "A Level H2 Biology Guide 2025: Complete Study Strategy for Singapore Students",
     description: "Comprehensive A Level H2 Biology guide with proven strategies to help Singapore students achieve A grades in GCE A Level Biology.",
     type: "article",
-    url: "https://www.lioncitytutors.com/blog/a-level-h2-biology-guide-2025",
+    url: "https://www.lioncitytutors.com/a-level-biology",
   },
   alternates: {
-    canonical: "https://www.lioncitytutors.com/blog/a-level-h2-biology-guide-2025"
+    canonical: "https://www.lioncitytutors.com/a-level-biology"
   }
 };
 

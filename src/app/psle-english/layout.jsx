@@ -16,10 +16,10 @@ export const metadata = {
     title: 'PSLE English Guide 2025: Complete Preparation Strategy for Singapore Students',
     description: 'Comprehensive PSLE English guide with proven strategies to help Singapore students achieve A* grades in PSLE English.',
     type: 'article',
-    url: 'https://www.lioncitytutors.com/blog/psle-english',
+    url: 'https://www.lioncitytutors.com/psle-english',
   },
   alternates: {
-    canonical: 'https://www.lioncitytutors.com/blog/psle-english',
+    canonical: 'https://www.lioncitytutors.com/psle-english',
   },
 };
 

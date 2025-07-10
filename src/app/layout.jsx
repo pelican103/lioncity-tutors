@@ -20,6 +20,7 @@ export const metadata = {
 
 import Navbar from '../components/Navbar';
 import Footer from './Footer';
+import Whatsapp from './Whatsapp';
 import './globals.css';
 import { Toaster } from 'sonner';
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         <main>{children}</main>
         <Footer />
+        <Whatsapp />
       </body>
     </html>
   );
