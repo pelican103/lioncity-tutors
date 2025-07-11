@@ -16,11 +16,11 @@ export async function POST(req) {
   const user_data = {
     em: hash(email),
     ph: hash(phone),
-    fn: hash(firstName),
-    ln: hash(lastName),
-    country: hash('sg'),
-    client_ip_address: ip,
-    client_user_agent: userAgent,
+    client_ip_address: ip || null,
+    client_user_agent: userAgent || null,
+    country: [hash('sg')],
+    fn: [hash(firstName)],
+    ln: [hash(lastName)],
   };
 
   const payload = {
@@ -28,10 +28,8 @@ export async function POST(req) {
       {
         event_name: eventName,
         event_time: Math.floor(Date.now() / 1000),
-        event_source_url: 'https://www.lioncitytutors.com/',
+        action_source: 'system_generated',
         user_data,
-        action_source: 'website',
-        
       },
     ],
   };
