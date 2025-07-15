@@ -10,7 +10,7 @@ export const metadata = {
   openGraph: {
     title: 'Best Biology Tuition Singapore | Secondary, JC H1/H2, IGCSE, IB Biology Tutors | Lion City Tutors',
     description: 'Top Biology tuition in Singapore. Improve your grades with our experienced tutors and proven methods.',
-    url: 'https://my-tuition-site.com/biology-tuition',
+    url: 'https://www.lioncitytutors.com/biology-tuition',
     images: [
       {
         url: '/biology.webp',

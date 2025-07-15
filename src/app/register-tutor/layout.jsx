@@ -4,7 +4,7 @@ export const metadata = {
   openGraph: {
     title: 'Register as a Tutor | LionCity Tutors',
     description: 'Register to become a tutor with LionCity Tutors.',
-    url: 'https://my-tuition-site.com/register-tutor',
+    url: 'https://www.lioncitytutors.com/register-tutor',
     type: 'website',
   },
 };

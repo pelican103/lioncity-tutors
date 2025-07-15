@@ -11,6 +11,10 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [subjectsOpen, setSubjectsOpen] = useState(false);
   const [levelsOpen, setLevelsOpen] = useState(false);
+  // New state for desktop submenu
+  const [hoveredLevel, setHoveredLevel] = useState(null);
+  // New state for mobile submenu
+  const [openSecondarySubmenu, setOpenSecondarySubmenu] = useState(false);
 
   const navLinkStyle = (path) =>
     `text-sm font-medium px-4 py-2 rounded hover:bg-gray-100 transition ${
@@ -41,9 +45,16 @@ export default function Navbar() {
   ];
 
   const levels = [
-    { name: "Primary School", path: "/primary-school-tuition" },
-    { name: "Secondary School", path: "/secondary-school-tuition" },
-    { name: "Junior College", path: "/jc-tuition" },
+    { name: "Primary School Tuition", path: "/primary-school-tuition" },
+    {
+      name: "Secondary School Tuition",
+      path: "/secondary-school-tuition",
+      submenu: [
+        { name: "O Level Tuition", path: "/secondary-school-tuition/o-level-tuition" },
+        { name: "N Level Tuition", path: "/secondary-school-tuition/n-level-tuition" },
+      ],
+    },
+    { name: "Junior College Tuition", path: "/jc-tuition" },
   ];
 
   return (
@@ -74,7 +85,7 @@ export default function Navbar() {
         <div 
           className="relative group"
           onMouseEnter={() => setLevelsOpen(true)}
-          onMouseLeave={() => setLevelsOpen(false)}
+          onMouseLeave={() => { setLevelsOpen(false); setHoveredLevel(null); }}
         >
           <button className={`${navLinkStyle("/levels")} flex items-center gap-1`}>
             Levels & Exams
@@ -83,19 +94,40 @@ export default function Navbar() {
           
           {levelsOpen && (
             <div 
-              className="absolute left-0 pt-2 w-48 z-20"
+              className="absolute left-0 pt-2 w-50 z-20 flex"
               onMouseEnter={() => setLevelsOpen(true)}
-              onMouseLeave={() => setLevelsOpen(false)}
+              onMouseLeave={() => { setLevelsOpen(false); setHoveredLevel(null); }}
             >
-              <div className="bg-white rounded-md shadow-lg py-1">
+              <div className="bg-white rounded-md shadow-lg py-1 min-w-[200px]">
                 {levels.map((level) => (
-                  <Link
+                  <div
                     key={level.path}
-                    href={level.path}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onMouseEnter={() => level.submenu ? setHoveredLevel(level.path) : setHoveredLevel(null)}
+                    onMouseLeave={() => setHoveredLevel(null)}
+                    className="relative"
                   >
-                    {level.name}
-                  </Link>
+                    <Link
+                      href={level.path}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap"
+                    >
+                      {level.name}
+                      {level.submenu && <ChevronDown size={14} className="inline align-middle ml-0.5" />}
+                    </Link>
+                    {/* Submenu for Secondary School Tuition */}
+                    {level.submenu && hoveredLevel === level.path && (
+                      <div className="absolute left-full top-0 ml-1 bg-white rounded-md shadow-lg py-1 min-w-[180px] z-30">
+                        {level.submenu.map((sub) => (
+                          <Link
+                            key={sub.path}
+                            href={sub.path}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap"
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
@@ -178,18 +210,44 @@ export default function Navbar() {
               Levels & Exams
               <ChevronDown size={16} className={`transition-transform ${levelsOpen ? 'rotate-180' : ''}`} />
             </button>
-            
             {levelsOpen && (
-              <div className="w-full bg-gray-50 py-2">
+              <div className="w-full mx-auto bg-gray-50 py-2">
                 {levels.map((level) => (
-                  <Link
-                    key={level.path}
-                    href={level.path}
-                    onClick={toggleMenu}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    {level.name}
-                  </Link>
+                  <div key={level.path} className="w-full">
+                    {level.submenu ? (
+                      <>
+                        <button
+                          onClick={() => setOpenSecondarySubmenu((prev) => !prev)}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center justify-between"
+                        >
+                          {level.name}
+                          <ChevronDown size={14} className={`ml-0.5 transition-transform ${openSecondarySubmenu ? 'rotate-180' : ''}`} />
+                        </button>
+                        {openSecondarySubmenu && (
+                          <div className="pl-4 border-l border-gray-200">
+                            {level.submenu.map((sub) => (
+                              <Link
+                                key={sub.path}
+                                href={sub.path}
+                                onClick={toggleMenu}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <Link
+                        href={level.path}
+                        onClick={toggleMenu}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        {level.name}
+                      </Link>
+                    )}
+                  </div>
                 ))}
               </div>
             )}

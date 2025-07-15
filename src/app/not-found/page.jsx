@@ -6,7 +6,7 @@ export const metadata = {
   openGraph: {
     title: '404 Not Found | My Tuition Site',
     description: 'Sorry, the page you are looking for does not exist. Return to the homepage of My Tuition Site.',
-    url: 'https://my-tuition-site.com/404',
+    url: 'https://www.lioncitytutors.com/404',
     type: 'website',
   },
 };

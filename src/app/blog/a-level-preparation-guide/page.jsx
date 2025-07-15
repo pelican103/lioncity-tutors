@@ -7,7 +7,7 @@ export const metadata = {
   openGraph: {
     title: 'A-Level Preparation Guide 2025: Complete Strategy for Singapore Students | LionCity Tutors',
     description: 'Comprehensive A-Level preparation strategies and expert tips to help JC students achieve university admission goals.',
-    url: 'https://my-tuition-site.com/blog/a-level-preparation-guide',
+    url: 'https://www.lioncitytutors.com/blog/a-level-preparation-guide',
     type: 'article',
   },
 };
