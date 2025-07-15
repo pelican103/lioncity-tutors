@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function Footer() {
   return (
     <footer className="bg-teal-700 text-white py-12 px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-15">
         
         {/* About Us & Video */}
         <div>
@@ -17,13 +17,19 @@ export default function Footer() {
         {/* Quick Links */}
         <div>
           <h4 className="text-lg font-semibold mb-4">Quick Links:</h4>
-          <ul className="space-y-3 text-sm">
-            <li><Link href="/request-tutor" className="hover:underline">Request A Tutor</Link></li>
-            <li><Link href="/tuition-rates" className="hover:underline">Tuition Rates</Link></li>
-            <li><Link href="/register-tutor" className="hover:underline">Register as a Tutor</Link></li>
-            <li><Link href="/free-test-papers" className="hover:underline">Free Test Papers</Link></li>
-            <li><Link href="/blog" className="hover:underline">Our Blog</Link></li>
-          </ul>
+          <div className="flex gap-15">
+            <ul className="space-y-3 text-sm">
+              <li><Link href="/request-tutor" className="hover:underline">Request A Tutor</Link></li>
+              <li><Link href="/register-tutor" className="hover:underline">Register as a Tutor</Link></li>
+              <li><Link href="/tuition-rates" className="hover:underline">Tuition Rates</Link></li>
+              <li><Link href="/blog" className="hover:underline">Our Blog</Link></li>
+            </ul>
+            <ul className="space-y-3 text-sm">
+              <li><Link href="/free-test-papers" className="hover:underline">Free Test Papers</Link></li>
+              <li><Link href="/terms-and-conditions-for-clients" className="hover:underline">T&amp;s for Clients</Link></li>
+              <li><Link href="/terms-and-conditions-for-tutors" className="hover:underline">T&amp;Cs for Tutors</Link></li>
+            </ul>
+          </div>
         </div>
 
         {/* Contact Info & Socials */}
