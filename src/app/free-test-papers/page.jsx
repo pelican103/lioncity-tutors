@@ -159,7 +159,7 @@ export default function FreeTestPapers() {
                           </TabsTrigger>
                         </TabsList>
                         <TabsContent value="wa1">
-                          <ul className="space-y-2 text-sm text-black-600">
+                          <ul className="space-y-4 text-sm text-black-600">
                             {testPapers.primary.p5.english.wa1.map((paper, index) => (
                               <li key={index} className="flex justify-between items-center">
                                 <span>{paper.title}</span>
@@ -175,7 +175,7 @@ export default function FreeTestPapers() {
                           </ul>
                         </TabsContent>
                         <TabsContent value="sa2">
-                          <ul className="space-y-2 text-sm text-black-600">
+                          <ul className="space-y-4 text-sm text-black-600">
                             {testPapers.primary.p5.english.sa2.map((paper, index) => (
                               <li key={index} className="flex justify-between items-center">
                                 <span>{paper.title}</span>
@@ -199,11 +199,11 @@ export default function FreeTestPapers() {
               {/* Primary 6 Papers */}
               <div>
                 <h3 className="text-xl font-bold text-emerald-700 mb-4">Primary Six (P6) Free Exam Papers</h3>
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 gap-10">
                   <Card className="hover:shadow-lg transition-shadow">
                     <CardContent className="p-4">
                       <h4 className="font-semibold mb-2">Primary 6 English</h4>
-                      <ul className="space-y-2 text-sm text-black-600">
+                      <ul className="space-y-4 text-sm text-black-600">
                         {testPapers.primary.p6.english.sa2.map((paper, index) => (
                           <li key={index} className="flex justify-between items-center">
                             <span>{paper.title}</span>
@@ -248,7 +248,7 @@ export default function FreeTestPapers() {
                             </TabsTrigger>
                           </TabsList>
                           <TabsContent value="wa1">
-                            <ul className="space-y-2 text-sm text-black-600">
+                            <ul className="space-y-4 text-sm text-black-600">
                               {testPapers.primary.p6.math.wa1?.map((paper, index) => (
                                 <li key={index} className="flex justify-between items-center">
                                   <span>{paper.title}</span>
@@ -264,7 +264,7 @@ export default function FreeTestPapers() {
                             </ul>
                           </TabsContent>
                           <TabsContent value="sa2">
-                            <ul className="space-y-2 text-sm text-black-600">
+                            <ul className="space-y-4 text-sm text-black-600">
                               {testPapers.primary.p6.math.sa2?.map((paper, index) => (
                                 <li key={index} className="flex justify-between items-center">
                                   <span>{paper.title}</span>
@@ -312,7 +312,7 @@ export default function FreeTestPapers() {
                             </TabsTrigger>
                           </TabsList>
                           <TabsContent value="wa1">
-                            <ul className="space-y-2 text-sm text-black-600">
+                            <ul className="space-y-4 text-sm text-black-600">
                               {testPapers.primary.p6.science.wa1?.map((paper, index) => (
                                 <li key={index} className="flex justify-between items-center">
                                   <span>{paper.title}</span>
@@ -328,7 +328,7 @@ export default function FreeTestPapers() {
                             </ul>
                           </TabsContent>
                           <TabsContent value="sa2">
-                            <ul className="space-y-2 text-sm text-black-600">
+                            <ul className="space-y-4 text-sm text-black-600">
                               {testPapers.primary.p6.science.sa2?.map((paper, index) => (
                                 <li key={index} className="flex justify-between items-center">
                                   <span>{paper.title}</span>
@@ -357,13 +357,35 @@ export default function FreeTestPapers() {
             <>
               <div>
                 <h3 className="text-xl font-bold text-blue-700 mb-4">O Level Free Exam Papers</h3>
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 gap-10">
+
+                {/*O Level English */}
+                <Card className="hover:shadow-lg transition-shadow">
+                    <CardContent className="p-4">
+                      <h4 className="font-semibold mb-5">O Level English</h4>
+                      <ul className="space-y-4 text-sm text-black-600">
+                        {testPapers.secondary.o_level.English.prelim.map((paper, index) => (
+                          <li key={index} className="flex justify-between items-center">
+                            <span>{paper.title}</span>
+                            <Button 
+                              variant="link" 
+                              className="text-blue-600 hover:text-blue-700"
+                              onClick={() => handleDownload(paper, "secondary.o_level.English.prelim")}
+                            >
+                              Download
+                            </Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+
                   <Card className="hover:shadow-lg transition-shadow">
                     <CardContent className="p-4">
                       <h4 className="font-semibold mb-5">O Level Additional Mathematics</h4>
                       {/* Paper 1 */}
                       <h5 className="font-medium mt-2 mb-1">Paper 1</h5>
-                      <ul className="space-y-2 text-sm text-black-600">
+                      <ul className="space-y-4 text-sm text-black-600">
                         {testPapers.secondary.o_level.A_math.sa2.P1.map((paper, index) => (
                           <li key={index} className="flex justify-between items-center">
                             <span>{paper.title}</span>
@@ -379,7 +401,7 @@ export default function FreeTestPapers() {
                       </ul>
                       {/* Paper 2 */}
                       <h5 className="font-medium mt-4 mb-1">Paper 2</h5>
-                      <ul className="space-y-2 text-sm text-black-600">
+                      <ul className="space-y-4 text-sm text-black-600">
                         {testPapers.secondary.o_level.A_math.sa2.P2.map((paper, index) => (
                           <li key={index} className="flex justify-between items-center">
                             <span>{paper.title}</span>
@@ -395,11 +417,12 @@ export default function FreeTestPapers() {
                       </ul>
                     </CardContent>
                   </Card>
+                  {/*O Level E maths*/}
                   <Card className="hover:shadow-lg transition-shadow">
                     <CardContent className="p-4">
                       <h4 className="font-semibold mb-5">O Level Elementary Mathetmatics</h4>
                       {/* Paper */}
-                      <ul className="space-y-2 text-sm text-black-600">
+                      <ul className="space-y-4 text-sm text-black-600">
                         {testPapers.secondary.o_level.E_math.prelim.map((paper, index) => (
                           <li key={index} className="flex justify-between items-center">
                             <span>{paper.title}</span>
@@ -419,7 +442,7 @@ export default function FreeTestPapers() {
                     <CardContent className="p-4">
                       <h4 className="font-semibold mb-5">O Level Chemistry</h4>
                       {/* Paper */}
-                      <ul className="space-y-2 text-sm text-black-600">
+                      <ul className="space-y-4 text-sm text-black-600">
                         {testPapers.secondary.o_level.Chemistry.prelim.map((paper, index) => (
                           <li key={index} className="flex justify-between items-center">
                             <span>{paper.title}</span>
@@ -439,7 +462,7 @@ export default function FreeTestPapers() {
                     <CardContent className="p-4">
                       <h4 className="font-semibold mb-5">O Level Physics</h4>
                       {/* Paper */}
-                      <ul className="space-y-2 text-sm text-black-600">
+                      <ul className="space-y-4 text-sm text-black-600">
                         {testPapers.secondary.o_level.Physics.prelim.map((paper, index) => (
                           <li key={index} className="flex justify-between items-center">
                             <span>{paper.title}</span>
@@ -460,7 +483,7 @@ export default function FreeTestPapers() {
                       <h4 className="font-semibold mb-5">O Level Biology</h4>
                       {/* Paper 1 */}
                       <h5 className="font-medium mt-2 mb-1">Paper 1</h5>
-                      <ul className="space-y-2 text-sm text-black-600">
+                      <ul className="space-y-4 text-sm text-black-600">
                         {testPapers.secondary.o_level.Biology.prelim.P1.map((paper, index) => (
                           <li key={index} className="flex justify-between items-center">
                             <span>{paper.title}</span>
@@ -476,7 +499,7 @@ export default function FreeTestPapers() {
                       </ul>
                       {/* Paper 2 */}
                       <h5 className="font-medium mt-4 mb-1">Paper 2</h5>
-                      <ul className="space-y-2 text-sm text-black-600">
+                      <ul className="space-y-4 text-sm text-black-600">
                         {testPapers.secondary.o_level.Biology.prelim.P2.map((paper, index) => (
                           <li key={index} className="flex justify-between items-center">
                             <span>{paper.title}</span>
@@ -501,12 +524,34 @@ export default function FreeTestPapers() {
           {(selectedLevel === "all" || selectedLevel === "jc") && (
             <>
               <h3 className="text-xl font-bold text-purple-700 mb-4">A Level Free Exam Papers</h3>
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 gap-10">
+                {/* A Level GP */}
+                {testPapers.jc.generalpaper?.prelim?.length > 0 && (
+                  <Card className="hover:shadow-lg transition-shadow">
+                    <CardContent className="p-4">
+                      <h4 className="font-semibold mb-5">A Level H1 GP</h4>
+                      <ul className="space-y-4 text-sm text-black-600">
+                        {testPapers.jc.generalpaper.prelim.map((paper, index) => (
+                          <li key={index} className="flex justify-between items-center">
+                            <span>{paper.title}</span>
+                            <Button 
+                              variant="link" 
+                              className="text-purple-600 hover:text-purple-700"
+                              onClick={() => handleDownload(paper, "jc.generalpaper.prelim")}
+                            >
+                              Download
+                            </Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                )}
                 {/* A Level Math */}
                 <Card className="hover:shadow-lg transition-shadow">
                   <CardContent className="p-4">
                     <h4 className="font-semibold mb-5">A Level H2 Mathematics</h4>
-                    <ul className="space-y-2 text-sm text-black-600">
+                    <ul className="space-y-4 text-sm text-black-600">
                       {testPapers.jc.maths.prelim.map((paper, index) => (
                         <li key={index} className="flex justify-between items-center">
                           <span>{paper.title}</span>
@@ -528,7 +573,7 @@ export default function FreeTestPapers() {
                   <Card className="hover:shadow-lg transition-shadow">
                     <CardContent className="p-4">
                       <h4 className="font-semibold mb-5">A Level H2 Chemistry</h4>
-                      <ul className="space-y-2 text-sm text-black-600">
+                      <ul className="space-y-4 text-sm text-black-600">
                         {testPapers.jc.chemistry.prelim.map((paper, index) => (
                           <li key={index} className="flex justify-between items-center">
                             <span>{paper.title}</span>
@@ -536,6 +581,50 @@ export default function FreeTestPapers() {
                               variant="link" 
                               className="text-purple-600 hover:text-purple-700"
                               onClick={() => handleDownload(paper, "jc.chemistry.prelim")}
+                            >
+                              Download
+                            </Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                )}
+                {/* A Level Physics */}
+                {testPapers.jc.physics?.prelim?.length > 0 && (
+                  <Card className="hover:shadow-lg transition-shadow">
+                    <CardContent className="p-4">
+                      <h4 className="font-semibold mb-5">A Level H2 Physics</h4>
+                      <ul className="space-y-4 text-sm text-black-600">
+                        {testPapers.jc.physics.prelim.map((paper, index) => (
+                          <li key={index} className="flex justify-between items-center">
+                            <span>{paper.title}</span>
+                            <Button 
+                              variant="link" 
+                              className="text-purple-600 hover:text-purple-700"
+                              onClick={() => handleDownload(paper, "jc.physics.prelim")}
+                            >
+                              Download
+                            </Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                )}
+                {/* A Level Biology */}
+                {testPapers.jc.biology?.prelim?.length > 0 && (
+                  <Card className="hover:shadow-lg transition-shadow">
+                    <CardContent className="p-4">
+                      <h4 className="font-semibold mb-5">A Level H2 Biology</h4>
+                      <ul className="space-y-4 text-sm text-black-600">
+                        {testPapers.jc.biology.prelim.map((paper, index) => (
+                          <li key={index} className="flex justify-between items-center">
+                            <span>{paper.title}</span>
+                            <Button 
+                              variant="link" 
+                              className="text-purple-600 hover:text-purple-700"
+                              onClick={() => handleDownload(paper, "jc.biology.prelim")}
                             >
                               Download
                             </Button>
@@ -554,7 +643,7 @@ export default function FreeTestPapers() {
                       {testPapers.jc.economics.prelim.P1?.length > 0 && (
                         <>
                           <h5 className="font-medium mt-2 mb-1">Paper 1</h5>
-                          <ul className="space-y-2 text-sm text-black-600">
+                          <ul className="space-y-4 text-sm text-black-600">
                             {testPapers.jc.economics.prelim.P1.map((paper, index) => (
                               <li key={index} className="flex justify-between items-center">
                                 <span>{paper.title}</span>
@@ -574,7 +663,7 @@ export default function FreeTestPapers() {
                       {testPapers.jc.economics.prelim.P2?.length > 0 && (
                         <>
                           <h5 className="font-medium mt-4 mb-1">Paper 2</h5>
-                          <ul className="space-y-2 text-sm text-black-600">
+                          <ul className="space-y-4 text-sm text-black-600">
                             {testPapers.jc.economics.prelim.P2.map((paper, index) => (
                               <li key={index} className="flex justify-between items-center">
                                 <span>{paper.title}</span>

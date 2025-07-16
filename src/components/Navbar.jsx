@@ -115,16 +115,23 @@ export default function Navbar() {
                     </Link>
                     {/* Submenu for Secondary School Tuition */}
                     {level.submenu && hoveredLevel === level.path && (
-                      <div className="absolute left-full top-0 ml-1 bg-white rounded-md shadow-lg py-1 min-w-[180px] z-30">
-                        {level.submenu.map((sub) => (
-                          <Link
-                            key={sub.path}
-                            href={sub.path}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap"
-                          >
-                            {sub.name}
-                          </Link>
-                        ))}
+                      <div className="absolute left-full top-0 z-30 flex"
+                        onMouseEnter={() => setHoveredLevel(level.path)}
+                        onMouseLeave={() => setHoveredLevel(null)}
+                      >
+                        {/* Transparent buffer to prevent accidental mouseout */}
+                        <div style={{ width: 1, height: '100%' }} />
+                        <div className="bg-white rounded-md shadow-lg py-1 min-w-[180px] flex flex-col">
+                          {level.submenu.map((sub) => (
+                            <Link
+                              key={sub.path}
+                              href={sub.path}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap"
+                            >
+                              {sub.name}
+                            </Link>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>

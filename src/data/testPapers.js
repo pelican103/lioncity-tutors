@@ -187,6 +187,30 @@ export const testPapers = {
   
   secondary: {
     o_level: {
+      English:{
+        prelim: [
+          {
+            title: 'O Level English 2024 Prelim (with Answers) - ACJC',
+            downloadUrl: '/papers/secondary/O Level/2024/English/Sec4 English 2024 ACJC.zip'
+          },
+          {
+            title: 'O Level English 2023 Prelim (with Answers) - Anderson',
+            downloadUrl: '/papers/secondary/O Level/2023/english/Sec4 English 2023 Anderson.zip'
+          },
+          {
+            title: 'O Level English 2023 Prelim (with Answers) - Cedar Girls',
+            downloadUrl: '/papers/secondary/O Level/2023/english/Sec4 English 2023 Cedar Girls.zip'
+          },
+          {
+            title: 'O Level English 2023 Prelim (with Answers) - Chung Cheng',
+            downloadUrl: '/papers/secondary/O Level/2023/english/Sec4 English 2023 Chung Cheng.zip'
+          },
+          {
+            title: 'O Level English 2023 Prelim (with Answers) - NCHS',
+            downloadUrl: '/papers/secondary/O Level/2023/english/Sec4 English 2023 NCHS.zip'
+          },
+        ]
+      },
       A_math: {
         sa2: {
           P1: [
@@ -339,6 +363,30 @@ export const testPapers = {
   },
 
   jc: {
+    generalpaper: {
+      prelim: [
+        {
+          title: 'JC2 2024 GP Prelim - HCI (with Answers)',
+          downloadUrl: '/papers/jc/GP/2024 HCI Prelim H1 GP (with Answers).zip'
+        }, 
+        {
+          title: 'JC2 2024 GP Prelim - RI (with Answers)',
+          downloadUrl: '/papers/jc/GP/2024 RI Prelim H1 GP (with Answers).zip'
+        }, 
+        {
+          title: 'JC2 2024 GP Prelim - ACJC (with Answers)',
+          downloadUrl: '/papers/jc/GP/2024 ACJC Prelim H1 GP (with Answers).zip'
+        }, 
+        {
+          title: 'JC2 2024 GP Prelim - NYJC (with Answers)',
+          downloadUrl: '/papers/jc/GP/2024 NYJC Prelim H1 GP (with Answers).zip'
+        }, 
+        {
+          title: 'JC2 2024 GP Prelim - NJC (with Answers)',
+          downloadUrl: '/papers/jc/GP/2024 NJC Prelim H1 GP (with Answers).zip'
+        }, 
+      ]
+    },
     maths: {
       prelim: [
         {
@@ -366,7 +414,7 @@ export const testPapers = {
     chemistry: {
       prelim: [
         {
-          title: 'JC2 2024 Chemistry Prelim - HCI',
+          title: 'JC2 2024 Chemistry Prelim (P1-P4) - HCI',
           downloadUrl: '/papers/jc/chemistry/2024 Prelims HCI H2 Chem.pdf'
         }, 
         {
@@ -374,13 +422,81 @@ export const testPapers = {
           downloadUrl: '/papers/jc/chemistry/2024 Prelims HCI H2 Chem (Ans).pdf'
         }, 
         {
-          title: 'JC2 2024 Chemistry Prelim - RI',
+          title: 'JC2 2024 Chemistry Prelim (P1-P4) - RI',
           downloadUrl: '/papers/jc/chemistry/2024 Prelims RI H2 Chem.pdf'
         }, 
         {
           title: 'JC2 2024 Chemistry Prelim - RI (Answers)',
           downloadUrl: '/papers/jc/chemistry/2024 Prelims RI H2 Chem (Ans).pdf'
         }, 
+      ]
+    },
+    physics: {
+      prelim: [
+        {
+          title: 'JC2 2024 Physics Prelim (P1-P4) - HCI',
+          downloadUrl: '/papers/jc/physics/2024 HCI Prelim H2 Physics (P1-P4).pdf'
+        },
+        {
+          title: 'JC2 2024 Physics Prelim - HCI (Answers)',
+          downloadUrl: '/papers/jc/physics/2024 HCI Prelim H2 Physics (P1-P4) SOLUTIONS.pdf'
+        },
+        {
+          title: 'JC2 2024 Physics Prelim (P1-P4) - RI',
+          downloadUrl: '/papers/jc/physics/2024 RI Prelim H2 Physics (P1-P4).pdf' 
+        },
+        {
+          title: 'JC2 2024 Physics Prelim - RI (Answers)',
+          downloadUrl: '/papers/jc/physics/2024 RI Prelim H2 Physics (P1-P4) SOLUTIONS.pdf' 
+        },
+        {
+          title: 'JC2 2024 Physics Prelim (P1-P4) - NJC',
+          downloadUrl: '/papers/jc/physics/2024 NJC Prelim H2 Physics (P1-P4).pdf' 
+        },
+        {
+          title: 'JC2 2024 Physics Prelim - NJC (Answers)',
+          downloadUrl: '/papers/jc/physics/2024 NJC Prelim H2 Physics (P1-P4) SOLUTIONS.pdf' 
+        },
+        {
+          title: 'JC2 2024 Physics Prelim (P1-P4) - ACJC (with Answers)',
+          downloadUrl: '/papers/jc/physics/2024 ACJC Prelim H2 Physics (P1-P4) (with Answers).zip' 
+        },
+        {
+          title: 'JC2 2024 Physics Prelim (P1-P4) - NYJC (with Answers)',
+          downloadUrl: '/papers/jc/physics/2024 NYJC Prelim H2 Physics (P1-P4) (with Answers).zip' 
+        },
+        {
+          title: 'JC2 2024 Physics Prelim (P1-P4) - CJC (with Answers)',
+          downloadUrl: '/papers/jc/physics/2024 CJC Prelim H2 Physics (P1-P4) (with Answers).zip' 
+        },
+        {
+          title: 'JC2 2024 Physics Prelim (P1-P4) - RVHS (with Answers)',
+          downloadUrl: '/papers/jc/physics/2024 RVHS Prelim H2 Physics (P1-P4) (with Answers).zip' 
+        },
+      ]
+    },
+    biology: {
+      prelim: [
+        {
+          title: 'JC2 2024 Biology Prelim (P1-P4) - HCI (with Answers)',
+          downloadUrl: '/papers/jc/biology/H2/2024 HCI Prelim H2 Biology (P1-P4) (with Answers).zip' 
+        },
+        {
+          title: 'JC2 2024 Biology Prelim (P1-P4) - RI (with Answers)',
+          downloadUrl: '/papers/jc/biology/H2/2024 RI Prelim H2 Biology (P1-P4) (with Answers).zip' 
+        },
+        {
+          title: 'JC2 2024 Biology Prelim (P1-P4) - ACJC (with Answers)',
+          downloadUrl: '/papers/jc/biology/H2/2024 ACJC Prelim H2 Biology (P1-P4) (with Answers).zip' 
+        },
+        {
+          title: 'JC2 2024 Biology Prelim (P1-P4) - VJC (with Answers)',
+          downloadUrl: '/papers/jc/biology/H2/2024 VJC Prelim H2 Biology (P1-P4) (with Answers).zip' 
+        },
+        {
+          title: 'JC2 2024 Biology Prelim (P1-P4) - NJC (with Answers)',
+          downloadUrl: '/papers/jc/biology/H2/2024 NJC Prelim H2 Biology (P1-P4) (with Answers).zip' 
+        },
       ]
     },
     economics: {
@@ -402,7 +518,7 @@ export const testPapers = {
           }, 
           {
             title: 'JC2 2024 Economics Prelim P2 - HCI',
-            downloadUrl: '/papers/jc/economics/JC2_h2economics2_2024_prelims_hwachong.pdf'
+            downloadUrl: '/papers/jc/economics/JC2_h2economics2_2024_prelims_hwachong.pdf' 
           }, 
         ]
       }

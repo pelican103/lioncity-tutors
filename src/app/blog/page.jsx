@@ -61,12 +61,52 @@ const blogPosts = [
     categories: ['PSLE'],
   },
   {
+    slug: 'primary-school-tuition',
+    title: 'Primary School Tuition',
+    description: 'Discover the benefits of primary school tuition in Singapore. Learn how targeted support, foundational skill-building, and personalized guidance can help your child excel academically and gain confidence.',
+    date: 'July 15, 2025',
+    directUrl: '/primary-school-tuition',
+    categories: ['General']
+  },
+  {
+    slug: 'secondary-school-tuition',
+    title: 'Secondary School Tuition',
+    description: 'Explore how secondary school tuition can help students master challenging subjects, improve exam performance, and build strong study habits for O-Levels and beyond.',
+    date: 'July 15, 2025',
+    directUrl: '/secondary-school-tuition',
+    categories: ['General']
+  },
+  {
+    slug: 'jc-tuition',
+    title: 'Junior College Tuition',
+    description: 'Learn how junior college tuition supports students in tackling demanding A-Level subjects, developing critical thinking skills, and achieving their university aspirations.',
+    date: 'July 16, 2025',
+    directUrl: '/jc-tuition',
+    categories: ['General']
+  },
+  {
+    slug: 'o-level-tuition',
+    title: 'O-Level Tuition',
+    description: 'Find out how O-Level tuition can help students excel in their GCE O-Level exams. Get expert guidance, subject-specific strategies, and exam preparation tips to boost confidence and results.',
+    date: 'July 12, 2025',
+    directUrl: '/secondary-school-tuition/o-level-tuition',
+    categories: ['O-Level', 'General']
+  },
+  {
+    slug: 'n-level-tuition',
+    title: 'N-Level Tuition',
+    description: 'Learn how N-Level tuition supports students in mastering key subjects, improving academic performance, and preparing effectively for the GCE N-Level examinations.',
+    date: 'July 11, 2025',
+    directUrl: '/secondary-school-tuition/n-level-tuition',
+    categories: ['N-Level', 'General']
+  },
+  {
     slug: 'o-level-english',
     title: 'O-Level English Guide',
     description: 'Comprehensive guide to O-Level English. Expert strategies, language skills, and proven tips to score A1 in O Level English.',
     date: 'July 7, 2025',
     directUrl: '/o-level-english',
-    categories: ['O-Level', 'English'],
+    categories: ['O-Level', 'English']
   },
   {
     slug: 'o-level-chemistry',
@@ -103,10 +143,18 @@ const blogPosts = [
   {
     slug: 'o-level-preparation',
     title: 'O-Level Preparation Guide 2025',
-    description: 'Comprehensive O-Level preparation guide for Singapore students. Master all GCE O-Level subjects with expert strategies and proven study techniques.',
+    description: 'Comprehensive O-Level preparation guide for Singapore O-Level students. Master all GCE O-Level subjects with expert strategies and proven study techniques.',
     date: 'June 11, 2025',
     directUrl: '/blog/o-level-preparation-guide',
     categories: ['O-Level'],
+  },
+  {
+    slug: 'n-level-preparation',
+    title: 'N-Level Preparation Guide 2025',
+    description: 'Complete N-Level preparation guide for Singapore N-Level students. Master all GCE N-Level subjects with expert strategies and proven study techniques.',
+    date: 'July 11, 2025',
+    directUrl: '/blog/n-level-preparation-guide',
+    categories: ['N-Level'],
   },
   {
     slug: 'o-level-math',
@@ -206,7 +254,7 @@ const blogPosts = [
   },
 ];
 
-const categories = ['All', 'English', 'Math', 'Physics', 'Chemistry', 'Biology', 'Science', 'PSLE', 'O-Level', 'A-Level', 'IGCSE', 'IBDP', 'General'];
+const categories = ['All', 'PSLE', 'O-Level', 'N-Level', 'A-Level', 'English', 'Math', 'Science', 'Physics', 'Chemistry', 'Biology', 'IGCSE', 'IBDP', 'General'];
 
 export default function Blog() {
   const [selectedCategory, setSelectedCategory] = useState('All');
