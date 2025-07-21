@@ -99,7 +99,8 @@ const tutorSchema = new mongoose.Schema({
     west: Boolean,
     central: Boolean,
     northeast: Boolean,
-    northwest: Boolean
+    northwest: Boolean,
+    online: Boolean 
   },
   
   // Qualifications & Experience
