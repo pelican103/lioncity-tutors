@@ -75,7 +75,8 @@ export default function RegisterAsTutor() {
       west: false,
       central: false,
       northeast: false,
-      northwest: false
+      northwest: false,
+      online: false
     },
     
     // Qualifications & Experience
@@ -233,7 +234,7 @@ export default function RegisterAsTutor() {
         },
         locations: {
           north: false, south: false, east: false, west: false, 
-          central: false, northeast: false, northwest: false
+          central: false, northeast: false, northwest: false, online: false
         },
         tutorType: '',
         yearsOfExperience: '',
@@ -991,6 +992,21 @@ export default function RegisterAsTutor() {
                     </label>
                     <div className="ml-6 text-gray-600 text-sm">
                       Choa Chu Kang, Bukit Panjang, Bukit Batok, Yew Tee, Jelapang
+                    </div>
+                  </div>
+                  {/* Online Lesson */}
+                  <div className="border-t border-gray-200 pt-3">
+                    <label className="inline-flex items-center mb-2">
+                      <input 
+                        type="checkbox" 
+                        checked={formData.locations.online} 
+                        onChange={() => handleLocationChange('online')} 
+                        className="h-4 w-4 text-blue-600"
+                      />
+                      <span className="ml-2 font-medium">Online lesson</span>
+                    </label>
+                    <div className="ml-6 text-gray-600 text-sm">
+                      Online via Zoom, Google Meet, etc.
                     </div>
                   </div>
                 </div>

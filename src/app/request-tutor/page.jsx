@@ -263,7 +263,7 @@ export default function RequestForTutor() {
                   value={formData.location}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g. 610146, Bishan, Jurong, Bedok, Sengkang"
+                  placeholder="e.g. 610146, Online lesson, Bishan, Jurong, Sengkang"
                 />
               </div>
 
