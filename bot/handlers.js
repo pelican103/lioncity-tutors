@@ -1,11 +1,27 @@
+/* global process */
+
 function normalizePhone(phone) {
-  const cleaned = phone.replace(/\D/g, '');
-  const variations = [
-    cleaned,
-    cleaned.startsWith('65') ? cleaned.substring(2) : '65' + cleaned,
-    cleaned.startsWith('65') ? cleaned : '65' + cleaned
-  ];
-  return [...new Set(variations)];
+  console.log('normalizePhone - Input:', phone);
+  const cleaned = phone.replace(/\D/g, ''); // Remove non-digits
+  const variations = [cleaned, phone]; // Include raw input
+  if (cleaned.startsWith('65') && cleaned.length === 10) {
+    variations.push(cleaned.slice(2)); // '65XXXXXXXX' -> 'XXXXXXXX'
+    variations.push(`+${cleaned}`); // '65XXXXXXXX' -> '+65XXXXXXXX'
+  } else if (cleaned.length === 8) {
+    variations.push(`65${cleaned}`); // 'XXXXXXXX' -> '65XXXXXXXX'
+    variations.push(`+65${cleaned}`); // 'XXXXXXXX' -> '+65XXXXXXXX'
+  } else if (cleaned.startsWith('1') && cleaned.length === 11) {
+    variations.push(cleaned.slice(1)); // '1XXXXXXXXXX' -> 'XXXXXXXXXX'
+  }
+  // Handle formats like +65-XXXXXXXX, +65 XXXXXXXX, or +65-XXXX-XXXX
+  if (phone.includes('-') || phone.includes(' ') || phone.includes('+')) {
+    variations.push(cleaned.startsWith('65') ? cleaned.slice(2) : cleaned);
+    variations.push(`+65${cleaned.startsWith('65') ? cleaned.slice(2) : cleaned}`);
+    variations.push(`65${cleaned.startsWith('65') ? cleaned.slice(2) : cleaned}`);
+    variations.push(cleaned.replace(/^65/, '+65')); // Ensure +65XXXXXXXX
+  }
+  console.log('normalizePhone - Variations:', variations);
+  return [...new Set(variations)]; // Remove duplicates
 }
 
 function initializeTeachingLevels(tutor) {
@@ -48,16 +64,34 @@ function initializeLocations(tutor) {
 
 // Helper function to get tutor from session
 async function getTutorFromSession(chatId, userSessions, Tutor) {
-  let tutor;
-  if (userSessions[chatId]?.tutorId) {
-    tutor = await Tutor.findById(userSessions[chatId].tutorId);
+  try {
+    const session = userSessions[chatId];
+    if (!session) return null;
+
+    // Try by tutorId first
+    if (session.tutorId) {
+      try {
+        const tutorById = await Tutor.findById(session.tutorId);
+        if (tutorById) return tutorById;
+      } catch {
+        console.warn(`⚠️ Invalid tutorId for chatId ${chatId}:`, session.tutorId);
+      }
+    }
+
+    // Fallback: Try matching by contactNumber
+    if (session.contactNumber) {
+      const phoneVariations = normalizePhone(session.contactNumber);
+      const tutorByPhone = await Tutor.findOne({ contactNumber: { $in: phoneVariations } });
+      if (tutorByPhone) return tutorByPhone;
+    }
+
+    return null; // Not found
+  } catch (error) {
+    console.error(`❌ Error in getTutorFromSession for chatId ${chatId}:`, error);
+    return null;
   }
-  if (!tutor && userSessions[chatId]?.contactNumber) {
-    const phoneVariations = normalizePhone(userSessions[chatId].contactNumber);
-    tutor = await Tutor.findOne({ contactNumber: { $in: phoneVariations } });
-  }
-  return tutor;
 }
+
 
 function getTick(value) {
   return value ? '✅' : '❌';
@@ -169,7 +203,7 @@ function formatAssignment(assignment) {
 }
 
 // Format assignment for channel posting
-function formatAssignmentForChannel(assignment, botUsername) {
+function formatAssignmentForChannel(assignment) {
   let msg = `🎯 *Title:* ${assignment.title}\n\n`;
   msg += `📚 *Level:* ${assignment.level}\n`;
   msg += `📖 *Subject:* ${assignment.subject}\n`;
@@ -198,7 +232,7 @@ async function handleBioEdit(bot, chatId, text, userSessions, Tutor) {
     
     session.state = 'idle';
     await safeSend(bot, chatId, '✅ Bio updated successfully!');
-    return await showProfileEditMenu(bot, chatId);
+    return await showProfileEditMenu();
   } catch (error) {
     console.error('Error updating bio:', error);
     await safeSend(bot, chatId, '❌ Error updating bio. Please try again.');
@@ -210,12 +244,12 @@ async function handleExperienceEdit(bot, chatId, text, userSessions, Tutor) {
     const session = userSessions[chatId];
     const tutor = await Tutor.findById(session.tutorId);
     
-    tutor.experience = text;
+    tutor.teachingExperience = text;
     await tutor.save();
     
     session.state = 'idle';
     await safeSend(bot, chatId, '✅ Experience updated successfully!');
-    return await showProfileEditMenu(bot, chatId);
+    return await showProfileEditMenu();
   } catch (error) {
     console.error('Error updating experience:', error);
     await safeSend(bot, chatId, '❌ Error updating experience. Please try again.');
@@ -232,7 +266,7 @@ async function handleQualificationsEdit(bot, chatId, text, userSessions, Tutor) 
     
     session.state = 'idle';
     await safeSend(bot, chatId, '✅ Qualifications updated successfully!');
-    return await showProfileEditMenu(bot, chatId);
+    return await showProfileEditMenu();
   } catch (error) {
     console.error('Error updating qualifications:', error);
     await safeSend(bot, chatId, '❌ Error updating qualifications. Please try again.');
@@ -240,7 +274,7 @@ async function handleQualificationsEdit(bot, chatId, text, userSessions, Tutor) 
 }
 
 // Menu functions
-function showProfileEditMenu(tutor) {
+function showProfileEditMenu() {
   // This should return a keyboard object, NOT call safeSend
   return {
     inline_keyboard: [
@@ -293,17 +327,7 @@ function getTeachingLevelsMenu(tutor) {
     ]
   };
 }
-function getProfileDetailsMenu(tutor) {
-  return {
-    inline_keyboard: [
-      [{ text: '📝 Introduction', callback_data: 'edit_introduction' }],
-      [{ text: '👨‍🏫 Teaching Experience', callback_data: 'edit_teaching_experience' }],
-      [{ text: '🏆 Track Record', callback_data: 'edit_track_record' }],
-      [{ text: '⭐ Selling Points', callback_data: 'edit_selling_points' }],
-      [{ text: '⬅️ Back to Profile Edit', callback_data: 'profile_edit' }]
-    ]
-  };
-}
+
 function getLocationsMenu(tutor) {
   initializeLocations(tutor);
   
@@ -592,25 +616,27 @@ function isAdmin(userId, ADMIN_USERS) {
 }
 
 // Handle initial start and contact sharing
-async function handleStart(bot, chatId, userId, Tutor, userSessions, startParam = null, Assignment, ADMIN_USERS, BOT_USERNAME) {
+async function handleStart(bot, chatId, userId, Tutor, userSessions, startParam = null) {
   try {
-    // Store startParam in session if it's an application
+    const existingSession = userSessions[chatId] || {};
+
+    // Prepare updated session without overwriting everything
+    const updatedSession = {
+      ...existingSession,
+      state: 'awaiting_contact',
+      userId,
+      startParam
+    };
+
+    // If it's an application, extract assignment ID
     if (startParam && startParam.startsWith('apply_')) {
-      userSessions[chatId] = { 
-        state: 'awaiting_contact',
-        startParam: startParam,
-        userId: userId,
-        pendingAssignmentId: startParam.replace('apply_', '') // Store the assignment ID
-      };
-    } else {
-      userSessions[chatId] = { 
-        state: 'awaiting_contact',
-        startParam: startParam,
-        userId: userId
-      };
+      updatedSession.pendingAssignmentId = startParam.replace('apply_', '');
     }
-    
-    // Always request contact number first - this is your primary verification method
+
+    // Save updated session
+    userSessions[chatId] = updatedSession;
+
+    // Prompt user for contact
     await safeSend(bot, chatId, '👋 Welcome! To get started, please share your contact number by clicking the button below.', {
       reply_markup: {
         keyboard: [[{
@@ -634,44 +660,63 @@ async function handleContact(bot, chatId, userId, contact, Tutor, userSessions, 
     // Normalize phone number
     const phoneVariations = normalizePhone(contact.phone_number);
     
-    // Find or create tutor
-    let tutor = await Tutor.findOne({ contactNumber: { $in: phoneVariations } });
+    const tutors = await Tutor.find({ contactNumber: { $in: phoneVariations } });
+    if (tutors.length > 1) {
+      await safeSend(bot, chatId, 'Multiple accounts detected. Please contact support at 8870 1152 / @ivanfang on telegram for assistance.');
+      return;
+    }
+    const tutor = tutors[0];
     
     if (!tutor) {
-      // Create new tutor
-      tutor = new Tutor({
-        contactNumber: phoneVariations[0], // Use the first variation as the stored number
-        fullName: contact.first_name + (contact.last_name ? ' ' + contact.last_name : ''),
-        telegramId: userId,
-        teachingLevels: initializeTeachingLevels(),
-        availableTimeSlots: initializeAvailability(),
-        locations: initializeLocations()
-      });
-      await tutor.save();
-    } else if (tutor.telegramId !== userId) {
-      // Update telegram ID if it changed
+      // Instead of creating a new tutor, send registration message
+      await safeSend(bot, chatId, 'Please register yourself first at https://www.lioncitytutors.com/register-tutor');
+      return; // Exit the function
+    } 
+    const telegramIdCheck = await Tutor.findOne({ telegramId: userId, _id: { $ne: tutor._id } });
+    if (telegramIdCheck) {
+      await safeSend(bot, chatId, 'This Telegram account is linked to another tutor profile. Please contact support at support@lioncitytutors.com.');
+      return;
+    }
+    
+    // Update telegramId if changed
+    if (tutor.telegramId !== userId) {
       tutor.telegramId = userId;
       await tutor.save();
     }
     
-    // Store tutor ID in session
+    // Store tutor ID and preserve existing session data
+    const currentSession = userSessions[chatId] || {};
     userSessions[chatId] = {
-      ...userSessions[chatId],
+      ...currentSession,
       tutorId: tutor._id,
-      state: 'idle'
+      state: 'verified',
+      fullName: tutor.fullName
     };
     
-    // Check if there's a pending assignment application
-    if (userSessions[chatId].pendingAssignmentId) {
-      const assignmentId = userSessions[chatId].pendingAssignmentId;
-      const assignment = await Assignment.findById(assignmentId);
+    // Check for pending applications
+    const pendingApplications = await Assignment.find({
+      appliedTutors: tutor._id,
+      status: 'open'
+    });
+    
+    if (currentSession.pendingAssignmentId) {
+      const assignmentId = currentSession.pendingAssignmentId;
+      const assignment = await Assignment.findOne({ _id: assignmentId, status: 'open' });
       
       if (!assignment) {
         delete userSessions[chatId].pendingAssignmentId;
-        return await safeSend(bot, chatId, '❌ This assignment is no longer available.');
+        await safeSend(bot, chatId, '❌ This assignment is no longer available.');
+        // Show main menu with pending applications info
+        let message = `Welcome back, ${tutor.fullName}! `;
+        if (pendingApplications.length > 0) {
+          message += `You have ${pendingApplications.length} pending application(s).\n\n`;
+        }
+        message += 'What would you like to do?';
+        await showMainMenu(bot, chatId, message);
+        return;
       }
       
-      // Show profile preview with application options
+      // Show profile and assignment details
       const profileMsg = formatTutorProfile(tutor);
       const assignmentMsg = formatAssignment(assignment);
       
@@ -684,7 +729,8 @@ async function handleContact(bot, chatId, userId, contact, Tutor, userSessions, 
           reply_markup: {
             inline_keyboard: [
               [{ text: '📝 Update Profile', callback_data: 'profile_edit' }],
-              [{ text: '✅ Confirm Application', callback_data: `confirm_apply_${assignmentId}` }]
+              [{ text: '✅ Confirm Application', callback_data: `confirm_apply_${assignmentId}` }],
+              [{ text: '🏠 Main Menu', callback_data: 'main_menu' }]
             ]
           }
         }
@@ -694,24 +740,41 @@ async function handleContact(bot, chatId, userId, contact, Tutor, userSessions, 
     
     // If there was a start parameter, handle it
     if (userSessions[chatId].startParam) {
+      const param = userSessions[chatId].startParam;
       delete userSessions[chatId].startParam;
-      await handleStartParameter(bot, chatId, userId, userSessions[chatId].startParam, Assignment, Tutor, userSessions, ADMIN_USERS);
+      await handleStartParameter(bot, chatId, userId, param, Assignment, Tutor, userSessions, ADMIN_USERS);
       return;
     }
     
-    // Show profile and main menu
+    // Default flow: Show profile and main menu
     const profileMsg = formatTutorProfile(tutor);
-    await safeSend(bot, chatId, profileMsg, { parse_mode: 'Markdown' });
-    await showMainMenu(chatId, bot, userId, ADMIN_USERS);
+    let message = `Welcome back, ${tutor.fullName}! `;
+    if (pendingApplications.length > 0) {
+      message += `You have ${pendingApplications.length} pending application(s).\n\n`;
+    }
+    message += 'Here is your profile:\n\n' + profileMsg;
+    await safeSend(bot, chatId, message, {
+      parse_mode: 'Markdown',
+      reply_markup: {
+        inline_keyboard: [[{ text: '🏠 Main Menu', callback_data: 'main_menu' }]]
+      }
+    });
+    await showMainMenu(bot, chatId, 'What would you like to do?');
     
   } catch (error) {
-    console.error('Error handling contact:', error);
+    console.error('Error handling contact:', {
+      message: error.message,
+      stack: error.stack,
+      phoneNumber: contact.phone_number,
+      userId,
+      chatId
+    });
     await safeSend(bot, chatId, 'There was an error verifying your account. Please try again.');
   }
 }
 
 // Main menu function
-function showMainMenu(chatId, bot, userId, ADMIN_USERS) {
+async function showMainMenu(chatId, bot, userId, ADMIN_USERS) {
   const isUserAdmin = isAdmin(userId, ADMIN_USERS);
   
   const keyboard = [
@@ -724,14 +787,14 @@ function showMainMenu(chatId, bot, userId, ADMIN_USERS) {
     keyboard.push([{ text: '⚙️ Admin Panel', callback_data: 'admin_panel' }]);
   }
 
-  return safeSend(bot, chatId, 'Main Menu - What would you like to do?', {
+  await safeSend(bot, chatId, 'Main Menu - What would you like to do?', {
     reply_markup: { inline_keyboard: keyboard }
   });
 }
 
 // Admin panel menu
-function showAdminPanel(chatId, bot) {
-  return safeSend(bot, chatId, '⚙️ Admin Panel - What would you like to do?', {
+async function showAdminPanel(chatId, bot) {
+  await safeSend(bot, chatId, '⚙️ Admin Panel - What would you like to do?', {
     reply_markup: {
       inline_keyboard: [
         [{ text: '🎯 Post New Assignment', callback_data: 'admin_post_assignment' }],
@@ -916,7 +979,7 @@ async function handleAssignmentStep(bot, chatId, text, userSessions) {
         });
         break;
       
-      case 'description':
+      case 'description': {
         if (text.toLowerCase().trim() !== 'skip') {
           assignmentData.description = text.trim();
         }
@@ -938,6 +1001,7 @@ async function handleAssignmentStep(bot, chatId, text, userSessions) {
           }
         });
         break;
+      }
     }
   } catch (error) {
     console.error('Error in assignment step:', error);
@@ -1005,7 +1069,7 @@ async function confirmPostAssignment(bot, chatId, userSessions, Assignment, chan
 // Post assignment to channel
 async function postAssignmentToChannel(bot, assignment, channelId, botUsername) {
   try {
-    const message = formatAssignmentForChannel(assignment, botUsername);
+    const message = formatAssignmentForChannel(assignment);
     
     const result = await bot.sendMessage(channelId, message, {
       parse_mode: 'Markdown',
@@ -1505,7 +1569,7 @@ async function handleYearsExperienceEdit(bot, chatId, text, userSessions, Tutor)
       return await safeSend(bot, chatId, '❌ Please enter a valid number of years (0-50):');
     }
     
-    tutor.yearsExperience = years;
+    tutor.yearsOfExperience = years;
     await tutor.save();
     
     session.state = 'idle';
@@ -1810,7 +1874,7 @@ async function handleCallbackQuery(
       }
     
       const profileMsg = formatTutorProfile(tutor);
-      const keyboard = showProfileEditMenu(tutor); 
+      const keyboard = showProfileEditMenu(); 
       
       return await safeSend(bot, chatId, `${profileMsg}\n\nWhat would you like to edit?`, {
         parse_mode: 'Markdown',
@@ -2218,7 +2282,7 @@ async function handleCallbackQuery(
       }
 
       return await safeSend(bot, chatId, 'Select which teaching levels you want to configure:', {
-        reply_markup: getTeachingLevelsDetailedMenu(tutor)
+        reply_markup: getTeachingLevelsMenu(tutor)
       });
     }
 
@@ -2252,7 +2316,7 @@ async function handleCallbackQuery(
         };
         
         commonSubjects[level]?.forEach(subject => {
-          if (tutor.teachingLevels[level].hasOwnProperty(subject)) {
+          if (Object.prototype.hasOwnProperty.call(tutor.teachingLevels[level], subject)) {
             tutor.teachingLevels[level][subject] = true;
           }
         });
@@ -2261,7 +2325,7 @@ async function handleCallbackQuery(
       await tutor.save();
       
       return await safeSend(bot, chatId, `✅ ${level.charAt(0).toUpperCase() + level.slice(1)} level updated.`, {
-        reply_markup: getTeachingLevelsDetailedMenu(tutor)
+        reply_markup: getTeachingLevelsMenu(tutor)
       });
     }
 
@@ -2410,7 +2474,7 @@ async function handleMessage(bot, chatId, userId, text, message, Tutor, Assignme
     
     // For users without proper setup, redirect to start
     if (!session.tutorId) {
-      return await handleStart(bot, chatId, userId, Tutor, userSessions, null, Assignment, ADMIN_USERS, BOT_USERNAME);
+      return await handleStart(bot, chatId, userId, Tutor, userSessions, null);
     }
     
     // Show main menu for established users
@@ -2420,7 +2484,7 @@ async function handleMessage(bot, chatId, userId, text, message, Tutor, Assignme
   // Handle /start command - delegate to your existing handleStart function
   if (text === '/start' || text.startsWith('/start ')) {
     const startParam = text.includes(' ') ? text.split(' ')[1] : null;
-    return await handleStart(bot, chatId, userId, Tutor, userSessions, startParam, Assignment, ADMIN_USERS, BOT_USERNAME);
+    return await handleStart(bot, chatId, userId, Tutor, userSessions, startParam);
   }
 
   // Check if user is in awaiting_contact state
@@ -2439,17 +2503,12 @@ async function handleMessage(bot, chatId, userId, text, message, Tutor, Assignme
 
   // For users without proper setup, redirect to start
   if (!session.tutorId) {
-    return await handleStart(bot, chatId, userId, Tutor, userSessions, null, Assignment, ADMIN_USERS, BOT_USERNAME);
+    return await handleStart(bot, chatId, userId, Tutor, userSessions, null);
   }
 
   // Handle assignment creation flow
   if (session.state === 'creating_assignment') {
     return await handleAssignmentStep(bot, chatId, text, userSessions);
-  }
-
-  // Profile editing states
-  if (session.state === 'editing_name') {
-    return await handleNameEdit(bot, chatId, text, userSessions, Tutor);
   }
 
   if (session.state === 'editing_bio') {
@@ -2462,10 +2521,6 @@ async function handleMessage(bot, chatId, userId, text, message, Tutor, Assignme
 
   if (session.state === 'editing_qualifications') {
     return await handleQualificationsEdit(bot, chatId, text, userSessions, Tutor);
-  }
-
-  if (session.state === 'editing_hourly_rate') {
-    return await handleHourlyRateEdit(bot, chatId, text, userSessions, Tutor);
   }
 
   // ADD ALL THE TEXT INPUT HANDLERS HERE (moved from handleCallbackQuery)
