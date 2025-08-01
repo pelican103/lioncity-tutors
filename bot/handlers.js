@@ -712,7 +712,7 @@ async function handleContact(bot, chatId, userId, contact, Tutor, userSessions, 
           message += `You have ${pendingApplications.length} pending application(s).\n\n`;
         }
         message += 'What would you like to do?';
-        await showMainMenu(bot, chatId, message);
+        await showMainMenu(chatId, bot, userId, ADMIN_USERS);
         return;
       }
       
@@ -759,7 +759,7 @@ async function handleContact(bot, chatId, userId, contact, Tutor, userSessions, 
         inline_keyboard: [[{ text: '🏠 Main Menu', callback_data: 'main_menu' }]]
       }
     });
-    await showMainMenu(bot, chatId, 'What would you like to do?');
+    await showMainMenu(chatId, bot, userId, ADMIN_USERS);
     
   } catch (error) {
     console.error('Error handling contact:', {
@@ -2478,7 +2478,8 @@ async function handleMessage(bot, chatId, userId, text, message, Tutor, Assignme
     }
     
     // Show main menu for established users
-    return await showMainMenu(chatId, bot, userId, ADMIN_USERS);
+    await showMainMenu(chatId, bot, userId, ADMIN_USERS);
+    return;
   }
 
   // Handle /start command - delegate to your existing handleStart function
