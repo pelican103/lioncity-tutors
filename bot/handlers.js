@@ -696,12 +696,12 @@ async function handleContact(bot, chatId, userId, contact, Tutor, userSessions, 
     // Check for pending applications
     const pendingApplications = await Assignment.find({
       appliedTutors: tutor._id,
-      status: 'open'
+      status: 'Open'
     });
     
     if (currentSession.pendingAssignmentId) {
       const assignmentId = currentSession.pendingAssignmentId;
-      const assignment = await Assignment.findOne({ _id: assignmentId, status: 'open' });
+      const assignment = await Assignment.findOne({ _id: assignmentId, status: 'Open' });
       
       if (!assignment) {
         delete userSessions[chatId].pendingAssignmentId;
