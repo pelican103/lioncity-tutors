@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { FaPhoneAlt, FaWhatsapp, FaArrowRight } from "react-icons/fa";
 import { motion, useScroll, useTransform, useAnimation } from "framer-motion";
 import { Info } from "lucide-react";
-import Footer from '../Footer';
+import Head from 'next/head';
+import Image from 'next/image';
 
 // Counter component
 const Counter = ({ end, duration = 2.5, suffix = "", decimals = 0 }) => {
@@ -142,8 +143,6 @@ export default function HomePageClient(props) {
       setStatus({ submitting: false, submitted: false, error: error.message || 'Failed to submit the form. Please try again.' });
     }
   };
-
-  // ...rest of the HomePage UI and logic from the original file...
  
     const { scrollYProgress } = useScroll();
     const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
@@ -151,21 +150,33 @@ export default function HomePageClient(props) {
   
     return (
       <>
+      <Head>
+        <title>#1 Home Tuition Agency in Singapore | LionCity Tutors</title>
+        <meta name="description" content="Connect with trusted home tutors in Singapore for Primary, Secondary, and JC subjects. Fast matching, no agency fees, and guaranteed satisfaction." />
+      </Head>
       <main>
       <div className="min-h-screen bg-white text-gray-800">
         {/* Hero Banner Section - Fixed mobile formatting issues */}
-        <section className="relative">
-          <div>
-            <motion.img
-              initial={{ scale: 1.1 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 1.5 }}
-              src="/final.png" 
-              alt="Students receiving personalized home tuition in Singapore - LionCity Tutors" 
-              loading="lazy"
-              className="w-full h-[280px] sm:h-[300px] md:h-[550px] object-cover object-top"
+        <section className="relative w-full h-[280px] sm:h-[300px] md:h-[550px] overflow-hidden">
+        {/* The motion.div now wraps the Image component to apply the scaling animation.
+          It is positioned absolutely to fill the parent <section>.
+        */}
+        <motion.div
+          className="absolute inset-0"
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.5 }}
+        >
+            <Image
+              src="/final.webp"
+              alt="Students receiving personalized home tuition in Singapore - LionCity Tutors"
+              fill 
+              className="object-cover object-top" 
+              priority 
             />
-          </div>
+        </motion.div>
+
+          {/* The overlay div for text and buttons. This sits on top of the image. */}
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
@@ -177,9 +188,9 @@ export default function HomePageClient(props) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-xs sm:text-base uppercase font-bold text-yellow-400 mb-1 sm:mb-2"
+                className="text-lg sm:text-xl uppercase font-extrabold text-red-500 mb-1 sm:mb-2"
               >
-                Home Tuition Singapore
+                LionCity Tutors
               </motion.p>
               <motion.h1 
                 initial={{ opacity: 0, y: 20 }}
@@ -187,8 +198,7 @@ export default function HomePageClient(props) {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="text-xl sm:text-3xl md:text-5xl font-extrabold leading-tight mb-1 sm:mb-4"
               >
-                <span className="text-red-500">LionCity Tutors:</span>{" "}
-                <span className="block sm:inline mt-1 sm:mt-0 text-lg sm:text-3xl md:text-5xl">The #1 Tuition Agency in Singapore</span>
+                Find the Perfect Home Tutor in Singapore
               </motion.h1>
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
@@ -242,13 +252,13 @@ export default function HomePageClient(props) {
         {/* Hero Section */}
         <section className="bg-blue-50 py-12 sm:py-16 px-4 sm:px-6 text-center">
           
-          <motion.h1
+          <motion.h2
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-3xl sm:text-4xl font-extrabold text-blue-700 mb-4">
             A Results-Proven Home Tuition Agency
-          </motion.h1>
+          </motion.h2>
           <p className="text-lg text-gray-600 max-w-xl mx-auto mb-6">
             We connect parents/students with qualified and experienced tutors across Singapore. Fast, reliable, and free to request.
           </p>
@@ -405,15 +415,11 @@ export default function HomePageClient(props) {
         
         {/* Testimonials Section */}
         <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+          <h2 
             className="text-2xl sm:text-3xl font-semibold mb-8 sm:mb-12 text-center"
           >
             What Our Clients Say
-          </motion.h2>
+          </h2>
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {/* Testimonial 1 */}
             <motion.div
@@ -566,7 +572,7 @@ export default function HomePageClient(props) {
   
         {/* Request Form Section */}
         <div className="max-w-4xl mx-auto py-16 px-6">
-          <h1 className="text-4xl font-bold text-center text-blue-700 mb-10 leading-relaxed">Free Request For Tutor</h1>
+          <h2 className="text-4xl font-bold text-center text-blue-700 mb-10 leading-relaxed">Free Request For Tutor</h2>
           
           <div className="bg-white rounded-xl shadow-lg p-8">
             {/* Your form and success message here - unchanged */}
@@ -978,4 +984,4 @@ export default function HomePageClient(props) {
       </>
     );
   
-} 
+}

@@ -62,7 +62,7 @@ export default function Navbar() {
       {/* Logo */}
       <Link href="/" className="flex flex-col items-center text-xl font-bold text-red-500">
         <img
-          src="/favicon1.png"
+          src="/favicon1.webp"
           alt="LionCity Logo"
           className="h-10 w-10"
         />
