@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Link from 'next/link';
 import { Step1, Step2, Step3 } from "@/components/FormSteps";
 
+
 export default function PSLEScience() {
   const [currentStep, setCurrentStep] = useState(1);
   const initialFormData = {
@@ -116,49 +117,6 @@ export default function PSLEScience() {
   return (
     <>
       <div className="p-6 max-w-5xl mx-auto space-y-12">
-        {/* Table of Contents */}
-        <section className="bg-blue-50 p-6 rounded-xl">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-blue-800">Table of Contents</h2>
-            <Button 
-              onClick={() => setShowTOC(!showTOC)}
-              className="text-blue-600 hover:text-blue-800"
-            >
-              {showTOC ? 'Hide' : 'Show'}
-            </Button>
-          </div>
-          
-          {showTOC && (
-            <nav className="space-y-2">
-              <ol className="list-decimal list-inside space-y-2 text-blue-700">
-                <li>
-                  <a href="#overview" className="hover:text-blue-900">An Overview to PSLE Science</a>
-                </li>
-                <li>
-                  <a href="#objectives" className="hover:text-blue-900">Objectives of PSLE Science</a>
-                </li>
-                <li>
-                  <a href="#exam-format" className="hover:text-blue-900">PSLE Science Exam Format</a>
-                  <ul className="list-disc list-inside ml-6 mt-1">
-                    <li><a href="#booklet-a" className="hover:text-blue-900">3.1. Booklet A (Multiple-choice Questions)</a></li>
-                    <li><a href="#booklet-b" className="hover:text-blue-900">3.2. Booklet B (Open-ended Questions)</a></li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#tips-resources" className="hover:text-blue-900">PSLE Science Tips and Resources</a>
-                  <ul className="list-disc list-inside ml-6 mt-1">
-                    <li><a href="#tips" className="hover:text-blue-900">4.1. PSLE Science Tips</a></li>
-                    <li><a href="#resources" className="hover:text-blue-900">4.2. PSLE Science Resources</a></li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#conclusion" className="hover:text-blue-900">Conclusion</a>
-                </li>
-              </ol>
-            </nav>
-          )}
-        </section>
-
         {/* Main Content */}
         <section id="overview" className="space-y-6">
           <h1 className="text-4xl font-bold text-blue-800">A Complete Guide to Primary School & PSLE Science</h1>
