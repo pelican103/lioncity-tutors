@@ -4,15 +4,18 @@ import React, { useState } from "react";
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Step1, Step2, Step3 } from "@/components/FormSteps";
 
 export default function JCTuition() {
   const [activeStream, setActiveStream] = useState('science');
-
-  const [formData, setFormData] = useState({
+  const [currentStep, setCurrentStep] = useState(1);
+  const initialFormData = {
     name: '',
     mobile: '',
+    email: '',
     level: '',
     school: '',
+    location: '',
     lessonDuration: '1.5 Hours',
     customDuration: '',
     lessonFrequency: '1 Lesson/Week',
@@ -24,25 +27,23 @@ export default function JCTuition() {
       moeTeacher: false
     },
     budget: {
-      marketRate: true,
-      custom: false,
+      type: 'marketRate',
       customAmount: ''
     },
     genderPreference: 'No preference',
     bilingualRequired: 'No',
     preferences: ''
-  });
-
+  };
+  const [formData, setFormData] = useState(initialFormData);
   const [status, setStatus] = useState({
     submitting: false,
     submitted: false,
     error: null
   });
-
+  const nextStep = () => setCurrentStep(prev => prev + 1);
+  const prevStep = () => setCurrentStep(prev => prev - 1);
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    
-    // Check if this is a nested field (contains a dot)
+    const { name, value, type } = e.target;
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
       setFormData(prevData => ({
@@ -53,15 +54,12 @@ export default function JCTuition() {
         }
       }));
     } else {
-      // Handle regular fields
       setFormData(prevData => ({
         ...prevData,
         [name]: value
       }));
     }
   };
-
-  // Handle changes for nested objects with checkboxes
   const handleNestedChange = (objectName, field, value) => {
     setFormData(prevData => ({
       ...prevData,
@@ -71,12 +69,8 @@ export default function JCTuition() {
       }
     }));
   };
-
-  // Handle checkbox changes
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
-    
-    // Check if this is a nested field (contains a dot)
     if (name.includes('.')) {
       const [objectName, field] = name.split('.');
       handleNestedChange(objectName, field, checked);
@@ -87,11 +81,17 @@ export default function JCTuition() {
       }));
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ submitting: true, submitted: false, error: null });
-
+    const payload = {
+      ...formData,
+      budget: {
+        marketRate: formData.budget.type === 'marketRate',
+        custom: formData.budget.type === 'custom',
+        customAmount: formData.budget.type === 'custom' ? formData.budget.customAmount : ''
+      }
+    };
     try {
       const response = await fetch('https://tuition-backend-afud.onrender.com/api/requestfortutor', {
         method: 'POST',
@@ -100,41 +100,16 @@ export default function JCTuition() {
         },
         body: JSON.stringify(formData)
       });
-
       if (response.ok) {
         const result = await response.json();
-        console.log('Submission successful:', result);
-        setFormData({
-          name: '',
-          mobile: '',
-          level: '',
-          school: '',
-          lessonDuration: '1.5 Hours',
-          customDuration: '',
-          lessonFrequency: '1 Lesson/Week',
-          customFrequency: '',
-          preferredTime: '',
-          tutorType: {
-            partTime: false,
-            fullTime: false,
-            moeTeacher: false
-          },
-          budget: {
-            marketRate: true,
-            custom: false,
-            customAmount: ''
-          },
-          genderPreference: 'No preference',
-          bilingualRequired: 'No',
-          preferences: ''
-        });
+        setFormData(initialFormData);
+        setCurrentStep(1);
         setStatus({ submitting: false, submitted: true, error: null });
       } else {
         const errorText = await response.text();
         throw new Error(errorText || 'Form submission failed');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
       setStatus({ submitting: false, submitted: false, error: error.message || 'Failed to submit the form. Please try again.' });
     }
   };
@@ -164,8 +139,7 @@ export default function JCTuition() {
         {/* Tutor Request Form Section */}
         <section className="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl shadow-lg">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-indigo-700 mb-8">Request a JC Tutor</h2>
-            
+            <h2 className="text-3xl font-bold text-center text-indigo-700 mb-4">Request a JC Tutor</h2>
             <div className="bg-white rounded-xl shadow-lg p-8">
               {status.submitted ? (
                 <div className="text-center py-10">
@@ -180,257 +154,53 @@ export default function JCTuition() {
                   </button>
                 </div>
               ) : (
-                <>
+                <form id="mainForm" onSubmit={handleSubmit}>
+                  {/* --- Progress Bar --- */}
+                  <div className="mb-8">
+                    <div className="flex justify-between mb-1">
+                      <span className={`text-sm font-medium ${currentStep >= 1 ? 'text-indigo-700' : 'text-gray-400'}`}>Core Info</span>
+                      <span className={`text-sm font-medium ${currentStep >= 2 ? 'text-indigo-700' : 'text-gray-400'}`}>Logistics</span>
+                      <span className={`text-sm font-medium ${currentStep >= 3 ? 'text-indigo-700' : 'text-gray-400'}`}>Preferences</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-indigo-600 h-2 rounded-full transition-all duration-500 ease-in-out"
+                        style={{ width: `${((currentStep - 1) / 2) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
                   {status.error && (
                     <div className="bg-red-100 text-red-800 p-4 rounded-md mb-6">
                       <p className="font-semibold">Submission Error</p>
                       <p className="text-sm">{status.error}</p>
                     </div>
                   )}
-
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name<span className="text-red-500">*</span></label>
-                      <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Your name"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">Mobile Number<span className="text-red-500">*</span></label>
-                      <input
-                        id="mobile"
-                        name="mobile"
-                        type="tel"
-                        value={formData.mobile}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="e.g. 91234567"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="level" className="block text-sm font-medium text-gray-700 mb-1">Student's Level & Subject<span className="text-red-500">*</span></label>
-                      <input
-                        id="level"
-                        name="level"
-                        type="text"
-                        value={formData.level}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="e.g. JC1 H2 Math"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="school" className="block text-sm font-medium text-gray-700 mb-1">
-                        Student's School
-                      </label>
-                      <input
-                        id="school"
-                        name="school"
-                        type="text"
-                        value={formData.school}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="e.g. NJC"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      <div>
-                        <label htmlFor="lessonDuration" className="block text-sm font-medium text-gray-700 mb-1">
-                          Lesson Duration<span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          id="lessonDuration"
-                          name="lessonDuration"
-                          value={formData.lessonDuration}
-                          onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                          <option value="1.5 Hours">1.5 Hours</option>
-                          <option value="2 Hours">2 Hours</option>
-                          <option value="Others">Others</option>
-                        </select>
-                        
-                        {formData.lessonDuration === "Others" && (
-                          <div className="mt-2">
-                            <input
-                              type="text"
-                              name="customDuration"
-                              value={formData.customDuration}
-                              onChange={handleChange}
-                              placeholder="Please specify"
-                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            />
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="lessonFrequency" className="block text-sm font-medium text-gray-700 mb-1">
-                          Lesson Frequency<span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          id="lessonFrequency"
-                          name="lessonFrequency"
-                          value={formData.lessonFrequency}
-                          onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                          <option value="1 Lesson/Week">1 Lesson/Week</option>
-                          <option value="2 Lessons/Week">2 Lessons/Week</option>
-                          <option value="Others">Others</option>
-                        </select>
-                        
-                        {formData.lessonFrequency === "Others" && (
-                          <div className="mt-2">
-                            <input
-                              type="text"
-                              name="customFrequency"
-                              value={formData.customFrequency}
-                              onChange={handleChange}
-                              placeholder="Please specify"
-                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label htmlFor="preferredTime" className="block text-sm font-medium text-gray-700 mb-1">Preferred Days/Time<span className="text-red-500">*</span></label>
-                      <input
-                        id="preferredTime"
-                        name="preferredTime"
-                        type="text"
-                        value={formData.preferredTime}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="e.g. Weekday evenings"
-                      />
-                    </div>
-
-                    <div className="border border-gray-200 rounded-lg p-5 bg-gray-50">
-                      <h3 className="font-semibold text-lg mb-3">Tutor Rates</h3>
-                      
-                      <div className="space-y-3">
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id="tutorType.partTime"
-                            name="tutorType.partTime"
-                            checked={formData.tutorType.partTime}
-                            onChange={handleCheckboxChange}
-                            className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                          />
-                          <label htmlFor="tutorType.partTime" className="ml-2 block text-gray-700">
-                            <span className="font-bold">Part-Time Tutors</span>{" "}
-                            <span className="font-bold">$25-$35/Hour</span>
-                          </label>
-                        </div>
-                        
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id="tutorType.fullTime"
-                            name="tutorType.fullTime"
-                            checked={formData.tutorType.fullTime}
-                            onChange={handleCheckboxChange}
-                            className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                          />
-                          <label htmlFor="tutorType.fullTime" className="ml-2 block text-gray-700">
-                            <span className="font-bold">Full-Time Tutors</span>{" "}
-                            <span className="font-bold">$35-$45/Hour</span>
-                          </label>
-                        </div>
-                        
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id="tutorType.moeTeacher"
-                            name="tutorType.moeTeacher"
-                            checked={formData.tutorType.moeTeacher}
-                            onChange={handleCheckboxChange}
-                            className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                          />
-                          <label htmlFor="tutorType.moeTeacher" className="ml-2 block text-gray-700">
-                            <span className="font-bold">Ex/Current MOE Teachers</span>{" "}
-                            <span className="font-bold">$50-$70/Hour</span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      <div>
-                        <label htmlFor="genderPreference" className="block text-sm font-medium text-gray-700 mb-1">
-                          Gender Preference<span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          id="genderPreference"
-                          name="genderPreference"
-                          value={formData.genderPreference}
-                          onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                          <option value="No preference">No preference</option>
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
-                        </select>
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="bilingualRequired" className="block text-sm font-medium text-gray-700 mb-1">
-                          Is a Bilingual Tutor Required?<span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          id="bilingualRequired"
-                          name="bilingualRequired"
-                          value={formData.bilingualRequired}
-                          onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                          <option value="No">No</option>
-                          <option value="Yes">Yes</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label htmlFor="preferences" className="block text-sm font-medium text-gray-700 mb-1">Other Preferences or Questions</label>
-                      <textarea
-                        id="preferences"
-                        name="preferences"
-                        value={formData.preferences}
-                        onChange={handleChange}
-                        rows="4"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Any specific tutor requirements or questions?"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={status.submitting}
-                      className={`w-full py-3 px-4 rounded-lg text-white font-medium transition-colors ${
-                        status.submitting ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
-                      }`}
-                    >
-                      {status.submitting ? 'Submitting...' : 'Submit Request'}
-                    </button>
-                  </form>
-                </>
+                  {/* --- Conditional Step Rendering --- */}
+                  {currentStep === 1 && (
+                    <Step1 
+                      nextStep={nextStep} 
+                      formData={formData} 
+                      handleChange={handleChange} 
+                    />
+                  )}
+                  {currentStep === 2 && (
+                    <Step2 
+                      nextStep={nextStep} 
+                      prevStep={prevStep} 
+                      formData={formData} 
+                      handleChange={handleChange} 
+                    />
+                  )}
+                  {currentStep === 3 && (
+                    <Step3 
+                      prevStep={prevStep} 
+                      formData={formData} 
+                      handleChange={handleChange}
+                      handleCheckboxChange={handleCheckboxChange}
+                      status={status}
+                    />
+                  )}
+                </form>
               )}
             </div>
           </div>

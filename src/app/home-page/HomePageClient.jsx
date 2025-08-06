@@ -10,6 +10,8 @@ import { motion, useScroll, useTransform, useAnimation } from "framer-motion";
 import { Info } from "lucide-react";
 import Head from 'next/head';
 import Image from 'next/image';
+import UniqueFeaturesSection from "@/components/UniqueFeaturesSection";
+import {Step1, Step2, Step3} from "@/components/FormSteps";
 
 // Counter component
 const Counter = ({ end, duration = 2.5, suffix = "", decimals = 0 }) => {
@@ -42,13 +44,18 @@ const Counter = ({ end, duration = 2.5, suffix = "", decimals = 0 }) => {
   );
 };
 
+
 export default function HomePageClient(props) {
   const router = useRouter();
+  const [currentStep, setCurrentStep] = useState(1);
+
   const initialFormData = {
     name: '',
     mobile: '',
+    email: '',
     level: '',
     school: '',
+    location: '',
     lessonDuration: '1.5 Hours',
     customDuration: '',
     lessonFrequency: '1 Lesson/Week',
@@ -60,8 +67,7 @@ export default function HomePageClient(props) {
       moeTeacher: false
     },
     budget: {
-      marketRate: true,
-      custom: false,
+      type: 'marketRate', // 'marketRate' or 'custom'
       customAmount: ''
     },
     genderPreference: 'No preference',
@@ -76,8 +82,12 @@ export default function HomePageClient(props) {
     error: null
   });
 
+  const nextStep = () => setCurrentStep(prev => prev + 1);
+  const prevStep = () => setCurrentStep(prev => prev - 1);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
       setFormData(prevData => ({
@@ -121,6 +131,15 @@ export default function HomePageClient(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ submitting: true, submitted: false, error: null });
+    const payload = {
+      ...formData,
+      budget: {
+        marketRate: formData.budget.type === 'marketRate',
+        custom: formData.budget.type === 'custom',
+        customAmount: formData.budget.type === 'custom' ? formData.budget.customAmount : ''
+      }
+    };
+    
     try {
       const response = await fetch('https://tuition-backend-afud.onrender.com/api/requestfortutor', {
         method: 'POST',
@@ -133,6 +152,7 @@ export default function HomePageClient(props) {
         const result = await response.json();
         console.log('Submission successful:', result);
         setFormData(initialFormData);
+        setCurrentStep(1);
         setStatus({ submitting: false, submitted: true, error: null });
       } else {
         const errorText = await response.text();
@@ -153,6 +173,85 @@ export default function HomePageClient(props) {
       <Head>
         <title>#1 Home Tuition Agency in Singapore | LionCity Tutors</title>
         <meta name="description" content="Connect with trusted home tutors in Singapore for Primary, Secondary, and JC subjects. Fast matching, no agency fees, and guaranteed satisfaction." />
+        {/* Local Business Schema */}
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": "LionCity Tutors",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Boon Lay Wy, Tradehub 21",
+                "addressLocality": "Singapore",
+                "postalCode": "609966",
+                "addressCountry": "SG"
+              },
+              "url": "https://www.lioncitytutors.com/",
+              "telephone": "+65 88701152",
+              "openingHoursSpecification": [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday"
+                  ],
+                  "opens": "09:00",
+                  "closes": "21:00"
+                }
+              ]
+            }
+          `}
+        </script>
+
+        {/* FAQ Page Schema */}
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "How much does it cost to request a tutor?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our matching service is completely free! You only pay the tutor's rate directly to them after the lessons begin."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How quickly will I receive tutor profiles?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We typically send you tutor profiles within 24 hours of your request. Our team works 7 days a week to ensure fast matching."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What qualifications do your tutors have?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our tutors range from university undergraduates to MOE teachers. All tutors are carefully vetted and have proven academic excellence."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I try a lesson before committing?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! We offer trial lessons so you can ensure the tutor is the right fit for your child before making a long-term commitment."
+                  }
+                }
+              ]
+            }
+          `}
+        </script>
       </Head>
       <main>
       <div className="min-h-screen bg-white text-gray-800">
@@ -198,7 +297,7 @@ export default function HomePageClient(props) {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="text-xl sm:text-3xl md:text-5xl font-extrabold leading-tight mb-1 sm:mb-4"
               >
-                Find the Perfect Home Tutor in Singapore
+                Unlock Your Child's Potential with Singapore's Top Tutors
               </motion.h1>
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
@@ -206,22 +305,24 @@ export default function HomePageClient(props) {
                 transition={{ duration: 0.8, delay: 0.8 }}
                 className="text-xs sm:text-lg md:text-xl mb-2 sm:mb-8 text-gray-100 max-w-md mx-auto"
               >
-                Connect with qualified tutors who can help your child excel academically. 
-                Fast matching, free service, and guaranteed satisfaction.
+                Get matched with a qualified professional for free. We guarantee a perfect 
+                fit for your child's learning style.
               </motion.p>
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1 }}
-                className="flex flex-col sm:flex-row gap-1 sm:gap-4 justify-center"
+                className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center"
               >
+                {/* --- PRIMARY CTA (High Visibility) --- */}
                 <Button
-                  className="bg-red-500 hover:bg-red-600 text-white px-3 sm:px-8 py-1 sm:py-3 text-xs sm:text-lg rounded-lg w-full sm:w-auto"
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold px-4 sm:px-8 py-2 sm:py-3 text-sm sm:text-lg rounded-lg w-full sm:w-auto shadow-lg"
                   onClick={() => router.push("/request-tutor")}>
-                  Request a Tutor Now
+                  Get Your Free Tutor Match
                 </Button>
+                {/* --- SECONDARY CTA (Lower Visibility) --- */}
                 <Button
-                  className="bg-white hover:bg-gray-100 text-blue-600 px-3 sm:px-8 py-1 sm:py-3 text-xs sm:text-lg rounded-lg w-full sm:w-auto"
+                  className="bg-transparent border border-white/80 hover:bg-white hover:text-red-500 text-white px-4 sm:px-8 py-2 sm:py-3 text-sm sm:text-lg rounded-lg w-full sm:w-auto transition-colors duration-200"
                   onClick={() => router.push("/tuition-rates")}>
                   View Tuition Rates
                 </Button>
@@ -363,56 +464,8 @@ export default function HomePageClient(props) {
             </Card>
           </div>
         </section>
-        <section className="py-12 sm:py-20 px-4 sm:px-6 bg-blue-50">
-          <div>
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-8 sm:mb-12 text-center">What's Unique About LionCity Tutors?</h2>
-          </div>
-          <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 text-center">
-            {/* Feature 1 */}
-            <div>
-              <img src="https://singaporetuitionteachers.com/wp-content/uploads/2020/07/icon-1.png" alt="Tutors" className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-500">100+ Tutors</h3>
-              <p className="text-xs sm:text-sm text-gray-700 mt-2">The most comprehensive tutor database in Singapore to suit your every need.</p>
-            </div>
-  
-            {/* Feature 2 */}
-            <div>
-              <img src="https://singaporetuitionteachers.com/wp-content/uploads/2020/07/icon-2.png" alt="Affordable" className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-500">100% Free Service</h3>
-              <p className="text-xs sm:text-sm text-gray-700 mt-2">No agency fees. Most affordable rates guaranteed.</p>
-            </div>
-  
-            {/* Feature 3 */}
-            <div>
-              <img src="https://singaporetuitionteachers.com/wp-content/uploads/2020/07/icon-3.png" alt="Experienced" className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-500">Experienced Tutors</h3>
-              <p className="text-xs sm:text-sm text-gray-700 mt-2">Only top-rated, highly qualified tutors are shortlisted. Think: MOE Teachers, 90RP Graduates, RI/HCI Graduates etc.</p>
-            </div>
-  
-            {/* Feature 4 */}
-            <div>
-              <img src="https://singaporetuitionteachers.com/wp-content/uploads/2020/07/icon-4-1.png" alt="Fast" className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-500">24-Hour Turnaround</h3>
-              <p className="text-xs sm:text-sm text-gray-700 mt-2">Receive tutor matches within a day via our express matching system.</p>
-            </div>
-  
-            {/* Feature 5 */}
-            <div>
-              <img src="https://singaporetuitionteachers.com/wp-content/uploads/2020/07/icon-5-1.png" alt="Support" className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-500">7-Day Support</h3>
-              <p className="text-xs sm:text-sm text-gray-700 mt-2">Friendly tuition coordinators available every day of the week.</p>
-            </div>
-  
-            {/* Feature 6 */}
-            <div>
-              <img src="https://singaporetuitionteachers.com/wp-content/uploads/2020/07/icon-6-1.png" alt="Trial Lessons" className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-500">Trial Lessons</h3>
-              <p className="text-xs sm:text-sm text-gray-700 mt-2">Try before you commit. Find your perfect tutor fit first.</p>
-            </div>
-  
-          </div>
-        </section>
-        
+        <UniqueFeaturesSection />
+
         {/* Testimonials Section */}
         <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
           <h2 
@@ -589,369 +642,57 @@ export default function HomePageClient(props) {
               </button>
             </div>
           ) : (
-            <>
+            <form id="mainForm" onSubmit={handleSubmit}>
+              {/* --- NEW: Progress Bar --- */}
+              <div className="mb-8">
+                <div className="flex justify-between mb-1">
+                  <span className={`text-sm font-medium ${currentStep >= 1 ? 'text-blue-700' : 'text-gray-400'}`}>Core Info</span>
+                  <span className={`text-sm font-medium ${currentStep >= 2 ? 'text-blue-700' : 'text-gray-400'}`}>Logistics</span>
+                  <span className={`text-sm font-medium ${currentStep >= 3 ? 'text-blue-700' : 'text-gray-400'}`}>Preferences</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-500 ease-in-out"
+                    style={{ width: `${((currentStep - 1) / 2) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+
               {status.error && (
                 <div className="bg-red-100 text-red-800 p-4 rounded-md mb-6">
                   <p className="font-semibold">Submission Error</p>
                   <p className="text-sm">{status.error}</p>
                 </div>
               )}
-  
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name<span className="text-red-500">*</span></label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Your name"
-                  />
-                </div>
-  
-                <div>
-                  <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">Mobile Number<span className="text-red-500">*</span></label>
-                  <input
-                    id="mobile"
-                    name="mobile"
-                    type="tel"
-                    value={formData.mobile}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="e.g. 91234567"
-                  />
-                </div>
-  
-                <div>
-                  <label htmlFor="level" className="block text-sm font-medium text-gray-700 mb-1">Student's Level & Subject<span className="text-red-500">*</span></label>
-                  <input
-                    id="level"
-                    name="level"
-                    type="text"
-                    value={formData.level}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="e.g. Sec 3 A-Math"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="school" className="block text-sm font-medium text-gray-700 mb-1">
-                    Student's School
-                  </label>
-                  <input
-                    id="school"
-                    name="school"
-                    type="text"
-                    value={formData.school}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="e.g. NJC"
-                  />
-                </div>
-  
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div>
-                    <label htmlFor="lessonDuration" className="block text-sm font-medium text-gray-700 mb-1">
-                      Lesson Duration<span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="lessonDuration"
-                      name="lessonDuration"
-                      value={formData.lessonDuration}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="1.5 Hours">1.5 Hours</option>
-                      <option value="2 Hours">2 Hours</option>
-                      <option value="Others">Others</option>
-                    </select>
-                    
-                    {formData.lessonDuration === "Others" && (
-                      <div className="mt-2">
-                        <input
-                          type="text"
-                          name="customDuration"
-                          value={formData.customDuration}
-                          onChange={handleChange}
-                          placeholder="Please specify"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="lessonFrequency" className="block text-sm font-medium text-gray-700 mb-1">
-                      Lesson Frequency<span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="lessonFrequency"
-                      name="lessonFrequency"
-                      value={formData.lessonFrequency}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="1 Lesson/Week">1 Lesson/Week</option>
-                      <option value="2 Lessons/Week">2 Lessons/Week</option>
-                      <option value="Others">Others</option>
-                    </select>
-                    
-                    {formData.lessonFrequency === "Others" && (
-                      <div className="mt-2">
-                        <input
-                          type="text"
-                          name="customFrequency"
-                          value={formData.customFrequency}
-                          onChange={handleChange}
-                          placeholder="Please specify"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-  
-                <div>
-                  <label htmlFor="preferredTime" className="block text-sm font-medium text-gray-700 mb-1">Preferred Days/Time<span className="text-red-500">*</span></label>
-                  <input
-                    id="preferredTime"
-                    name="preferredTime"
-                    type="text"
-                    value={formData.preferredTime}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="e.g. Weekday evenings"
-                  />
-                </div>
-                <div className="border border-gray-200 rounded-lg p-5 bg-gray-50">
-                  <h3 className="font-semibold text-lg mb-3">Tutor Rates</h3>
-                  
-                  <div className="space-y-3">
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="tutorType.partTime"
-                        name="tutorType.partTime"
-                        checked={formData.tutorType.partTime}
-                        onChange={handleCheckboxChange}
-                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <label htmlFor="tutorType.partTime" className="ml-2 block text-gray-700">
-                        <span className="font-bold">Part-Time Tutors</span>{" "}
-                        <span className="font-bold">$25-$35/Hour</span>
-                      </label>
-                      <div className="relative group ml-2">
-                        <Info size={16} className="text-blue-600 cursor-pointer" />
-                        <div className="absolute hidden group-hover:block bg-white border border-gray-200 p-3 rounded shadow-lg z-10 w-72 -translate-x-1/2 left-1/2 mt-1">
-                          <p className="font-medium text-gray-800 mb-2">Part-Time Tutors:</p>
-                          <ul className="text-sm text-gray-600 space-y-1 list-disc pl-4">
-                            <li>Mostly University Undergraduates</li>
-                            <li>Pursuing Tutoring As A Part-Time Career</li>
-                            <li>1-3 Years of Tutoring Experience</li>
-                            <li>Young & Vibrant (Average Age of 20+)</li>
-                            <li>Small Age Gap With Students, Able To Relate Well</li>
-                            <li>Scored Good Grades During Schooling Days (A*, A1)</li>
-                            <li>Most Budget Friendly Option</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="tutorType.fullTime"
-                        name="tutorType.fullTime"
-                        checked={formData.tutorType.fullTime}
-                        onChange={handleCheckboxChange}
-                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <label htmlFor="tutorType.fullTime" className="ml-2 block text-gray-700">
-                        <span className="font-bold">Full-Time Tutors</span>{" "}
-                        <span className="font-bold">$35-$45/Hour</span>
-                      </label>
-                      <div className="relative group ml-2">
-                        <Info size={16} className="text-blue-600 cursor-pointer" />
-                        <div className="absolute hidden group-hover:block bg-white border border-gray-200 p-3 rounded shadow-lg z-10 w-72 -translate-x-1/2 left-1/2 mt-1">
-                          <p className="font-medium text-gray-800 mb-2">Full-Time Tutors:</p>
-                          <ul className="text-sm text-gray-600 space-y-1 list-disc pl-4">
-                            <li>Mostly University Graduates</li>
-                            <li>Pursuing Tutoring As A Full-Time Career</li>
-                            <li>At Least 5 Years of Tutoring Experience</li>
-                            <li>Professional & Responsible</li>
-                            <li>Able To Recommend/Provide Learning Materials</li>
-                            <li>Large Pool of Students, Often Teaching Students of Same Level</li>
-                            <li>Able To Cope With Students of All Ages & Abilities</li>
-                            <li>Highest Level of Commitment</li>
-                            <li>Reasonable Tuition Rates</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="tutorType.moeTeacher"
-                        name="tutorType.moeTeacher"
-                        checked={formData.tutorType.moeTeacher}
-                        onChange={handleCheckboxChange}
-                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <label htmlFor="tutorType.moeTeacher" className="ml-2 block text-gray-700">
-                        <span className="font-bold">Ex/Current MOE Teachers</span>{" "}
-                        <span className="font-bold">$50-$70/Hour</span>
-                      </label>
-                      <div className="relative group ml-2">
-                        <Info size={16} className="text-blue-600" />
-                        <div className="absolute hidden group-hover:block bg-white border border-gray-200 p-3 rounded shadow-lg z-10 w-72 -translate-x-1/2 left-1/2 mt-1">
-                          <p className="font-medium text-gray-800 mb-2">Ex/Current MOE Teachers:</p>
-                          <ul className="text-sm text-gray-600 space-y-1 list-disc pl-4">
-                            <li>MOE & NIE Trained School Teachers</li>
-                            <li>Highly Familiar with MOE Syllabus</li>
-                            <li>National Exam Markers (PSLE, O/N/A Levels, IBDP)</li>
-                            <li>In-Depth & Well-Versed Teaching Pedagogy</li>
-                            <li>Able To Access/Provide Special Learning Materials</li>
-                            <li>Highly Experienced with All Types of Students</li>
-                            <li>Most Qualified Tutor Option</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-  
-                    <div className="mt-4 pt-3 border-t border-gray-200">
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id="budget.marketRate"
-                          name="budget.marketRate"
-                          checked={formData.budget.marketRate}
-                          onChange={(e) => {
-                            const isChecked = e.target.checked;
-                            setFormData({
-                              ...formData,
-                              budget: {
-                                ...formData.budget,
-                                marketRate: isChecked,
-                                custom: isChecked ? false : formData.budget.custom
-                              }
-                            });
-                          }}
-                          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <label htmlFor="budget.marketRate" className="ml-2 block text-gray-700">
-                          I am comfortable with the market rates above
-                        </label>
-                      </div>
-                      
-                      <div className="flex items-center mt-2">
-                        <input
-                          type="checkbox"
-                          id="budget.custom"
-                          name="budget.custom"
-                          checked={formData.budget.custom}
-                          onChange={(e) => {
-                            const isChecked = e.target.checked;
-                            setFormData({
-                              ...formData,
-                              budget: {
-                                ...formData.budget,
-                                custom: isChecked,
-                                marketRate: isChecked ? false : formData.budget.marketRate
-                              }
-                            });
-                          }}
-                          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <label htmlFor="budget.custom" className="ml-2 block text-gray-700">
-                          I Have A Preferred Budget
-                        </label>
-                      </div>
-                      
-                      {formData.budget.custom && (
-                        <div className="mt-2 ml-6">
-                          <input
-                            type="text"
-                            name="budget.customAmount"
-                            value={formData.budget.customAmount}
-                            onChange={handleChange}
-                            placeholder="Your budget per hour (SGD)"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-  
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div>
-                    <label htmlFor="genderPreference" className="block text-sm font-medium text-gray-700 mb-1">
-                      Gender Preference<span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="genderPreference"
-                      name="genderPreference"
-                      value={formData.genderPreference}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="No preference">No preference</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="bilingualRequired" className="block text-sm font-medium text-gray-700 mb-1">
-                      Is a Bilingual Tutor Required?<span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="bilingualRequired"
-                      name="bilingualRequired"
-                      value={formData.bilingualRequired}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="No">No</option>
-                      <option value="Yes">Yes</option>
-                    </select>
-                  </div>
-                </div>
-  
-                <div>
-                  <label htmlFor="preferences" className="block text-sm font-medium text-gray-700 mb-1">Other Preferences or Questions</label>
-                  <textarea
-                    id="preferences"
-                    name="preferences"
-                    value={formData.preferences}
-                    onChange={handleChange}
-                    rows="4"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Any specific tutor requirements or questions?"
-                  />
-                </div>
-  
-                <button
-                  type="submit"
-                  disabled={status.submitting}
-                  className={`w-full py-2 px-4 rounded-lg text-white font-medium transition-colors ${
-                    status.submitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-                  }`}
-                >
-                  {status.submitting ? 'Submitting...' : 'Submit Request'}
-                </button>
-              </form>
-            </>
-          )}
-            </div>
-         
+              {/* --- NEW: Conditional Step Rendering --- */}
+              {currentStep === 1 && (
+                <Step1 
+                  nextStep={nextStep} 
+                  formData={formData} 
+                  handleChange={handleChange} 
+                />
+              )}
+              {currentStep === 2 && (
+                <Step2 
+                  nextStep={nextStep} 
+                  prevStep={prevStep} 
+                  formData={formData} 
+                  handleChange={handleChange} 
+                />
+              )}
+              {currentStep === 3 && (
+                <Step3 
+                  prevStep={prevStep} 
+                  formData={formData} 
+                  handleChange={handleChange}
+                  handleCheckboxChange={handleCheckboxChange} // Pass this if needed in the full Step3 code
+                  status={status}
+                />
+              )}
+            </form>
+            )}
           </div>
+        </div>
         {/* FAQ Section */}
         <section className="py-20 px-6 bg-gray-50">
           <div className="max-w-4xl mx-auto">
