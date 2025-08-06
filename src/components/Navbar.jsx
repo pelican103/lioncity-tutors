@@ -2,19 +2,20 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+// Import useRouter from next/navigation
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
 
 export default function Navbar() {
+  // 1. Initialize the router
+  const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [subjectsOpen, setSubjectsOpen] = useState(false);
   const [levelsOpen, setLevelsOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
-  // New state for desktop submenu
   const [hoveredLevel, setHoveredLevel] = useState(null);
-  // Fixed state for mobile submenu - make it specific to item
   const [openMobileSecondarySubmenu, setOpenMobileSecondarySubmenu] = useState(null);
 
   const levelsRef = useRef(null);
@@ -25,11 +26,13 @@ export default function Navbar() {
     `text-sm font-medium px-4 py-2 rounded hover:bg-gray-100 transition ${
       pathname === path ? "bg-gray-200 font-semibold" : ""
     }`;
-  
-  // Close mobile menu when a link is clicked
-  const handleNavLinkClick = () => {
+
+  // 2. Create a new handler for mobile navigation
+  const handleMobileLinkClick = (path) => {
+    // First, initiate navigation
+    router.push(path);
+    // Then, close all menus
     setMenuOpen(false);
-    // Reset mobile submenu states when main menu closes
     setLevelsOpen(false);
     setSubjectsOpen(false);
     setResourcesOpen(false);
@@ -85,10 +88,10 @@ export default function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
+  // --- No changes needed in the Desktop JSX ---
   return (
     <nav className="w-full bg-white shadow-md px-4 py-3 sm:px-6 flex justify-between items-center relative rounded-b-lg">
-      {/* Logo */}
       <Link href="/" className="flex flex-col items-center text-xl font-bold text-red-500">
         <img
           src="/favicon1.webp"
@@ -98,7 +101,6 @@ export default function Navbar() {
         LionCity Tutors
       </Link>
 
-      {/* Desktop Nav */}
       <div className="hidden sm:flex space-x-2">
         <Link href="/" className={navLinkStyle("/")}>
           Home
@@ -107,10 +109,9 @@ export default function Navbar() {
           Request For a Tutor
         </Link>
         <Link href="/register-tutor" className={navLinkStyle("/register-tutor")}>
-          Register As a Tutor 
+          Register As a Tutor
         </Link>
-        
-        {/* Levels & Exams Dropdown */}
+
         <div
           ref={levelsRef}
           className="relative group"
@@ -121,9 +122,9 @@ export default function Navbar() {
             Levels & Exams
             <ChevronDown size={16} className={`transition-transform ${levelsOpen ? 'rotate-180' : ''}`} />
           </button>
-          
+
           {levelsOpen && (
-            <div 
+            <div
               className="absolute left-0 pt-2 w-56 z-20 flex"
               onMouseEnter={() => setLevelsOpen(true)}
               onMouseLeave={() => { setLevelsOpen(false); setHoveredLevel(null); }}
@@ -144,13 +145,11 @@ export default function Navbar() {
                         <ChevronDown size={14} className="ml-2 -rotate-90 flex-shrink-0" />
                       )}
                     </Link>
-                    {/* Submenu for Secondary School Tuition */}
                     {level.submenu && hoveredLevel === level.name && (
                       <div className="absolute left-full top-0 z-30 flex"
                         onMouseEnter={() => setHoveredLevel(level.name)}
                         onMouseLeave={() => setHoveredLevel(null)}
                       >
-                        {/* Transparent buffer to prevent accidental mouseout */}
                         <div style={{ width: '1px', height: '100%' }} />
                         <div className="bg-white rounded-md shadow-lg py-1 min-w-[180px] flex flex-col border border-gray-100">
                           {level.submenu.map((sub) => (
@@ -172,7 +171,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Subjects Dropdown */}
         <div
           ref={subjectsRef}
           className="relative group"
@@ -183,9 +181,9 @@ export default function Navbar() {
             Subjects
             <ChevronDown size={16} className={`transition-transform ${subjectsOpen ? 'rotate-180' : ''}`} />
           </button>
-          
+
           {subjectsOpen && (
-            <div 
+            <div
               className="absolute left-0 pt-2 w-48 z-20"
               onMouseEnter={() => setSubjectsOpen(true)}
               onMouseLeave={() => setSubjectsOpen(false)}
@@ -205,7 +203,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Resources Dropdown */}
         <div
           ref={resourcesRef}
           className="relative group"
@@ -247,7 +244,6 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Mobile Menu Button */}
       <button
         className="sm:hidden text-gray-600 focus:outline-none p-2 rounded-md hover:bg-gray-100"
         onClick={() => setMenuOpen(!menuOpen)}
@@ -256,20 +252,20 @@ export default function Navbar() {
         {menuOpen ? <X size={28} /> : <Menu size={28} />}
       </button>
 
-      {/* Mobile Nav Menu */}
+      {/* --- Changes are in the Mobile Menu JSX below --- */}
       {menuOpen && (
         <div className="absolute top-full left-0 w-full bg-white shadow-lg flex flex-col items-center py-4 space-y-2 z-10 sm:hidden rounded-b-lg">
-          <Link href="/" onClick={handleNavLinkClick} className={navLinkStyle("/")}>
+          {/* 3. Use a button or div for the onClick, not the Link itself, and call the new handler */}
+          <button onClick={() => handleMobileLinkClick("/")} className={navLinkStyle("/")}>
             Home
-          </Link>
-          <Link href="/request-tutor" onClick={handleNavLinkClick} className={navLinkStyle("/request-tutor")}>
+          </button>
+          <button onClick={() => handleMobileLinkClick("/request-tutor")} className={navLinkStyle("/request-tutor")}>
             Request For a Tutor
-          </Link>
-          <Link href="/register-tutor" onClick={handleNavLinkClick} className={navLinkStyle("/register-tutor")}>
+          </button>
+          <button onClick={() => handleMobileLinkClick("/register-tutor")} className={navLinkStyle("/register-tutor")}>
             Register As a Tutor
-          </Link>
+          </button>
 
-          {/* Mobile Levels & Exams Dropdown */}
           <div className="w-full">
             <button
               onClick={() => setLevelsOpen(!levelsOpen)}
@@ -291,36 +287,36 @@ export default function Navbar() {
                           className="block w-full text-center px-6 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center justify-center"
                         >
                           {level.name}
-                          <ChevronDown 
-                            size={14} 
+                          <ChevronDown
+                            size={14}
                             className={`ml-0.5 transition-transform ${
                               openMobileSecondarySubmenu === level.name ? 'rotate-180' : ''
-                            }`} 
+                            }`}
                           />
                         </button>
                         {openMobileSecondarySubmenu === level.name && (
                           <div className="w-full border-l border-gray-200 flex flex-col items-center">
                             {level.submenu.map((sub) => (
-                              <Link
+                              // 4. Update the submenu links to use the new handler
+                              <button
                                 key={sub.path}
-                                href={sub.path}
-                                onClick={handleNavLinkClick}
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
+                                onClick={() => handleMobileLinkClick(sub.path)}
+                                className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
                               >
                                 {sub.name}
-                              </Link>
+                              </button>
                             ))}
                           </div>
                         )}
                       </>
                     ) : (
-                      <Link
-                        href={level.path}
-                        onClick={handleNavLinkClick}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
+                      // 5. Update the primary level links to use the new handler
+                      <button
+                        onClick={() => handleMobileLinkClick(level.path)}
+                        className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
                       >
                         {level.name}
-                      </Link>
+                      </button>
                     )}
                   </div>
                 ))}
@@ -328,7 +324,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile Subjects Dropdown */}
           <div className="w-full">
             <button
               onClick={() => setSubjectsOpen(!subjectsOpen)}
@@ -337,24 +332,22 @@ export default function Navbar() {
               Subjects
               <ChevronDown size={16} className={`transition-transform ${subjectsOpen ? 'rotate-180' : ''}`} />
             </button>
-
             {subjectsOpen && (
               <div className="w-full bg-gray-50 py-2 border-t border-gray-100 flex flex-col items-center">
                 {subjects.map((subject) => (
-                  <Link
+                  // 6. Update all other submenu links
+                  <button
                     key={subject.path}
-                    href={subject.path}
-                    onClick={handleNavLinkClick}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
+                    onClick={() => handleMobileLinkClick(subject.path)}
+                    className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
                   >
                     {subject.name}
-                  </Link>
+                  </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Mobile Resources Dropdown */}
           <div className="w-full">
             <button
               onClick={() => setResourcesOpen(!resourcesOpen)}
@@ -363,29 +356,27 @@ export default function Navbar() {
               Resources
               <ChevronDown size={16} className={`transition-transform ${resourcesOpen ? 'rotate-180' : ''}`} />
             </button>
-
             {resourcesOpen && (
               <div className="w-full bg-gray-50 py-2 border-t border-gray-100 flex flex-col items-center">
                 {resources.map((resource) => (
-                  <Link
+                  <button
                     key={resource.path}
-                    href={resource.path}
-                    onClick={handleNavLinkClick}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
+                    onClick={() => handleMobileLinkClick(resource.path)}
+                    className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
                   >
                     {resource.name}
-                  </Link>
+                  </button>
                 ))}
               </div>
             )}
           </div>
-
-          <Link href="/tuition-rates" onClick={handleNavLinkClick} className={navLinkStyle("/tuition-rates")}>
+          
+          <button onClick={() => handleMobileLinkClick("/tuition-rates")} className={navLinkStyle("/tuition-rates")}>
             Tuition Rates
-          </Link>
-          <Link href="/contact-us" onClick={handleNavLinkClick} className={navLinkStyle("/contact-us")}>
+          </button>
+          <button onClick={() => handleMobileLinkClick("/contact-us")} className={navLinkStyle("/contact-us")}>
             Contact Us
-          </Link>
+          </button>
         </div>
       )}
     </nav>
