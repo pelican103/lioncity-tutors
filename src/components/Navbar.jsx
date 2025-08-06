@@ -1,41 +1,54 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react"; // using lucide icons!
 
 export default function Navbar() {
-  // 1. Initialize the router
-  const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [subjectsOpen, setSubjectsOpen] = useState(false);
   const [levelsOpen, setLevelsOpen] = useState(false);
-  const [resourcesOpen, setResourcesOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false); // New state for resources
+  // New state for desktop submenu
   const [hoveredLevel, setHoveredLevel] = useState(null);
-  const [openMobileSecondarySubmenu, setOpenMobileSecondarySubmenu] = useState(null);
-
-  const levelsRef = useRef(null);
-  const subjectsRef = useRef(null);
-  const resourcesRef = useRef(null);
+  // New state for mobile submenu
+  const [openSecondarySubmenu, setOpenSecondarySubmenu] = useState(false);
 
   const navLinkStyle = (path) =>
     `text-sm font-medium px-4 py-2 rounded hover:bg-gray-100 transition ${
       pathname === path ? "bg-gray-200 font-semibold" : ""
     }`;
 
-  // 2. Create a new handler for mobile navigation
-  const handleMobileLinkClick = (path) => {
-    // First, initiate navigation
-    router.push(path);
-    // Then, close all menus
-    setMenuOpen(false);
-    setLevelsOpen(false);
-    setSubjectsOpen(false);
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+    // Close dropdowns when closing main menu
+    if (menuOpen) {
+        setLevelsOpen(false);
+        setSubjectsOpen(false);
+        setResourcesOpen(false);
+        setOpenSecondarySubmenu(false);
+    }
+  };
+
+  const toggleSubjects = () => {
+    setSubjectsOpen(!subjectsOpen);
+    setLevelsOpen(false); // Close other menus
     setResourcesOpen(false);
-    setOpenMobileSecondarySubmenu(null);
+  };
+
+  const toggleLevels = () => {
+    setLevelsOpen(!levelsOpen);
+    setSubjectsOpen(false); // Close other menus
+    setResourcesOpen(false);
+  };
+
+  const toggleResources = () => {
+    setResourcesOpen(!resourcesOpen);
+    setLevelsOpen(false); // Close other menus
+    setSubjectsOpen(false);
   };
 
   const subjects = [
@@ -62,44 +75,26 @@ export default function Navbar() {
     { name: "Junior College Tuition", path: "/jc-tuition" },
   ];
 
+  // New resources array
   const resources = [
     { name: "Free Notes", path: "/free-notes" },
     { name: "Free Test Papers", path: "/free-test-papers" },
     { name: "Blog", path: "/blog" },
   ];
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (levelsRef.current && !levelsRef.current.contains(event.target)) {
-        setLevelsOpen(false);
-        setHoveredLevel(null);
-      }
-      if (subjectsRef.current && !subjectsRef.current.contains(event.target)) {
-        setSubjectsOpen(false);
-      }
-      if (resourcesRef.current && !resourcesRef.current.contains(event.target)) {
-        setResourcesOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  // --- No changes needed in the Desktop JSX ---
   return (
-    <nav className="w-full bg-white shadow-md px-4 py-3 sm:px-6 flex justify-between items-center relative rounded-b-lg">
+    <nav className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative">
+      {/* Logo */}
       <Link href="/" className="flex flex-col items-center text-xl font-bold text-red-500">
         <img
-          src="/favicon1.webp"
+          src="/favicon1.png"
           alt="LionCity Logo"
           className="h-10 w-10"
         />
         LionCity Tutors
       </Link>
 
+      {/* Desktop Nav */}
       <div className="hidden sm:flex space-x-2">
         <Link href="/" className={navLinkStyle("/")}>
           Home
@@ -108,54 +103,56 @@ export default function Navbar() {
           Request For a Tutor
         </Link>
         <Link href="/register-tutor" className={navLinkStyle("/register-tutor")}>
-          Register As a Tutor
+          Register As a Tutor 
         </Link>
 
-        <div
-          ref={levelsRef}
+        {/* Levels & Exams Dropdown */}
+        <div 
           className="relative group"
           onMouseEnter={() => setLevelsOpen(true)}
           onMouseLeave={() => { setLevelsOpen(false); setHoveredLevel(null); }}
         >
-          <button className={`${navLinkStyle("/levels")} flex items-center gap-1 focus:outline-none`}>
+          <button className={`${navLinkStyle("/levels")} flex items-center gap-1`}>
             Levels & Exams
             <ChevronDown size={16} className={`transition-transform ${levelsOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {levelsOpen && (
-            <div
-              className="absolute left-0 pt-2 w-56 z-20 flex"
+            <div 
+              className="absolute left-0 pt-2 w-50 z-20 flex"
               onMouseEnter={() => setLevelsOpen(true)}
               onMouseLeave={() => { setLevelsOpen(false); setHoveredLevel(null); }}
             >
-              <div className="bg-white rounded-md shadow-lg py-1 min-w-[220px]">
+              <div className="bg-white rounded-md shadow-lg py-1 min-w-[200px]">
                 {levels.map((level) => (
                   <div
                     key={level.path}
-                    onMouseEnter={() => level.submenu ? setHoveredLevel(level.name) : setHoveredLevel(null)}
+                    onMouseEnter={() => level.submenu ? setHoveredLevel(level.path) : setHoveredLevel(null)}
+                    onMouseLeave={() => setHoveredLevel(null)}
                     className="relative"
                   >
                     <Link
                       href={level.path}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap flex justify-between items-center"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap text-center" // <-- Added this
                     >
-                      <span>{level.name}</span>
-                      {level.submenu && (
-                        <ChevronDown size={14} className="ml-2 -rotate-90 flex-shrink-0" />
-                      )}
+                      {level.name}
+                      {level.submenu && <ChevronDown size={14} className="inline align-middle ml-0.5" />}
                     </Link>
-                    {level.submenu && hoveredLevel === level.name && (
+                    {/* Submenu for Secondary School Tuition */}
+                    {level.submenu && hoveredLevel === level.path && (
+                      
                       <div className="absolute left-full top-0 z-30 flex"
-                        onMouseEnter={() => setHoveredLevel(level.name)}
+                        onMouseEnter={() => setHoveredLevel(level.path)}
                         onMouseLeave={() => setHoveredLevel(null)}
                       >
-                        <div style={{ width: '1px', height: '100%' }} />
-                        <div className="bg-white rounded-md shadow-lg py-1 min-w-[180px] flex flex-col border border-gray-100">
+                        {/* Transparent buffer to prevent accidental mouseout */}
+                        <div style={{ width: 1, height: '100%' }} />
+                        <div className="bg-white rounded-md shadow-lg py-1 min-w-[180px] flex flex-col">
                           {level.submenu.map((sub) => (
                             <Link
                               key={sub.path}
                               href={sub.path}
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap"
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap text-center" // <-- Added this
                             >
                               {sub.name}
                             </Link>
@@ -170,29 +167,29 @@ export default function Navbar() {
           )}
         </div>
 
-        <div
-          ref={subjectsRef}
+        {/* Subjects Dropdown */}
+        <div 
           className="relative group"
           onMouseEnter={() => setSubjectsOpen(true)}
           onMouseLeave={() => setSubjectsOpen(false)}
         >
-          <button className={`${navLinkStyle("/subjects")} flex items-center gap-1 focus:outline-none`}>
+          <button className={`${navLinkStyle("/subjects")} flex items-center gap-1`}>
             Subjects
             <ChevronDown size={16} className={`transition-transform ${subjectsOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {subjectsOpen && (
-            <div
+            <div 
               className="absolute left-0 pt-2 w-48 z-20"
               onMouseEnter={() => setSubjectsOpen(true)}
               onMouseLeave={() => setSubjectsOpen(false)}
             >
-              <div className="bg-white rounded-md shadow-lg py-1 min-w-[180px] border border-gray-100">
+              <div className="bg-white rounded-md shadow-lg py-1">
                 {subjects.map((subject) => (
                   <Link
                     key={subject.path}
                     href={subject.path}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center" // <-- Added this
                   >
                     {subject.name}
                   </Link>
@@ -202,29 +199,29 @@ export default function Navbar() {
           )}
         </div>
 
-        <div
-          ref={resourcesRef}
+        {/* Resources Dropdown */}
+        <div 
           className="relative group"
           onMouseEnter={() => setResourcesOpen(true)}
           onMouseLeave={() => setResourcesOpen(false)}
         >
-          <button className={`${navLinkStyle("/resources")} flex items-center gap-1 focus:outline-none`}>
+          <button className={`${navLinkStyle("/resources")} flex items-center gap-1`}>
             Resources
             <ChevronDown size={16} className={`transition-transform ${resourcesOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {resourcesOpen && (
-            <div
-              className="absolute left-0 pt-2 w-max z-20"
+            <div 
+              className="absolute left-0 pt-2 w-48 z-20"
               onMouseEnter={() => setResourcesOpen(true)}
               onMouseLeave={() => setResourcesOpen(false)}
             >
-              <div className="bg-white rounded-md shadow-lg py-1 min-w-[180px] border border-gray-100">
+              <div className="bg-white rounded-md shadow-lg py-1">
                 {resources.map((resource) => (
                   <Link
                     key={resource.path}
                     href={resource.path}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center" // <-- Added this
                   >
                     {resource.name}
                   </Link>
@@ -237,85 +234,77 @@ export default function Navbar() {
         <Link href="/tuition-rates" className={navLinkStyle("/tuition-rates")}>
           Tuition Rates
         </Link>
-
         <Link href="/contact-us" className={navLinkStyle("/contact-us")}>
           Contact Us
         </Link>
       </div>
 
+      {/* Mobile Menu Button */}
       <button
-        className="sm:hidden text-gray-600 focus:outline-none p-2 rounded-md hover:bg-gray-100"
-        onClick={() => setMenuOpen(!menuOpen)}
-        aria-label="Toggle mobile menu"
+        className="sm:hidden text-gray-600 focus:outline-none"
+        onClick={toggleMenu}
       >
         {menuOpen ? <X size={28} /> : <Menu size={28} />}
       </button>
 
-      {/* --- Changes are in the Mobile Menu JSX below --- */}
+      {/* Mobile Nav Menu */}
       {menuOpen && (
-        <div className="absolute top-full left-0 w-full bg-white shadow-lg flex flex-col items-center py-4 space-y-2 z-10 sm:hidden rounded-b-lg">
-          {/* 3. Use a button or div for the onClick, not the Link itself, and call the new handler */}
-          <button onClick={() => handleMobileLinkClick("/")} className={navLinkStyle("/")}>
+        <div className="absolute top-full left-0 w-full bg-white shadow-md flex flex-col items-center py-4 space-y-2 z-10">
+          <Link href="/" onClick={toggleMenu} className={navLinkStyle("/")}>
             Home
-          </button>
-          <button onClick={() => handleMobileLinkClick("/request-tutor")} className={navLinkStyle("/request-tutor")}>
+          </Link>
+          <Link href="/request-tutor" onClick={toggleMenu} className={navLinkStyle("/request-tutor")}>
             Request For a Tutor
-          </button>
-          <button onClick={() => handleMobileLinkClick("/register-tutor")} className={navLinkStyle("/register-tutor")}>
+          </Link>
+          <Link href="/register-tutor" onClick={toggleMenu} className={navLinkStyle("/register-tutor")}>
             Register As a Tutor
-          </button>
+          </Link>
 
+          {/* Mobile Levels & Exams Dropdown */}
           <div className="w-full">
-            <button
-              onClick={() => setLevelsOpen(!levelsOpen)}
-              className={`${navLinkStyle("/levels")} w-full flex items-center justify-center px-4 py-2 focus:outline-none`}
+            <button 
+              onClick={toggleLevels}
+              className={`${navLinkStyle("/levels")} w-full flex items-center justify-center gap-1`}
             >
               Levels & Exams
               <ChevronDown size={16} className={`transition-transform ${levelsOpen ? 'rotate-180' : ''}`} />
             </button>
             {levelsOpen && (
-              <div className="w-full bg-gray-50 py-2 border-t border-gray-100 flex flex-col items-center">
+              <div className="w-full mx-auto bg-gray-50 py-2">
                 {levels.map((level) => (
                   <div key={level.path} className="w-full">
                     {level.submenu ? (
                       <>
                         <button
-                          onClick={() => setOpenMobileSecondarySubmenu(
-                            openMobileSecondarySubmenu === level.name ? null : level.name
-                          )}
-                          className="block w-full text-center px-6 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center justify-center"
+                          onClick={() => setOpenSecondarySubmenu((prev) => !prev)}
+                          className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center justify-center" // <-- Centered button text
                         >
                           {level.name}
-                          <ChevronDown
-                            size={14}
-                            className={`ml-0.5 transition-transform ${
-                              openMobileSecondarySubmenu === level.name ? 'rotate-180' : ''
-                            }`}
-                          />
+                          <ChevronDown size={14} className={`ml-2 transition-transform ${openSecondarySubmenu ? 'rotate-180' : ''}`} />
                         </button>
-                        {openMobileSecondarySubmenu === level.name && (
-                          <div className="w-full border-l border-gray-200 flex flex-col items-center">
+                        {openSecondarySubmenu && (
+                          <div className="pl-4 border-l border-gray-200">
                             {level.submenu.map((sub) => (
-                              // 4. Update the submenu links to use the new handler
-                              <button
+                              <Link
                                 key={sub.path}
-                                onClick={() => handleMobileLinkClick(sub.path)}
-                                className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
+                                href={sub.path}
+                                onClick={toggleMenu}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center" // <-- Added this
                               >
                                 {sub.name}
-                              </button>
+                              </Link>
                             ))}
                           </div>
                         )}
                       </>
                     ) : (
-                      // 5. Update the primary level links to use the new handler
-                      <button
-                        onClick={() => handleMobileLinkClick(level.path)}
-                        className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
+                      <Link
+                        href={level.path}
+                        onClick={toggleMenu}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center" // <-- Added this
                       >
                         {level.name}
-                      </button>
+                      </Link>
                     )}
                   </div>
                 ))}
@@ -323,59 +312,64 @@ export default function Navbar() {
             )}
           </div>
 
+          {/* Mobile Subjects Dropdown */}
           <div className="w-full">
-            <button
-              onClick={() => setSubjectsOpen(!subjectsOpen)}
-              className={`${navLinkStyle("/subjects")} w-full flex items-center justify-center px-4 py-2 focus:outline-none`}
+            <button 
+              onClick={toggleSubjects}
+              className={`${navLinkStyle("/subjects")} w-full flex items-center justify-center gap-1`}
             >
               Subjects
               <ChevronDown size={16} className={`transition-transform ${subjectsOpen ? 'rotate-180' : ''}`} />
             </button>
+
             {subjectsOpen && (
-              <div className="w-full bg-gray-50 py-2 border-t border-gray-100 flex flex-col items-center">
+              <div className="w-full bg-gray-50 py-2">
                 {subjects.map((subject) => (
-                  // 6. Update all other submenu links
-                  <button
+                  <Link
                     key={subject.path}
-                    onClick={() => handleMobileLinkClick(subject.path)}
-                    className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
+                    href={subject.path}
+                    onClick={toggleMenu}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center" // <-- Added this
                   >
                     {subject.name}
-                  </button>
+                  </Link>
                 ))}
               </div>
             )}
           </div>
 
+          {/* Mobile Resources Dropdown */}
           <div className="w-full">
-            <button
-              onClick={() => setResourcesOpen(!resourcesOpen)}
-              className={`${navLinkStyle("/resources")} w-full flex items-center justify-center px-4 py-2 focus:outline-none`}
+            <button 
+              onClick={toggleResources}
+              className={`${navLinkStyle("/resources")} w-full flex items-center justify-center gap-1`}
             >
               Resources
               <ChevronDown size={16} className={`transition-transform ${resourcesOpen ? 'rotate-180' : ''}`} />
             </button>
+
             {resourcesOpen && (
-              <div className="w-full bg-gray-50 py-2 border-t border-gray-100 flex flex-col items-center">
+              <div className="w-full bg-gray-50 py-2">
                 {resources.map((resource) => (
-                  <button
+                  <Link
                     key={resource.path}
-                    onClick={() => handleMobileLinkClick(resource.path)}
-                    className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
+                    href={resource.path}
+                    onClick={toggleMenu}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center" // <-- Added this
                   >
                     {resource.name}
-                  </button>
+                  </Link>
                 ))}
               </div>
             )}
           </div>
-          
-          <button onClick={() => handleMobileLinkClick("/tuition-rates")} className={navLinkStyle("/tuition-rates")}>
+
+          <Link href="/tuition-rates" onClick={toggleMenu} className={navLinkStyle("/tuition-rates")}>
             Tuition Rates
-          </button>
-          <button onClick={() => handleMobileLinkClick("/contact-us")} className={navLinkStyle("/contact-us")}>
+          </Link>
+          <Link href="/contact-us" onClick={toggleMenu} className={navLinkStyle("/contact-us")}>
             Contact Us
-          </button>
+          </Link>
         </div>
       )}
     </nav>
