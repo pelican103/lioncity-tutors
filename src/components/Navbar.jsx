@@ -206,7 +206,7 @@ export default function Navbar() {
           onMouseLeave={() => setResourcesOpen(false)}
         >
           <button className={`${navLinkStyle("/resources")} flex items-center gap-1`}>
-            Resources
+            Free Resources
             <ChevronDown size={16} className={`transition-transform ${resourcesOpen ? 'rotate-180' : ''}`} />
           </button>
 
