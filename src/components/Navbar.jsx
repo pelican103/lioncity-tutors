@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-// Import useRouter from next/navigation
+import { useRouter } from "next/navigation";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
