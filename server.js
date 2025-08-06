@@ -7,6 +7,7 @@ require('dotenv').config();
 
 app.use(cors({
   origin: [
+    'http://localhost:3000',
     'http://localhost:5173', 
     'https://www.lioncitytutors.com',
     'https://lioncitytutors.com',
@@ -41,7 +42,7 @@ const tutorSchema = new mongoose.Schema({
   nationalityOther: String,
   race: String,
   nricLast4: String,
-  
+  telegramId: { type: String, index: true },
   // Tutoring Preferences
   teachingLevels: {
     primary: {
