@@ -295,7 +295,7 @@ export default function HomePageClient(props) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
-                className="text-xl sm:text-3xl md:text-5xl font-extrabold leading-tight mb-1 sm:mb-4"
+                className="text-xl sm:text-3xl md:text-5xl font-extrabold leading-tight mb-2 sm:mb-6"
               >
                 Unlock Your Child's Potential with Singapore's Top Tutors
               </motion.h1>
@@ -327,6 +327,15 @@ export default function HomePageClient(props) {
                   View Tuition Rates
                 </Button>
               </motion.div>
+              <motion.p 
+                className="mt-4 text-sm text-gray-200"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1.4 }}
+              >
+                Rated <span className="font-bold text-yellow-400">4.8/5 stars</span> by parents across Singapore. 
+                <a href="#testimonials" className="underline hover:text-white">Read reviews</a>.
+              </motion.p>
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -351,24 +360,59 @@ export default function HomePageClient(props) {
         </section>
       
         {/* Hero Section */}
-        <section className="bg-blue-50 py-12 sm:py-16 px-4 sm:px-6 text-center">
+        <section className="bg-blue-50 py-10 sm:py-10 px-4 sm:px-6 text-center">
           
           <motion.h2
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-3xl sm:text-4xl font-extrabold text-blue-700 mb-4">
+            className="text-3xl sm:text-4xl font-extrabold text-blue-700 mb-5">
             A Results-Proven Home Tuition Agency
           </motion.h2>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto mb-6">
+          <p className="text-lg text-black-600 max-w-xl mx-auto mb-3">
             We connect parents/students with qualified and experienced tutors across Singapore. Fast, reliable, and free to request.
           </p>
-  
-          <Button
-              className="bg-black text-white font text-xl px-6 py-3 rounded-xl"
-              onClick={() => router.push("/request-tutor")}>
-            Request a Tutor
-          </Button>
+        </section>
+
+        {/* Quick Links Section */}
+        <section className="bg-white py-8 px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            
+            {/* Request a Tutor */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="p-6 bg-red-100 rounded-lg shadow-sm cursor-pointer"
+              onClick={() => router.push("/request-tutor")}
+            >
+              <div className="text-4xl mb-3">🎯</div>
+              <h3 className="text-xl font-bold text-red-800 mb-2">Request a Tutor</h3>
+              <p className="text-red-700">Get a free, no-obligation tutor match.</p>
+            </motion.div>
+
+            {/* Free Test Papers */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="p-6 bg-amber-50 rounded-lg shadow-sm cursor-pointer"
+              onClick={() => router.push("/free-test-papers")} 
+            >
+              <div className="text-4xl mb-3">🧪</div>
+              <h3 className="text-xl font-bold text-amber-800 mb-2">Free Test Papers</h3>
+              <p className="text-amber-700">Download past year papers for all levels.</p>
+            </motion.div>
+
+            {/* Free Notes */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="p-6 bg-sky-50 rounded-lg shadow-sm cursor-pointer"
+              onClick={() => router.push("/free-notes")} 
+            >
+              <div className="text-4xl mb-3">📘</div>
+              <h3 className="text-xl font-bold text-sky-800 mb-2">Free Notes</h3>
+              <p className="text-sky-700">Access concise revision notes from top schools.</p>
+            </motion.div>
+
+
+          </div>
         </section>
   
         {/* Statistics Section */}
@@ -413,7 +457,7 @@ export default function HomePageClient(props) {
                 className="p-4 sm:p-6 bg-blue-50 rounded-lg shadow-sm"
               >
                 <div className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">
-                  <Counter end={4.9} duration={2} suffix="/5" decimals={1} />
+                  <Counter end={4.8} duration={2} suffix="/5" decimals={1} />
                 </div>
                 <p className="text-sm sm:text-base text-gray-600">Client Rating</p>
               </motion.div>
@@ -467,7 +511,7 @@ export default function HomePageClient(props) {
         <UniqueFeaturesSection />
 
         {/* Testimonials Section */}
-        <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
+        <section id="testimonials" className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
           <h2 
             className="text-2xl sm:text-3xl font-semibold mb-8 sm:mb-12 text-center"
           >
@@ -488,14 +532,14 @@ export default function HomePageClient(props) {
                   whileHover={{ scale: 1.1 }}
                   className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center"
                 >
-                  <span className="text-blue-600 font-bold">S</span>
+                  <span className="text-blue-600 font-bold">M</span>
                 </motion.div>
                 <div className="ml-3 sm:ml-4">
-                  <h4 className="font-semibold">Sarah Lim</h4>
-                  <p className="text-xs sm:text-sm text-gray-600">Parent of Sec 3 Student</p>
+                  <h4 className="font-semibold">Molly Tan</h4>
+                  <p className="text-xs sm:text-sm text-gray-600">Parent of Primary 5 Student</p>
                 </div>
               </div>
-              <p className="text-sm sm:text-base text-gray-700">"The tutor matched for my daughter is excellent! Her grades improved from C5 to A2 in just 3 months. Very professional service!"</p>
+              <p className="text-sm sm:text-base text-gray-700">"Suggestion of tutor is good. Able to match my requirement and tutor is very responsible in meeting my children’s needs"</p>
               <div className="mt-3 sm:mt-4 flex text-yellow-400">
                 {"★".repeat(5)}
               </div>
@@ -515,14 +559,14 @@ export default function HomePageClient(props) {
                   whileHover={{ scale: 1.1 }}
                   className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center"
                 >
-                  <span className="text-blue-600 font-bold">J</span>
+                  <span className="text-blue-600 font-bold">M</span>
                 </motion.div>
                 <div className="ml-3 sm:ml-4">
-                  <h4 className="font-semibold">James Wong</h4>
-                  <p className="text-xs sm:text-sm text-gray-600">Parent of P5 Student</p>
+                  <h4 className="font-semibold">Madushani</h4>
+                  <p className="text-xs sm:text-sm text-gray-600">Parent of Secondary 3 Student</p>
                 </div>
               </div>
-              <p className="text-sm sm:text-base text-gray-700">"Fast response and great matching service. The tutor is patient and my son enjoys his lessons. Highly recommended!"</p>
+              <p className="text-sm sm:text-base text-gray-700">"Fast and fuss-free. Just filled in the form and someone got back within the hour. Helped me find a Sec 3 E Math and Chem tutor for my son. So far the tutor is very patient and reliable. Fee also reasonable. Will recommend to other parents."</p>
               <div className="mt-3 sm:mt-4 flex text-yellow-400">
                 {"★".repeat(5)}
               </div>
@@ -542,10 +586,10 @@ export default function HomePageClient(props) {
                   whileHover={{ scale: 1.1 }}
                   className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center"
                 >
-                  <span className="text-blue-600 font-bold">M</span>
+                  <span className="text-blue-600 font-bold">J</span>
                 </motion.div>
                 <div className="ml-3 sm:ml-4">
-                  <h4 className="font-semibold">Mary Tan</h4>
+                  <h4 className="font-semibold">John Goh</h4>
                   <p className="text-xs sm:text-sm text-gray-600">Parent of JC Student</p>
                 </div>
               </div>
