@@ -23,10 +23,6 @@ export const Step1 = ({ nextStep, formData, handleChange }) => (
       <label htmlFor="level" className="block text-sm font-medium text-gray-700 mb-1">Student's Level & Subject<span className="text-red-500">*</span></label>
       <input id="level" name="level" type="text" value={formData.level} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. Sec 3 A-Math" />
     </div>
-    <div>
-      <label htmlFor="school" className="block text-sm font-medium text-gray-700 mb-1">Student's School</label>
-      <input id="school" name="school" type="text" value={formData.school} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. NJC" />
-    </div>
     <button type="button" onClick={nextStep} className="w-full py-3 px-4 rounded-lg text-white font-semibold bg-blue-600 hover:bg-blue-700 transition-colors text-lg">
       Next: Schedule & Logistics
     </button>

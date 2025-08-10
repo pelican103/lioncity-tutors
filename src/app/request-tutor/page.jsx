@@ -1,17 +1,19 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Info } from "lucide-react";
 import {Step1, Step2, Step3} from "@/components/FormSteps";
 
+
 export default function RequestForTutor() {
+  const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const initialFormData = {
     name: '',
     mobile: '',
     email: '',
     level: '',
-    school: '',
     location: '',
     lessonDuration: '1.5 Hours',
     customDuration: '',
@@ -39,6 +41,23 @@ export default function RequestForTutor() {
     submitted: false,
     error: null
   });
+
+  // This hook reads the URL parameters on page load and pre-fills the form data.
+  useEffect(() => {
+    const name = searchParams.get('name');
+    const mobile = searchParams.get('mobile');
+    const email = searchParams.get('email');
+
+    // Update the state only if any of the URL parameters exist
+    if (name || mobile || email) {
+      setFormData(prevData => ({
+        ...prevData,
+        name: name || prevData.name,
+        mobile: mobile || prevData.mobile,
+        email: email || prevData.email,
+      }));
+    }
+  }, [searchParams]);
 
   const nextStep = () => setCurrentStep(prev => prev + 1);
   const prevStep = () => setCurrentStep(prev => prev - 1);
@@ -108,7 +127,7 @@ export default function RequestForTutor() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
     
       if (response.ok) {
@@ -169,7 +188,7 @@ export default function RequestForTutor() {
       </div>
 
       {/* Centered Form Container */}
-      <div className="max-w-4xl mx-auto py-16 px-6">
+      <div id = "form" className="max-w-4xl mx-auto py-16 px-6">
         <h1 className="text-4xl font-bold text-center text-blue-700 mb-10 leading-relaxed">Free Request For Tutor</h1>
         
         <div className="bg-white rounded-xl shadow-lg p-8">

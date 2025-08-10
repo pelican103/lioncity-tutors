@@ -13,7 +13,6 @@ export default function PSLEChinese() {
     mobile: '',
     email: '',
     level: '',
-    school: '',
     location: '',
     lessonDuration: '1.5 Hours',
     customDuration: '',

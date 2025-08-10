@@ -83,6 +83,32 @@ export default function Navbar() {
   ];
 
   return (
+    <>
+    {/* Contact Banner */}
+    <div className="w-full bg-gradient-to-r from-red-50 to-red-100 border-b border-red-200 text-red-700 text-sm py-3 px-6 flex justify-center sm:justify-end items-center">
+      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-2">
+          <span className="text-red-500">📞</span>
+          <a 
+            href="tel:+6588701152" 
+            className="font-medium hover:text-red-600 transition-colors duration-200"
+          >
+            +65 8870 1152
+          </a>
+        </div>
+        <div className="hidden sm:block w-px h-4 bg-red-300"></div>
+        <div className="flex items-center gap-2">
+          <span className="text-red-500">✉️</span>
+          <a 
+            href="mailto:admin@lioncitytutors.com" 
+            className="font-medium hover:text-red-600 transition-colors duration-200"
+          >
+            admin@lioncitytutors.com
+          </a>
+        </div>
+      </div>
+    </div>
+
     <nav className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative">
       {/* Logo */}
       <Link href="/" className="flex flex-col items-center text-xl font-bold text-red-500">
@@ -277,7 +303,7 @@ export default function Navbar() {
                       <>
                         <button
                           onClick={() => setOpenSecondarySubmenu((prev) => !prev)}
-                          className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center justify-center" // <-- Centered button text
+                          className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center justify-center" // <-- Centered button text
                         >
                           {level.name}
                           <ChevronDown size={14} className={`ml-2 transition-transform ${openSecondarySubmenu ? 'rotate-180' : ''}`} />
@@ -373,5 +399,6 @@ export default function Navbar() {
         </div>
       )}
     </nav>
+    </>
   );
 }

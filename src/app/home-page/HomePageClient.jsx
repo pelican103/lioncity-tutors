@@ -12,6 +12,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import UniqueFeaturesSection from "@/components/UniqueFeaturesSection";
 import {Step1, Step2, Step3} from "@/components/FormSteps";
+import TutorPopup from "@/components/TutorPopup";
 
 // Counter component
 const Counter = ({ end, duration = 2.5, suffix = "", decimals = 0 }) => {
@@ -54,7 +55,6 @@ export default function HomePageClient(props) {
     mobile: '',
     email: '',
     level: '',
-    school: '',
     location: '',
     lessonDuration: '1.5 Hours',
     customDuration: '',
@@ -254,9 +254,11 @@ export default function HomePageClient(props) {
         </script>
       </Head>
       <main>
+      <TutorPopup />
       <div className="min-h-screen bg-white text-gray-800">
         {/* Hero Banner Section - Fixed mobile formatting issues */}
-        <section className="relative w-full h-[280px] sm:h-[300px] md:h-[550px] overflow-hidden">
+        {/* MODIFIED: Increased the base height on mobile from h-[280px] to h-[360px] to prevent content from being cut off. */}
+        <section className="relative w-full h-[360px] sm:h-[300px] md:h-[550px] overflow-hidden">
         {/* The motion.div now wraps the Image component to apply the scaling animation.
           It is positioned absolutely to fill the parent <section>.
         */}
@@ -281,13 +283,15 @@ export default function HomePageClient(props) {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-center text-white px-3 sm:px-4 max-w-4xl w-full pt-8 pb-6 sm:py-0"
+              // MODIFIED: Increased top padding (pt-8 to pt-12) and bottom padding (pb-6 to pb-8) for more vertical space.
+              className="text-center text-white px-3 sm:px-4 max-w-4xl w-full pt-6 pb-8 sm:py-0"
             >
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-lg sm:text-xl uppercase font-extrabold text-red-500 mb-1 sm:mb-2"
+                // MODIFIED: Increased margin-bottom (mb-1 to mb-2) for more space below the subheading.
+                className="text-lg sm:text-xl uppercase font-extrabold text-red-500 mb-2 sm:mb-2"
               >
                 LionCity Tutors
               </motion.p>
@@ -410,8 +414,6 @@ export default function HomePageClient(props) {
               <h3 className="text-xl font-bold text-sky-800 mb-2">Free Notes</h3>
               <p className="text-sky-700">Access concise revision notes from top schools.</p>
             </motion.div>
-
-
           </div>
         </section>
   
