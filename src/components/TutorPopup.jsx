@@ -13,7 +13,7 @@ export default function TutorPopup() {
     if (popupActionTaken) {
       return;
     }
-    // Show popup after 8 seconds
+    // Show popup after 6 seconds
     const timer = setTimeout(() => {
       setShowPopup(true);
     }, 6000);
@@ -23,7 +23,7 @@ export default function TutorPopup() {
 
   const closePopup = () => {
     setShowPopup(false);
-    // 2. Set the flag when the user closes the popup
+    // Set the flag when the user closes the popup
     sessionStorage.setItem('popupActionTaken', 'true');
   };
   

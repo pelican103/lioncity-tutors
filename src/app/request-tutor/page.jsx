@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Info } from "lucide-react";
 import {Step1, Step2, Step3} from "@/components/FormSteps";
 
-
-export default function RequestForTutor() {
+function RequestForTutorContent(){
   const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const initialFormData = {
@@ -261,5 +260,13 @@ export default function RequestForTutor() {
     </div>
     </main>
     </>
+  );
+}
+
+export default function RequestForTutor() {
+  return (
+    <Suspense fallback={<div>Loading form...</div>}>
+      <RequestForTutorContent />
+    </Suspense>
   );
 }
