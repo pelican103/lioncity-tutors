@@ -45,6 +45,7 @@ const tutorSchema = new mongoose.Schema({
   telegramId: { type: String, index: true },
   // Tutoring Preferences
   teachingLevels: {
+    preschool: { english: Boolean, chinese: Boolean, malay: Boolean, tamil: Boolean, phonics: Boolean },
     primary: {
       english: Boolean,
       math: Boolean,
@@ -84,12 +85,8 @@ const tutorSchema = new mongoose.Schema({
       h1History: Boolean,
       h2History: Boolean
     },
-    international: {
-      ib: Boolean,
-      igcse: Boolean,
-      ielts: Boolean,
-      toefl: Boolean
-    }
+    ib: { englishLanguage: Boolean, englishLiterature: Boolean, chinese: Boolean, mathematics: Boolean, physics: Boolean, chemistry: Boolean, biology: Boolean, businessAndManagement: Boolean, economics: Boolean, geography: Boolean, history: Boolean, malay: Boolean, tamil: Boolean, music: Boolean, drama: Boolean, artAndDesign: Boolean },
+    music: { musictheory: Boolean, piano: Boolean, violin: Boolean, guitar: Boolean, drum: Boolean, clarinet: Boolean, flute: Boolean }
   },
   
   // Locations
@@ -113,17 +110,18 @@ const tutorSchema = new mongoose.Schema({
   
   // Fee Structure
   hourlyRate: {
+    preschool: String,
     primary: String,
     secondary: String,
     jc: String,
-    international: String
+    international: String,
+    music: String
   },
   
   // Tutor Profile
   introduction: String,
   teachingExperience: String,
   trackRecord: String,
-  sellingPoints: String,
   
   // Availability
   availableTimeSlots: {
@@ -144,9 +142,7 @@ const Tutor = mongoose.model('Tutor', tutorSchema);
 const contactSchema = new mongoose.Schema({
   name: { type: String, required: true },
   mobile: { type: String, required: true },
-  email: {type: String, required: true},
   level: { type: String, required: true },
-  school: { type: String },
   location: { type: String },
   
   // Lesson details
