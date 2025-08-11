@@ -16,7 +16,7 @@ export default function TutorPopup() {
     // Show popup after 6 seconds
     const timer = setTimeout(() => {
       setShowPopup(true);
-    }, 6000);
+    }, 4000);
 
     return () => clearTimeout(timer);
   }, [pathname]);

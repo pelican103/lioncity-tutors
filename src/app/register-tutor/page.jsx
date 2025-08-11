@@ -1,121 +1,184 @@
 "use client";
 
 import React, { useState } from 'react';
-import { FaPhoneAlt, Fahatsapp, FaTelegram } from "react-icons/fa";
-import Link from 'next/link';
+import { FaTelegram } from "react-icons/fa";
+
+
+const teachingOptions = {
+  preschool: {
+    title: 'Preschool Level',
+    subjects: {
+      english: 'English',
+      chinese: 'Chinese',
+      malay: 'Malay',
+      tamil: 'Tamil',
+      phonics: 'Phonics'
+    },
+    gridCols: 'md:grid-cols-4'
+  },
+  primary: {
+    title: 'Primary Level',
+    subjects: {
+      english: 'English',
+      math: 'Math',
+      science: 'Science',
+      chinese: 'Chinese',
+      higherchinese: 'Higher Chinese',
+      malay: 'Malay',
+      highermalay: 'Higher Malay',
+      tamil: 'Tamil',
+      highertamil: 'Higher Tamil',
+      art: 'Art'
+    },
+    gridCols: 'md:grid-cols-3'
+  },
+  secondary: {
+    title: 'Secondary Level',
+    subjects: {
+      english: 'English',
+      math: 'Mathematics',
+      aMath: 'Additional Mathematics',
+      eMath: 'Elementary Mathematics',
+      physics: 'Physics',
+      chemistry: 'Chemistry',
+      biology: 'Biology',
+      science: 'Combined Science',
+      history: 'History',
+      geography: 'Geography',
+      literature: 'Literature',
+      chinese: 'Chinese',
+      malay: 'Malay',
+      tamil: 'Tamil'
+    },
+    gridCols: 'md:grid-cols-3'
+  },
+  jc: {
+    title: 'Junior College (JC) Level',
+    subjects: {
+      generalPaper: 'General Paper (GP)',
+      h1Math: 'H1 Mathematics',
+      h2Math: 'H2 Mathematics',
+      h1Physics: 'H1 Physics',
+      h2Physics: 'H2 Physics',
+      h1Chemistry: 'H1 Chemistry',
+      h2Chemistry: 'H2 Chemistry',
+      h1Biology: 'H1 Biology',
+      h2Biology: 'H2 Biology',
+      h1Economics: 'H1 Economics',
+      h2Economics: 'H2 Economics',
+      h1History: 'H1 History',
+      h2History: 'H2 History',
+      h1Literature: 'H1 Literature',
+      h2Literature: 'H2 Literature',
+      h1Geography: 'H1 Geography',
+      h2Geography: 'H2 Geography',
+      h2Art: 'H2 Art',
+      h3Math: 'H3 Mathematics',
+      h3Physics: 'H3 Physics',
+      h3Chemistry: 'H3 Chemistry',
+      h3Economics: 'H3 Economics',
+      h3Biology: 'H3 Biology',
+    },
+    gridCols: 'md:grid-cols-3'
+  },
+  ib: {
+    title: 'International Baccalaureate (IB) / IGCSE',
+    subjects: {
+      englishLanguage: 'English Language',
+      englishLiterature: 'English Literature',
+      chinese: 'Chinese',
+      mathematics: 'Mathematics',
+      physics: 'Physics',
+      chemistry: 'Chemistry',
+      biology: 'Biology',
+      businessAndManagement: 'Business & Management',
+      economics: 'Economics',
+      geography: 'Geography',
+      history: 'History',
+      malay: 'Malay',
+      tamil: 'Tamil',
+      music: 'Music',
+      drama: 'Drama',
+      artAndDesign: 'Art & Design',
+    },
+    gridCols: 'md:grid-cols-3'
+  },
+  music: {
+    title: 'Music',
+    subjects: {
+      musictheory: 'Music Theory',
+      piano: 'Piano',
+      violin: 'Violin',
+      guitar: 'Guitar',
+      drum: 'Drum',
+      clarinet: 'Clarinet',
+      flute: 'Flute'
+    },
+    gridCols: 'md:grid-cols-4'
+  }
+};
+
+// Define the initial state for the form data
+const initialFormData = {
+  // Personal Information
+  fullName: '',
+  contactNumber: '',
+  email: '',
+  dob: { day: '', month: '', year: '' },
+  gender: '',
+  age: '',
+  nationality: '',
+  nationalityOther: '',
+  race: '',
+  nricLast4: '',
+  
+  // Tutoring Preferences - structured to match teachingOptions
+  teachingLevels: {
+    preschool: { english: false, chinese: false, malay: false, tamil: false, phonics: false },
+    primary: { english: false, math: false, science: false, chinese: false, higherchinese: false, malay: false, highermalay: false, tamil: false, highertamil: false, art: false },
+    secondary: { english: false, math: false, aMath: false, eMath: false, physics: false, chemistry: false, biology: false, science: false, history: false, geography: false, literature: false, chinese: false, malay: false, tamil: false },
+    jc: { generalPaper: false, h1Math: false, h2Math: false, h1Physics: false, h2Physics: false, h1Chemistry: false, h2Chemistry: false, h1Biology: false, h2Biology: false, h1Economics: false, h2Economics: false, h1History: false, h2History: false, h1Literature: false, h2Literature: false, h1Geography: false, h2Geography: false, h2Art: false, h3Math: false, h3Physics: false, h3Chemistry: false, h3Economics: false, h3Biology: false },
+    ib: { englishLanguage: false, englishLiterature: false, chinese: false, mathematics: false, physics: false, chemistry: false, biology: false, businessAndManagement: false, economics: false, geography: false, history: false, malay: false, tamil: false, music: false, drama: false, artAndDesign: false },
+    music: { musictheory: false, piano: false, violin: false, guitar: false, drum: false, clarinet: false, flute: false }
+  },
+  
+  // Locations
+  locations: { north: false, south: false, east: false, west: false, central: false, northeast: false, northwest: false, online: false },
+  
+  // Qualifications & Experience
+  tutorType: '',
+  yearsOfExperience: '',
+  highestEducation: '',
+  currentSchool: '',
+  previousSchools: '',
+  
+  // Fee Structure
+  hourlyRate: { preschool: '', primary: '', secondary: '', jc: '', international: '', music: '' },
+  
+  // Tutor Profile
+  introduction: '',
+  teachingExperience: '',
+  trackRecord: '',
+  
+  // Availability
+  availableTimeSlots: { weekdayMorning: false, weekdayAfternoon: false, weekdayEvening: false, weekendMorning: false, weekendAfternoon: false, weekendEvening: false }
+};
 
 export default function RegisterAsTutor() {
-  const [formData, setFormData] = useState({
-    // Personal Information
-    fullName: '',
-    contactNumber: '',
-    email: '',
-    dob: { day: '', month: '', year: '' },
-    gender: '',
-    age: '',
-    nationality: '',
-    nationalityOther: '',
-    race: '',
-    nricLast4: '',
-    
-    // Tutoring Preferences
-    teachingLevels: {
-      primary: {
-        english: false,
-        math: false,
-        science: false,
-        chinese: false,
-        malay: false,
-        tamil: false
-      },
-      secondary: {
-        english: false,
-        math: false,
-        aMath: false,
-        eMath: false,
-        physics: false,
-        chemistry: false,
-        biology: false,
-        science: false,
-        history: false,
-        geography: false,
-        literature: false,
-        chinese: false,
-        malay: false,
-        tamil: false
-      },
-      jc: {
-        generalPaper: false,
-        h1Math: false,
-        h2Math: false,
-        h1Physics: false,
-        h2Physics: false,
-        h1Chemistry: false,
-        h2Chemistry: false,
-        h1Biology: false,
-        h2Biology: false,
-        h1Economics: false,
-        h2Economics: false,
-        h1History: false,
-        h2History: false
-      },
-      international: {
-        ib: false,
-        igcse: false,
-        ielts: false,
-        toefl: false
-      }
-    },
-    
-    // Locations
-    locations: {
-      north: false,
-      south: false,
-      east: false,
-      west: false,
-      central: false,
-      northeast: false,
-      northwest: false,
-      online: false
-    },
-    
-    // Qualifications & Experience
-    tutorType: '',
-    yearsOfExperience: '',
-    highestEducation: '',
-    currentSchool: '',
-    previousSchools: '',
-    
-    // Fee Structure
-    hourlyRate: {
-      primary: '',
-      secondary: '',
-      jc: '',
-      international: ''
-    },
-    
-    // Tutor Profile
-    introduction: '',
-    teachingExperience: '',
-    trackRecord: '',
-    sellingPoints: '',
-    
-    // Availability
-    availableTimeSlots: {
-      weekdayMorning: false,
-      weekdayAfternoon: false,
-      weekdayEvening: false,
-      weekendMorning: false,
-      weekendAfternoon: false,
-      weekendEvening: false
-    }
-  });
-
+  const [formData, setFormData] = useState(initialFormData);
+  const [openSections, setOpenSections] = useState({});
   const [status, setStatus] = useState({
     submitting: false,
     submitted: false,
     error: null
   });
+
+  const toggleSection = (section) => {
+    setOpenSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -205,52 +268,7 @@ export default function RegisterAsTutor() {
           eventName: 'CompleteRegistration'
         })
       });
-      setFormData({
-        // Reset all form fields to initial state
-        fullName: '',
-        contactNumber: '',
-        email: '',
-        dob: { day: '', month: '', year: '' },
-        gender: '',
-        age: '',
-        nationality: '',
-        nationalityOther: '',
-        race: '',
-        nricLast4: '',
-        teachingLevels: {
-          // Reset all teaching levels
-          primary: { english: false, math: false, science: false, chinese: false, malay: false, tamil: false },
-          secondary: { 
-            english: false, math: false, aMath: false, eMath: false, physics: false, 
-            chemistry: false, biology: false, science: false, history: false, geography: false, 
-            literature: false, chinese: false, malay: false, tamil: false 
-          },
-          jc: {
-            generalPaper: false, h1Math: false, h2Math: false, h1Physics: false, h2Physics: false,
-            h1Chemistry: false, h2Chemistry: false, h1Biology: false, h2Biology: false,
-            h1Economics: false, h2Economics: false, h1History: false, h2History: false
-          },
-          international: { ib: false, igcse: false, ielts: false, toefl: false }
-        },
-        locations: {
-          north: false, south: false, east: false, west: false, 
-          central: false, northeast: false, northwest: false, online: false
-        },
-        tutorType: '',
-        yearsOfExperience: '',
-        highestEducation: '',
-        currentSchool: '',
-        previousSchools: '',
-        hourlyRate: { primary: '', secondary: '', jc: '', international: '' },
-        introduction: '',
-        teachingExperience: '',
-        trackRecord: '',
-        sellingPoints: '',
-        availableTimeSlots: {
-          weekdayMorning: false, weekdayAfternoon: false, weekdayEvening: false,
-          weekendMorning: false, weekendAfternoon: false, weekendEvening: false
-        }
-      });
+      setFormData(initialFormData);
       
       setStatus({ submitting: false, submitted: true, error: null });
     } catch (error) {
@@ -411,7 +429,7 @@ export default function RegisterAsTutor() {
                       onChange={handleInputChange} 
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                       required 
-                      min="18"
+                      min="17"
                       max="99"
                     />
                   </div>
@@ -509,370 +527,37 @@ export default function RegisterAsTutor() {
               </div>
 
               {/* Section 2: Teaching Levels & Subjects */}
-              <div className="border-b border-gray-200 pb-6 ">
-                <p className="mb-4"></p>
+              <div className="border-b border-gray-200 pb-6 mb-6">
                 <h2 className="text-2xl font-semibold mb-6 text-blue-700">2. Teaching Levels & Subjects</h2>
                 <p className="text-gray-600 mb-4">Select all the levels and subjects you are qualified to teach:</p>
                 
-                {/* Primary Level */}
-                <div className="mb-6 bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-bold text-lg mb-3">Primary Level</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.primary.english} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'primary', 'english')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">English</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.primary.math} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'primary', 'math')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Mathematics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.primary.science} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'primary', 'science')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Science</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.primary.chinese} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'primary', 'chinese')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Chinese</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.primary.malay} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'primary', 'malay')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Malay</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.primary.tamil} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'primary', 'tamil')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Tamil</span>
-                    </label>
-                  </div>
-                </div>
-                
-                {/* Secondary Level */}
-                <div className="mb-6 bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-bold text-lg mb-3">Secondary Level</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.english} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'english')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">English</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.math} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'math')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Mathematics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.aMath} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'aMath')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Additional Mathematics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.eMath} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'eMath')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Elementary Mathematics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.physics} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'physics')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Physics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.chemistry} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'chemistry')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Chemistry</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.biology} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'biology')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Biology</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.science} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'science')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Combined Science</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.history} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'history')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">History</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.geography} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'geography')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Geography</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.literature} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'literature')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Literature</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.chinese} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'chinese')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Chinese</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.malay} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'malay')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Malay</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.secondary.tamil} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'secondary', 'tamil')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Tamil</span>
-                    </label>
-                  </div>
-                </div>
-                
-                {/* JC Level */}
-                <div className="mb-6 bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-bold text-lg mb-3">Junior College (JC) Level</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.generalPaper} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'generalPaper')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">General Paper (GP)</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h1Math} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h1Math')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H1 Mathematics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h2Math} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h2Math')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H2 Mathematics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h1Physics} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h1Physics')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H1 Physics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h2Physics} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h2Physics')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H2 Physics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h1Chemistry} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h1Chemistry')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H1 Chemistry</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox"
-                        checked={formData.teachingLevels.jc.h2Chemistry} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h2Chemistry')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H2 Chemistry</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h1Biology} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h1Biology')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H1 Biology</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h2Biology} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h2Biology')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H2 Biology</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h1Economics} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h1Economics')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H1 Economics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h2Economics} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h2Economics')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H2 Economics</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h1History} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h1History')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H1 History</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.jc.h2History} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'jc', 'h2History')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">H2 History</span>
-                    </label>
-                  </div>
-                </div>
-                
-                {/* International Level */}
-                <div className="mb-6 bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-bold text-lg mb-3">International Programs</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.international.ib} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'international', 'ib')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">IB</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.international.igcse} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'international', 'igcse')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">IGCSE</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.international.ielts} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'international', 'ielts')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">IELTS</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.teachingLevels.international.toefl} 
-                        onChange={() => handleCheckboxChange('teachingLevels', 'international', 'toefl')} 
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">TOEFL</span>
-                    </label>
-                  </div>
+                <div className="space-y-4">
+                  {Object.entries(teachingOptions).map(([levelKey, levelData]) => (
+                    <div key={levelKey} className="bg-gray-50 p-4 rounded-lg transition-all duration-300">
+                      <h3
+                        onClick={() => toggleSection(levelKey)}
+                        className="font-bold text-lg cursor-pointer flex justify-between items-center"
+                      >
+                        {levelData.title}
+                        <span className="text-2xl font-light transition-transform duration-300" style={{ transform: openSections[levelKey] ? 'rotate(45deg)' : 'none' }}>+</span>
+                      </h3>
+                      {openSections[levelKey] && (
+                        <div className={`grid grid-cols-2 ${levelData.gridCols} gap-3 pt-4 border-t mt-3`}>
+                          {Object.entries(levelData.subjects).map(([subjectKey, subjectLabel]) => (
+                            <label key={subjectKey} className="inline-flex items-center">
+                              <input
+                                type="checkbox"
+                                checked={formData.teachingLevels[levelKey]?.[subjectKey] || false}
+                                onChange={() => handleCheckboxChange('teachingLevels', levelKey, subjectKey)}
+                                className="h-4 w-4 text-blue-600 rounded"
+                              />
+                              <span className="ml-2 text-sm">{subjectLabel}</span>
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -1157,9 +842,25 @@ export default function RegisterAsTutor() {
               <div className="border-b border-gray-200 pb-6">
               < p className="mb-4"></p>
                 <h2 className="text-2xl font-semibold mb-6 text-blue-700">5. Fee Structure</h2>
-                <p className="text-gray-600 mb-4">Indicate your hourly rate (SGD) for each educational level:</p>
+                <p className="text-gray-600 mb-4">Indicate your hourly rate (SGD) for each educational level. Fill for the levels you can teach:</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Preschool Level Rate</label>
+                    <div className="flex items-center">
+                      <span className="mr-2">$</span>
+                      <input 
+                        type="number" 
+                        value={formData.hourlyRate.preschool} 
+                        onChange={(e) => handleHourlyRateChange('preschool', e.target.value)} 
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        placeholder="Hourly rate"
+                        min="0"
+                      />
+                      <span className="ml-2">/hr</span>
+                    </div>
+                  </div>
+
                   <div>
                     <label className="block text-sm font-medium mb-1">Primary Level Rate</label>
                     <div className="flex items-center">
@@ -1209,13 +910,28 @@ export default function RegisterAsTutor() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">International Programs Rate</label>
+                    <label className="block text-sm font-medium mb-1">IB/IGCSE Rate</label>
                     <div className="flex items-center">
                       <span className="mr-2">$</span>
                       <input 
                         type="number" 
                         value={formData.hourlyRate.international} 
                         onChange={(e) => handleHourlyRateChange('international', e.target.value)} 
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        placeholder="Hourly rate"
+                        min="0"
+                      />
+                      <span className="ml-2">/hr</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Music Rate</label>
+                    <div className="flex items-center">
+                      <span className="mr-2">$</span>
+                      <input 
+                        type="number" 
+                        value={formData.hourlyRate.music} 
+                        onChange={(e) => handleHourlyRateChange('music', e.target.value)} 
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                         placeholder="Hourly rate"
                         min="0"
@@ -1266,18 +982,6 @@ export default function RegisterAsTutor() {
                       onChange={handleInputChange} 
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-24" 
                       placeholder="Share your students' achievements and success stories"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Your Selling Points <span className="text-red-500">*</span></label>
-                    <textarea 
-                      name="sellingPoints" 
-                      value={formData.sellingPoints} 
-                      onChange={handleInputChange} 
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-24" 
-                      required 
-                      placeholder="What makes you stand out as a tutor? Why should students choose you?"
                     />
                   </div>
                 </div>
