@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 export async function POST(req) {
   const body = await req.json();
-  const { email, phone, name = '', eventName = 'Lead' } = body;
+  const { phone, name = '', eventName = 'Lead' } = body;
 
   const ip = req.headers.get('x-forwarded-for') || '';
   const userAgent = req.headers.get('user-agent') || '';
@@ -14,7 +14,6 @@ export async function POST(req) {
   const lastName = rest.join(' ');
 
   const user_data = {
-    em: hash(email),
     ph: hash(phone),
     client_ip_address: ip || null,
     client_user_agent: userAgent || null,

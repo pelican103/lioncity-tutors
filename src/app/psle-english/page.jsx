@@ -10,7 +10,6 @@ export default function PSLEEnglish() {
   const initialFormData = {
     name: '',
     mobile: '',
-    email: '',
     level: '',
     location: '',
     lessonDuration: '1.5 Hours',

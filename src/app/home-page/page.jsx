@@ -18,7 +18,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     url: 'https://www.lioncitytutors.com/',
-    title: 'LionCity Tutors: #1 Home Tuition Agency in Singapore',
+    title: "LionCity Tutors – Singapore's #1 Home Tuition Agency",
     description: "Singapore's trusted home tuition agency. Private tutors for PSLE, O-Level, A-Level. Free tutor matching, 100+ successful matches. Contact us today!",
     images: [
       {

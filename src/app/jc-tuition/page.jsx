@@ -12,7 +12,6 @@ export default function JCTuition() {
   const initialFormData = {
     name: '',
     mobile: '',
-    email: '',
     level: '',
     location: '',
     lessonDuration: '1.5 Hours',

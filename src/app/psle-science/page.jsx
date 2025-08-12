@@ -12,7 +12,6 @@ export default function PSLEScience() {
   const initialFormData = {
     name: '',
     mobile: '',
-    email: '',
     level: '',
     location: '',
     lessonDuration: '1.5 Hours',

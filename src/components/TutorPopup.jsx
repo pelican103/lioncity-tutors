@@ -4,7 +4,7 @@ import { useRouter, usePathname } from "next/navigation";
 
 export default function TutorPopup() {
   const [showPopup, setShowPopup] = useState(false);
-  const [popupData, setPopupData] = useState({ name: "", mobile: "", email: "" });
+  const [popupData, setPopupData] = useState({ name: "", mobile: "" });
   const router = useRouter();
   const pathname = usePathname();
 
@@ -90,15 +90,6 @@ export default function TutorPopup() {
             onChange={handleChange}
             className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={popupData.email}
-            onChange={handleChange}
-            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-
           <button
             type="submit"
             className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-lg w-full transition"

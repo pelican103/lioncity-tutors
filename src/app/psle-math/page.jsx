@@ -9,7 +9,6 @@ export default function PSLEMath() {
   const initialFormData = {
     name: '',
     mobile: '',
-    email: '',
     level: '',
     location: '',
     lessonDuration: '1.5 Hours',
