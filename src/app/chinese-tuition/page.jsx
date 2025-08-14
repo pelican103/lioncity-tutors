@@ -1,5 +1,6 @@
 import React from "react";
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -51,11 +52,14 @@ export default function ChineseTuition() {
             From PSLE to A-Levels, Lion City Tutors connects you with expert Chinese tutors who understand Singapore's bilingual education system – at no cost to you.
           </p>
           <div className="my-8">
-            <img 
+            <Image 
               src="/chinese-tuition_optimized.webp" 
               alt="Chinese tuition in Singapore - Students learning with experienced tutors"
-              className="w-full max-w-3xl mx-auto rounded-xl shadow-lg"
-              loading="lazy"
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="/chinese-tuition_optimized.webp"
+              priority 
             />
           </div>
           <Link href="/request-tutor">

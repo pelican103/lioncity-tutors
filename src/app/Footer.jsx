@@ -1,12 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
+import { FaInstagram, FaFacebook } from "react-icons/fa";
 
 export default function Footer() {
   return (
     <footer className="bg-teal-700 text-white py-12 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-15">
         
-        {/* About Us & Video */}
+        {/* About Us */}
         <div>
           <h4 className="text-lg font-semibold mt-4 mb-2">About Us</h4>
           <p className="text-sm text-white">
@@ -41,13 +42,13 @@ export default function Footer() {
           <h4 className="text-lg font-semibold mb-2">Socials</h4>
           <div className="flex space-x-4">
             <a href="https://www.instagram.com/lioncitytutors/" target="_blank" rel="noopener noreferrer">
-              <img src="https://singaporetuitionteachers.com/wp-content/themes/Divi-child/icons/instagram-xxl.png" alt="Instagram" className="w-6 h-6" />
+              <FaInstagram className="w-6 h-6 text-pink-500" />
             </a>
             <a href="https://www.facebook.com/LionCityTutors/" target="_blank" rel="noopener noreferrer">
-              <img src="https://singaporetuitionteachers.com/wp-content/themes/Divi-child/icons/facebook-xxl.png" alt="Facebook" className="w-6 h-6" />
+              <FaFacebook className="w-6 h-6 text-blue-400" />
             </a>
             <a href="https://www.carousell.sg/u/lioncity_tutors/" target="_blank" rel="noopener noreferrer">
-              <img src="https://singaporetuitionteachers.com/wp-content/themes/Divi-child/icons/carousell-xxl.png" alt="Carousell" className="w-6 h-6" />
+              <img src="/carousell_fixed.svg" alt="Carousell" className="w-6 h-6" />
             </a>
           </div>
         </div>

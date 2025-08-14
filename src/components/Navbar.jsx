@@ -26,22 +26,16 @@ export default function Navbar() {
       {/* Contact Banner */}
       <div className="w-full bg-gradient-to-r from-red-50 to-red-100 border-b border-red-200 text-red-700 text-sm py-3 px-6 flex justify-center sm:justify-between items-center">
         <div className="flex items-center gap-2">
+          <span className="text-red-500">✉️</span>
+          <a href="mailto:admin@lioncitytutors.com" className="font-medium hover:text-red-600">
+          admin@lioncitytutors.com
+          </a>
+        </div>
+        <div className="hidden sm:flex items-center gap-2">
           <span className="text-red-500">📞</span>
           <a href="tel:+6588701152" className="font-medium hover:text-red-600">
             +65 8870 1152
           </a>
-        </div>
-        <div className="hidden sm:flex items-center gap-2">
-          <span className="text-red-500">✉️</span>
-          <a href="mailto:admin@lioncitytutors.com" className="font-medium hover:text-red-600">
-            admin@lioncitytutors.com
-          </a>
-          <Link
-            href="/request-tutor"
-            className="ml-4 bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition"
-          >
-            Get Free Tutor Matching
-          </Link>
         </div>
       </div>
 

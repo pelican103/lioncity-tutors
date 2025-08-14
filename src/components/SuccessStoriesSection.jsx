@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Star, TrendingUp, Award, Quote } from "lucide-react";
 
-export default function SuccessStoriesSection({ scrollToForm }) {
+export default function SuccessStoriesSection() {
   const stories = [
     {
       name: "Jonathan Goh",
@@ -34,7 +34,7 @@ export default function SuccessStoriesSection({ scrollToForm }) {
   ];
 
   return (
-    <section className="py-16 md:py-24 px-4 md:px-6 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 relative overflow-hidden">
+    <section className="py-16 md:py-24 px-4 md:px-6 bg-blue-50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl"></div>
@@ -167,8 +167,6 @@ export default function SuccessStoriesSection({ scrollToForm }) {
             </motion.div>
           ))}
         </div>
-        
-
       </div>
     </section>
   );

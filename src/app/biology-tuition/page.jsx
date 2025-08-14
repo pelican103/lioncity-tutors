@@ -1,5 +1,6 @@
 import React from "react";
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -34,13 +35,16 @@ export default function BiologyTuition() {
             From Secondary Pure/Combined Biology to JC H1/H2, IGCSE and IB Biology – our specialized tutors transform complex biological concepts including cell biology, genetics, human physiology, and ecology into clear, understandable knowledge.
           </p>
           
-          {/* IMAGE PLACEHOLDER - Replace src with your actual image path */}
           <div className="my-8">
-            <img 
+            <Image 
               src="/biology.webp" 
               alt="Biology tuition in Singapore - Students learning cell biology, genetics, and laboratory experiments"
-              className="w-full max-w-3xl mx-auto rounded-xl shadow-lg"
-              loading="lazy"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="/biology.webp"
+              priority
             />
           </div>
           

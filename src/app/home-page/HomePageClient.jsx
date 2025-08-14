@@ -38,6 +38,8 @@ export default function HomePageClient() {
   const router = useRouter();
   const formRef = useRef(null);
   const faqRef = useRef(null);
+  const resourcesRef = useRef(null);
+  const scrollToResources = () => resourcesRef.current?.scrollIntoView({ behavior: 'smooth' });
 
   const [currentStep, setCurrentStep] = useState(1);
   const initialFormData = {
@@ -261,7 +263,7 @@ export default function HomePageClient() {
       <main className="bg-white text-gray-800">
         <TutorPopup />
         {/* Hero */}
-        <section className="relative w-full overflow-hidden"> {/* REMOVED fixed heights */}
+        <section className="relative w-full overflow-hidden"> 
           <motion.div 
             className="absolute inset-0" 
             initial={{ scale: 1.1 }} 
@@ -299,7 +301,7 @@ export default function HomePageClient() {
                   View Tuition Rates
                 </Button>
               </div>
-              <div className="mt-8 flex flex-wrap justify-center gap-x-4 gap-y-3"> {/* INCREASED mt and gap */}
+              <div className="mt-8 flex flex-wrap justify-center gap-x-4 gap-y-3"> 
                 {[
                   { text: "100% Free Service", action: scrollToForm },
                   { text: "24h Response Time", action: scrollToForm },
@@ -334,8 +336,70 @@ export default function HomePageClient() {
           </div>
         </section>
 
+        <section className="bg-blue-50 py-8">
+          <div className="max-w-4xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-center md:text-left">
+            <div className="flex items-center">
+              <span className="text-3xl mr-4">📚</span>
+              <div>
+                <h3 className="font-bold text-lg text-blue-900">Studying for Exams?</h3>
+                <p className="text-blue-800">We offer free access to top school exam papers and revision notes.</p>
+              </div>
+            </div>
+            <Button 
+              className="bg-white text-blue-600 font-semibold mt-4 md:mt-0 ring-1 ring-inset ring-blue-200 hover:bg-blue-100"
+              onClick={scrollToResources}
+            >
+              Show Me The Resources
+            </Button>
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <HowitWorksSection formRef={formRef} />
+
+        {/* Unique Features */}
+        <UniqueFeaturesSection />
+        
+        {/* Testimonials */}
+        <Testimonials formRef = {formRef}/>
+
+        {/* Success Stories */}
+        <SuccessStories  />
+
+        {/* Form */}
+        <div ref={formRef} className="max-w-4xl mx-auto py-16 px-6">
+          <h2 className="text-4xl font-bold text-center text-blue-700 mb-10">Free Request For Tutor</h2>
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            {status.submitted ? (
+              <div className="text-center py-10">
+                <div className="text-green-500 text-5xl mb-4">✓</div>
+                <h2 className="text-2xl font-semibold mb-2">Thank you!</h2>
+                <p className="text-gray-600 mb-4">We'll send you tutor profiles shortly.</p>
+                <Button onClick={() => setStatus({ submitting: false, submitted: false, error: null })}>Submit Another Request</Button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <div className="mb-8">
+                  <div className="flex justify-between mb-1">
+                    {["About You", "Lesson Details", "Tutor Preferences"].map((step, i) => (
+                      <span key={i} className={`text-sm font-medium ${currentStep >= i + 1 ? 'text-blue-700' : 'text-gray-400'}`}>{step}</span>
+                    ))}
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-blue-600 h-2 rounded-full transition-all duration-500" style={{ width: `${((currentStep - 1) / 2) * 100}%` }} />
+                  </div>
+                </div>
+                {status.error && <div className="bg-red-100 text-red-800 p-4 rounded-md mb-6">{status.error}</div>}
+                {currentStep === 1 && <Step1 nextStep={nextStep} formData={formData} handleChange={handleChange} />}
+                {currentStep === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} formData={formData} handleChange={handleChange} />}
+                {currentStep === 3 && <Step3 prevStep={prevStep} formData={formData} handleChange={handleChange} handleCheckboxChange={handleCheckboxChange} status={status} />}
+              </form>
+            )}
+          </div>
+        </div>
+        
         {/* Enhanced Quick Links Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50 py-16 px-4 sm:px-6">
+        <section ref = {resourcesRef} className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50 py-16 px-4 sm:px-6">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-5">
             <div className="absolute top-10 left-10 w-20 h-20 bg-blue-600 rounded-full blur-xl"></div>
@@ -361,44 +425,7 @@ export default function HomePageClient() {
             </motion.div>
 
             {/* Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Request a Tutor */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="group relative p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-red-100 overflow-hidden"
-                onClick={() => router.push("/request-tutor")}
-              >
-                {/* Card Background Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-red-50 via-white to-red-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                
-                {/* Icon Container */}
-                <div className="relative z-10 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <span className="text-2xl">🎯</span>
-                  </div>
-                </div>
-
-                <div className="relative z-10">
-                  <h3 className="text-2xl font-bold text-red-800 mb-3 group-hover:text-red-900 transition-colors">
-                    Request a Tutor
-                  </h3>
-                  <p className="text-red-700/80 leading-relaxed mb-4">
-                    Get a free, no-obligation tutor match tailored to your learning needs.
-                  </p>
-                  <div className="flex items-center text-red-600 font-medium group-hover:text-red-700 transition-colors">
-                    <span>Get Started</span>
-                    <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Hover Effect Border */}
-                <div className="absolute inset-0 rounded-2xl border-2 border-red-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
               {/* Free Test Papers */}
               <motion.div
@@ -477,64 +504,9 @@ export default function HomePageClient() {
               </motion.div>
             </div>
             
-            {/* Bottom CTA 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-center mt-12"
-            >
-              <p className="text-slate-600 text-lg">
-                Need help choosing? <span className="text-blue-600 font-semibold cursor-pointer hover:text-blue-700 transition-colors">Contact our education consultants</span>
-              </p>
-            </motion.div>
-            */}
+            
           </div>
         </section>
-
-        {/* How It Works Section */}
-        <HowitWorksSection />
-
-        {/* Unique Features */}
-        <UniqueFeaturesSection />
-        
-        {/* Testimonials */}
-        <Testimonials />
-
-        {/* Success Stories */}
-        <SuccessStories scrollToForm={scrollToForm} />
-
-        {/* Form */}
-        <div ref={formRef} className="max-w-4xl mx-auto py-16 px-6">
-          <h2 className="text-4xl font-bold text-center text-blue-700 mb-10">Free Request For Tutor</h2>
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            {status.submitted ? (
-              <div className="text-center py-10">
-                <div className="text-green-500 text-5xl mb-4">✓</div>
-                <h2 className="text-2xl font-semibold mb-2">Thank you!</h2>
-                <p className="text-gray-600 mb-4">We'll send you tutor profiles shortly.</p>
-                <Button onClick={() => setStatus({ submitting: false, submitted: false, error: null })}>Submit Another Request</Button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit}>
-                <div className="mb-8">
-                  <div className="flex justify-between mb-1">
-                    {["About You", "Lesson Details", "Tutor Preferences"].map((step, i) => (
-                      <span key={i} className={`text-sm font-medium ${currentStep >= i + 1 ? 'text-blue-700' : 'text-gray-400'}`}>{step}</span>
-                    ))}
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-blue-600 h-2 rounded-full transition-all duration-500" style={{ width: `${((currentStep - 1) / 2) * 100}%` }} />
-                  </div>
-                </div>
-                {status.error && <div className="bg-red-100 text-red-800 p-4 rounded-md mb-6">{status.error}</div>}
-                {currentStep === 1 && <Step1 nextStep={nextStep} formData={formData} handleChange={handleChange} />}
-                {currentStep === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} formData={formData} handleChange={handleChange} />}
-                {currentStep === 3 && <Step3 prevStep={prevStep} formData={formData} handleChange={handleChange} handleCheckboxChange={handleCheckboxChange} status={status} />}
-              </form>
-            )}
-          </div>
-        </div>
 
         {/* FAQ */}
         <div ref={faqRef}>

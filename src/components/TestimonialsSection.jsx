@@ -2,8 +2,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, Star, Quote } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export default function TestimonialsSection() {
+export default function TestimonialsSection( { formRef}) {
   const testimonials = [
     {
       name: "Molly Tan",
@@ -63,6 +64,8 @@ export default function TestimonialsSection() {
       icon: "💯"
     }
   ];
+
+  const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: 'smooth' });
 
   return (
     <section id="testimonials" className="py-16 sm:py-24 px-4 sm:px-6 bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
@@ -199,9 +202,9 @@ export default function TestimonialsSection() {
                   whileTap={{ scale: 0.98 }}
                   className="mt-8"
                 >
-                  <a href="/request-tutor" className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Button onClick={scrollToForm} className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                     Find Your Perfect Tutor
-                  </a>
+                  </Button>
                 </motion.div>
               </div>
             </motion.div>

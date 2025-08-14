@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Step1, Step2, Step3 } from "@/components/FormSteps";
@@ -122,11 +123,14 @@ export default function PrimarySchoolTuition() {
             Trusted by over 100 families. We help your child grow in confidence and achieve real results.
           </p>
           <div className="my-8">
-            <img 
+            <Image 
               src="/primary-tuition_optimized.webp" 
               alt="Primary school tuition in Singapore - Students learning with experienced tutors"
-              className="w-full max-w-3xl mx-auto rounded-xl shadow-lg"
-              loading="lazy"
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="/primary-tuition_optimized.webp"
+              priority 
             />
           </div>
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
@@ -165,9 +169,9 @@ export default function PrimarySchoolTuition() {
                   {/* --- NEW: Progress Bar --- */}
                   <div className="mb-8">
                     <div className="flex justify-between mb-1">
-                      <span className={`text-sm font-medium ${currentStep >= 1 ? 'text-indigo-700' : 'text-gray-400'}`}>Core Info</span>
-                      <span className={`text-sm font-medium ${currentStep >= 2 ? 'text-indigo-700' : 'text-gray-400'}`}>Logistics</span>
-                      <span className={`text-sm font-medium ${currentStep >= 3 ? 'text-indigo-700' : 'text-gray-400'}`}>Preferences</span>
+                      <span className={`text-sm font-medium ${currentStep >= 1 ? 'text-indigo-700' : 'text-gray-400'}`}>About You</span>
+                      <span className={`text-sm font-medium ${currentStep >= 2 ? 'text-indigo-700' : 'text-gray-400'}`}>Lesson Details</span>
+                      <span className={`text-sm font-medium ${currentStep >= 3 ? 'text-indigo-700' : 'text-gray-400'}`}>Tutor Preferences</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div 

@@ -1,14 +1,15 @@
 "use client";
 import Image from "next/image";
-// Import icons (example: from Feather Icons)
 import { FaWpforms, FaUserCheck, FaBookReader } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
+import React from "react";
 
-export default function HowItWorksSection() {
+export default function HowItWorksSection( { formRef }) {
   const steps = [
     {
       icon: <FaWpforms size={24} />,
       title: "1. Submit Your Request",
-      desc: "Fill out our simple form in 2 minutes. Tell us the subject, level, and your specific needs. It's 100% free and no obligation."
+      desc: "Fill out our simple form in just 2 minutes. Tell us the subject, level, and your specific needs. It's 100% free and no obligation."
     },
     {
       icon: <FaUserCheck size={24} />,
@@ -21,6 +22,9 @@ export default function HowItWorksSection() {
       desc: "Choose the tutor you like best and schedule your first lesson. You only pay after a lesson is confirmed. It's that simple!"
     }
   ];
+
+  const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: 'smooth' });
+  
 
   return (
     <section className="bg-gray-50 py-20">
@@ -35,11 +39,13 @@ export default function HowItWorksSection() {
         {/* Left Side: Image */}
         <div className="relative w-full h-96 rounded-xl overflow-hidden shadow-xl order-last md:order-first">
           <Image
-            src="/final.webp"
-            alt="A friendly Singaporean tutor helping a secondary school student with their mathematics homework."
+            src="/primary-tuition_optimized.webp" 
+            alt="A friendly Singaporean tutor helping a primary school student with their mathematics homework."
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
+            placeholder="blur"
+            blurDataURL="/primary-tuition_optimized.webp"
           />
         </div>
 
@@ -59,9 +65,9 @@ export default function HowItWorksSection() {
           
           {/* Call-to-Action Button */}
           <div className="mt-6 ml-16">
-            <a href="/request-tutor" className="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md">
+            <Button onClick={scrollToForm} className="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md">
               Find Your Perfect Tutor
-            </a>
+            </Button>
           </div>
         </div>
       </div>
