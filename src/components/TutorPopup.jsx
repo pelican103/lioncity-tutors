@@ -9,6 +9,7 @@ export default function TutorPopup() {
   const pathname = usePathname();
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const popupActionTaken = sessionStorage.getItem('popupActionTaken');
     if (popupActionTaken) {
       return;
@@ -16,7 +17,7 @@ export default function TutorPopup() {
     // Show popup after 6 seconds
     const timer = setTimeout(() => {
       setShowPopup(true);
-    }, 4000);
+    }, 6000);
 
     return () => clearTimeout(timer);
   }, [pathname]);
@@ -49,7 +50,7 @@ export default function TutorPopup() {
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg relative transform animate-scaleIn">
         {/* Close button */}
-        <button
+        <button aria-label="Close popup"
           onClick={closePopup}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold"
         >

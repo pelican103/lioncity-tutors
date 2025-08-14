@@ -15,6 +15,7 @@ import dynamic from 'next/dynamic';
 const Testimonials = dynamic(() => import('@/components/TestimonialsSection'), { ssr: false });
 const SuccessStories = dynamic(() => import('@/components/SuccessStoriesSection'), { ssr: false });
 const FAQSection = dynamic(() => import('@/components/FAQSection'), { ssr: false });
+const HowitWorksSection = dynamic(() => import('@/components/HowItWorksSection'), { ssr: false });
 
 // Counter component
 const Counter = ({ end, duration = 2.5, suffix = "", decimals = 0 }) => {
@@ -144,11 +145,74 @@ export default function HomePageClient() {
                   "opens": "09:00",
                   "closes": "21:00"
                 }
-              ]
+              ],
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8", 
+                "reviewCount": "13",  
+                "bestRating": "5",
+                "worstRating": "3"
+              }
             }
           `}
         </script>
-
+        {/* Service Schema */}
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Service",
+              "name": "Home Tuition Services",
+              "description": "Professional home tuition matching service connecting students with qualified tutors for Primary, Secondary, and JC subjects in Singapore.",
+              "provider": {
+                "@type": "LocalBusiness",
+                "name": "LionCity Tutors",
+                "url": "https://www.lioncitytutors.com/"
+              },
+              "serviceType": "Home Tuition",
+              "areaServed": {
+                "@type": "Country",
+                "name": "Singapore"
+              },
+              "hasOfferingCatalog": {
+                "@type": "OfferingCatalog",
+                "name": "Tuition Services",
+                "itemListElement": [
+                  {
+                    "@type": "Offer",
+                    "itemOffered": {
+                      "@type": "Service",
+                      "name": "Primary School Tuition",
+                      "description": "Home tuition for Primary 1-6 students"
+                    }
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": {
+                      "@type": "Service",
+                      "name": "Secondary School Tuition", 
+                      "description": "Home tuition for Secondary 1-5 students"
+                    }
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": {
+                      "@type": "Service",
+                      "name": "Junior College Tuition",
+                      "description": "Home tuition for JC1-2 students"
+                    }
+                  }
+                ]
+              },
+              "offers": {
+                "@type": "Offer",
+                "description": "Free tutor matching service - no agency fees",
+                "price": "0",
+                "priceCurrency": "SGD"
+              }
+            }
+          `}
+        </script>
         {/* FAQ Page Schema */}
         <script type="application/ld+json">
           {`
@@ -214,7 +278,6 @@ export default function HomePageClient() {
             />
           </motion.div>
           <div className="relative z-10 bg-black/40 flex items-center justify-center py-8 sm:py-20 md:py-20 min-h-[480px] sm:min-h-[450px] md:min-h-[550px]">
-            {/* INCREASED horizontal padding (px-4) for more breathing room */}
             <div className="text-center text-white px-4 max-w-4xl">
               <p className="text-lg sm:text-xl uppercase font-extrabold text-red-500 mb-2">
                 LionCity Tutors
@@ -430,53 +493,11 @@ export default function HomePageClient() {
         </section>
 
         {/* How It Works Section */}
-        <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white text-center">
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-6">How It Works</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-8 sm:mb-12">Getting started with LionCity Tutors is simple and straightforward. Here's how we match you with the perfect tutor:</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
-            <Card className="relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
-              <CardContent className="p-4 sm:p-6 pt-8">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg sm:text-xl font-bold mb-2">Submit Request</h3>
-                <p className="text-sm sm:text-base text-gray-600">Fill out our simple form with your tuition needs, preferred schedule, and any specific requirements.</p>
-              </CardContent>
-            </Card>
-            <Card className="relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
-              <CardContent className="p-4 sm:p-6 pt-8">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg sm:text-xl font-bold mb-2">Tutor Matching</h3>
-                <p className="text-sm sm:text-base text-gray-600">Our team reviews your requirements and matches you with qualified tutors from our database.</p>
-              </CardContent>
-            </Card>
-            <Card className="relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
-              <CardContent className="p-4 sm:p-6 pt-8">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                <h3 className="text-lg sm:text-xl font-bold mb-2">Start Learning</h3>
-                <p className="text-sm sm:text-base text-gray-600">Review the tutor profiles, choose your preferred tutor, and begin your learning journey!</p>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+        <HowitWorksSection />
 
         {/* Unique Features */}
         <UniqueFeaturesSection />
         
-
         {/* Testimonials */}
         <Testimonials />
 
@@ -498,7 +519,7 @@ export default function HomePageClient() {
               <form onSubmit={handleSubmit}>
                 <div className="mb-8">
                   <div className="flex justify-between mb-1">
-                    {["About Your Child", "Lesson Details", "Tutor Preferences"].map((step, i) => (
+                    {["About You", "Lesson Details", "Tutor Preferences"].map((step, i) => (
                       <span key={i} className={`text-sm font-medium ${currentStep >= i + 1 ? 'text-blue-700' : 'text-gray-400'}`}>{step}</span>
                     ))}
                   </div>

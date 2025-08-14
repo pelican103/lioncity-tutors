@@ -20,7 +20,7 @@ export const Step1 = ({ nextStep, formData, handleChange }) => (
       <input id="level" name="level" type="text" value={formData.level} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. Sec 3 A-Math" />
     </div>
     <button type="button" onClick={nextStep} className="w-full py-3 px-4 rounded-lg text-white font-semibold bg-blue-600 hover:bg-blue-700 transition-colors text-lg">
-      Next: Schedule & Logistics
+      Next: Lesson Details
     </button>
   </div>
 );
