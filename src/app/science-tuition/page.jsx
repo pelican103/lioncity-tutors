@@ -1,5 +1,6 @@
 import React from "react";
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -50,16 +51,19 @@ export default function ScienceTuition() {
           <p className="text-base sm:text-lg text-gray-700 max-w-2xl mx-auto">
             From PSLE Science to A-Level Physics, Chemistry, and Biology – our expert tutors make complex concepts crystal clear for Singapore students.
           </p>
-          
-          <div className="my-6 sm:my-8">
-            <img 
-              src="/science3.webp" 
+          <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
+            <Image
+              src="/science3.webp"
               alt="Science tuition in Singapore - Students learning with experienced tutors"
-              className="w-full max-w-3xl mx-auto rounded-xl shadow-lg"
-              loading="lazy"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="/science3.webp"
+              priority 
             />
           </div>
-          
+
           <a href="/request-tutor">
             <Button className="w-full sm:w-auto text-base sm:text-lg px-4 sm:px-8 py-3 sm:py-4 mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200">
               Request a Science Tutor
@@ -392,17 +396,19 @@ export default function ScienceTuition() {
         {/* Section 6: Teaching Methods */}
         <section>
           <h2 className="text-2xl font-semibold mb-4 text-blue-700">Our Proven Science Teaching Methods</h2>
-          
-          {/* ANOTHER IMAGE PLACEHOLDER */}
-          <div className="my-6">
-            <img 
-              src="/science2.webp" 
+          <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
+            <Image
+              src="/science2.webp"
               alt="Interactive science teaching methods used by LionCity tutors"
-              className="w-full max-w-2xl mx-auto rounded-lg shadow-md"
-              loading="lazy"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="/science2.webp"
+              priority 
             />
           </div>
-          
+    
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
               <h3 className="text-xl font-bold text-emerald-700">🔍 Concept Mapping</h3>

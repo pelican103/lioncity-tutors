@@ -34,8 +34,8 @@ export default function BiologyTuition() {
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             From Secondary Pure/Combined Biology to JC H1/H2, IGCSE and IB Biology – our specialized tutors transform complex biological concepts including cell biology, genetics, human physiology, and ecology into clear, understandable knowledge.
           </p>
-          
-          <div className="my-8">
+        
+          <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
             <Image 
               src="/biology.webp" 
               alt="Biology tuition in Singapore - Students learning cell biology, genetics, and laboratory experiments"
@@ -436,19 +436,7 @@ export default function BiologyTuition() {
 
         {/* Section 7: Teaching Methods */}
         <section>
-          <h2 className="text-3xl font-semibold mb-6 text-green-700 text-center">Our Proven Biology Teaching Methods</h2>
-          
-          {/* ANOTHER IMAGE PLACEHOLDER 
-          <div className="my-6">
-            <img 
-              src="/biology-teaching-methods.webp" 
-              alt="Interactive biology teaching methods with microscopes, diagrams, and laboratory demonstrations for better understanding"
-              className="w-full max-w-2xl mx-auto rounded-lg shadow-md"
-              loading="lazy"
-            />
-          </div>
-          */}
-          
+          <h2 className="text-3xl font-semibold mb-6 text-green-700 text-center">Our Proven Biology Teaching Methods</h2>          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div>

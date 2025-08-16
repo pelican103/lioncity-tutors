@@ -1,5 +1,6 @@
 import React from "react";
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -53,16 +54,18 @@ export default function PhysicsTuition() {
           <p className="text-base sm:text-lg text-gray-700 max-w-2xl mx-auto">
             From Secondary Pure/Combined Physics to JC H1/H2, IGCSE and IB Physics – our specialized tutors transform complex physical concepts including mechanics, electromagnetism, thermodynamics, and quantum physics into clear, understandable knowledge.
           </p>
-          
-          <div className="my-6 sm:my-8">
-            <img 
-              src="/physics.webp" 
-              alt="Physics tuition in Singapore - Students learning mechanics, electromagnetism, and laboratory experiments"
-              className="w-full max-w-3xl mx-auto rounded-xl shadow-lg"
-              loading="lazy"
+          <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
+            <Image
+              src="/physics.webp"
+              alt="Physics tuition in Singapore - Students learning with experienced tutors"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="/physics.webp"
+              priority 
             />
-          </div>
-          
+          </div>    
           <a href="/request-tutor">
             <Button className="w-full sm:w-auto text-base sm:text-lg px-4 sm:px-8 py-3 sm:py-4 mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200">
               Request a Physics Tutor
@@ -452,17 +455,6 @@ export default function PhysicsTuition() {
         {/* Section 7: Teaching Methods */}
         <section>
           <h2 className="text-3xl font-semibold mb-6 text-blue-700 text-center">Our Proven Physics Teaching Methods</h2>
-          
-          {/* ANOTHER IMAGE PLACEHOLDER 
-          <div className="my-6">
-            <img 
-              src="/physics-teaching-methods.webp" 
-              alt="Interactive physics teaching methods with experiments, diagrams, and visual demonstrations for better understanding"
-              className="w-full max-w-2xl mx-auto rounded-lg shadow-md"
-              loading="lazy"
-            />
-          </div>
-          */}
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">

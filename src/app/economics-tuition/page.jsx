@@ -1,5 +1,6 @@
 import React from "react";
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -50,12 +51,16 @@ export default function EconomicsTuition() {
           <p className="text-base sm:text-lg text-gray-700 max-w-2xl mx-auto">
             Whether it's H1, H2, or IB Economics, Lion City Tutors connects you with handpicked private tutors in Singapore – at no cost to you.
           </p>
-          <div className="my-6 sm:my-8">
-            <img 
-              src="/economics.webp" 
+          <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
+            <Image
+              src="/economics.webp"
               alt="Economics tuition in Singapore - Students learning with experienced tutors"
-              className="w-full max-w-3xl mx-auto rounded-xl shadow-lg"
-              loading="lazy"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="/economics.webp"
+              priority 
             />
           </div>
           <Link href="/request-tutor">

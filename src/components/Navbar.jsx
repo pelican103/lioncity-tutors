@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -21,17 +21,37 @@ export default function Navbar() {
     setOpenDropdown(openDropdown === name ? null : name);
   };
 
+  const navRef = useRef(null);
+  
+  useEffect(() => {
+    setOpenDropdown(null);
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (navRef.current && !navRef.current.contains(event.target)) {
+          setOpenDropdown(null);
+          setMenuOpen(false);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []); 
+    
   return (
     <>
       {/* Contact Banner */}
       <div className="w-full bg-gradient-to-r from-red-50 to-red-100 border-b border-red-200 text-red-700 text-sm py-3 px-6 flex justify-center sm:justify-between items-center">
-        <div className="flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-2">
           <span className="text-red-500">✉️</span>
           <a href="mailto:admin@lioncitytutors.com" className="font-medium hover:text-red-600">
           admin@lioncitytutors.com
           </a>
         </div>
-        <div className="hidden sm:flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <span className="text-red-500">📞</span>
           <a href="tel:+6588701152" className="font-medium hover:text-red-600">
             +65 8870 1152
@@ -39,7 +59,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      <nav className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative">
+      <nav ref={navRef} className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative">
         {/* Logo */}
         <Link href="/" className="flex flex-col items-center text-xl font-bold text-red-500">
           <Image src="/favicon1.png" alt="LionCity Logo" width={40} height={40} priority />
@@ -91,7 +111,10 @@ export default function Navbar() {
 
         {/* Mobile Nav */}
         {menuOpen && (
-          <div className="absolute top-full left-0 w-full bg-white shadow-md flex flex-col items-center py-4 space-y-2 z-50">
+          <div 
+            className="mobile-menu absolute top-full left-0 w-full bg-white shadow-md flex flex-col items-center py-4 space-y-2 z-50"
+            onClick={(e) => e.stopPropagation()} 
+          >
             {/* CTA First */}
             <Link
               href="/request-tutor"

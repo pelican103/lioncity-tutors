@@ -1,5 +1,6 @@
 import React from "react";
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -53,12 +54,16 @@ export default function ChemistryTuition() {
             From O-Level to A-Level Chemistry – our expert tutors make complex concepts crystal clear for Singapore students.
           </p>
           
-          <div className="my-6 sm:my-8">
-            <img 
-              src="/chemistry.webp" 
+          <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
+            <Image
+              src="/chemistry.webp"
               alt="Chemistry tuition in Singapore - Students learning with experienced tutors"
-              className="w-full max-w-3xl mx-auto rounded-xl shadow-lg"
-              loading="lazy"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="/chemistry.webp"
+              priority 
             />
           </div>
           
@@ -451,17 +456,6 @@ export default function ChemistryTuition() {
         {/* Section 7: Teaching Methods */}
         <section>
           <h2 className="text-3xl font-semibold mb-6 text-emerald-700 text-center">Our Proven Chemistry Teaching Methods</h2>
-          
-          {/* ANOTHER IMAGE PLACEHOLDER 
-          <div className="my-6">
-            <img 
-              src="/chemistry-teaching-methods.webp" 
-              alt="Interactive chemistry teaching methods with molecular models, periodic table, and visual aids for better understanding"
-              className="w-full max-w-2xl mx-auto rounded-lg shadow-md"
-              loading="lazy"
-            />
-          </div>
-          */}
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">

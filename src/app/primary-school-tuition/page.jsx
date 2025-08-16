@@ -122,7 +122,7 @@ export default function PrimarySchoolTuition() {
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             Trusted by over 100 families. We help your child grow in confidence and achieve real results.
           </p>
-          <div className="my-8">
+          <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
             <Image 
               src="/primary-tuition_optimized.webp" 
               alt="Primary school tuition in Singapore - Students learning with experienced tutors"
@@ -131,6 +131,7 @@ export default function PrimarySchoolTuition() {
               placeholder="blur"
               blurDataURL="/primary-tuition_optimized.webp"
               priority 
+              fill 
             />
           </div>
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">

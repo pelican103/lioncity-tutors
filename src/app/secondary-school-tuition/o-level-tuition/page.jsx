@@ -159,9 +159,9 @@ export default function OLevelTuition() {
                     {/* --- NEW: Progress Bar --- */}
                     <div className="mb-8">
                       <div className="flex justify-between mb-1">
-                        <span className={`text-sm font-medium ${currentStep >= 1 ? 'text-indigo-700' : 'text-gray-400'}`}>Core Info</span>
-                        <span className={`text-sm font-medium ${currentStep >= 2 ? 'text-indigo-700' : 'text-gray-400'}`}>Logistics</span>
-                        <span className={`text-sm font-medium ${currentStep >= 3 ? 'text-indigo-700' : 'text-gray-400'}`}>Preferences</span>
+                        <span className={`text-sm font-medium ${currentStep >= 1 ? 'text-indigo-700' : 'text-gray-400'}`}>About You</span>
+                        <span className={`text-sm font-medium ${currentStep >= 2 ? 'text-indigo-700' : 'text-gray-400'}`}>Lesson Details</span>
+                        <span className={`text-sm font-medium ${currentStep >= 3 ? 'text-indigo-700' : 'text-gray-400'}`}>Tutor Preferences</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div 

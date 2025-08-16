@@ -1,11 +1,11 @@
 export const subjects = [
+  { name: "English Tuition", path: "/english-tuition" },
   { name: "Math Tuition", path: "/math-tuition" },
   { name: "Science Tuition", path: "/science-tuition" },
   { name: "Physics Tuition", path: "/physics-tuition" },
   { name: "Chemistry Tuition", path: "/chemistry-tuition" },
   { name: "Biology Tuition", path: "/biology-tuition" },
   { name: "Economics Tuition", path: "/economics-tuition" },
-  { name: "English Tuition", path: "/english-tuition" },
   { name: "Chinese Tuition", path: "/chinese-tuition" },
 ];
 

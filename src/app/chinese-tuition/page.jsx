@@ -51,10 +51,11 @@ export default function ChineseTuition() {
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             From PSLE to A-Levels, Lion City Tutors connects you with expert Chinese tutors who understand Singapore's bilingual education system – at no cost to you.
           </p>
-          <div className="my-8">
+          <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
             <Image 
               src="/chinese-tuition_optimized.webp" 
               alt="Chinese tuition in Singapore - Students learning with experienced tutors"
+              fill
               className="object-cover"
               sizes="100vw"
               placeholder="blur"

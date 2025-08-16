@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -136,12 +137,16 @@ export default function SecondarySchoolTuition() {
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             Achieve academic success with Singapore's top O-Level and N-Level tutors. We help students in Express, Normal Academic (N(A)), and Normal Technical (N(T)) streams build confidence, master key concepts, and excel in their exams.
           </p>
-          <div className="my-8">
-            <img 
-              src="/secondary-tuition.webp" 
+          <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
+            <Image
+              src="/secondary-tuition.webp"
               alt="Secondary school tuition in Singapore - Students learning with experienced tutors"
-              className="w-full max-w-3xl mx-auto rounded-xl shadow-lg"
-              loading="lazy"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="/secondary-tuition.webp"
+              priority 
             />
           </div>
         </section>

@@ -1,5 +1,6 @@
 import React from "react";
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";     
 
@@ -59,14 +60,16 @@ export default function MathTuition() {
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             Whether it's PSLE, O-Level, or JC H2 Math, Lion City Tutors connects you with handpicked private tutors in Singapore – at no cost to you.
           </p>
-          <div className="my-8">
-            <img 
-              src="/math-tuition_optimized.webp" 
+          <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
+            <Image
+              src="/math-tuition_optimized.webp"
               alt="Math tuition in Singapore - Students learning with experienced tutors"
-              className="w-full max-w-3xl mx-auto rounded-xl shadow-lg"
-              loading="lazy"
-              width="800"
-              height="400"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="/math-tuition_optimized.webp"
+              priority 
             />
           </div>
           <Link href="/request-tutor">
