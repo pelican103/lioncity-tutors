@@ -132,6 +132,7 @@ const teachingOptions = {
     gridCols: 'md:grid-cols-4'
   },
   computing: {
+    title: 'Computing',
     subjects: {
       python: 'Python',
       java: 'Java',
