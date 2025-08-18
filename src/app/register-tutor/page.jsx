@@ -43,12 +43,18 @@ const teachingOptions = {
       chemistry: 'Chemistry',
       biology: 'Biology',
       science: 'Combined Science',
+      computing: 'Computing',
       history: 'History',
       geography: 'Geography',
       literature: 'Literature',
       chinese: 'Chinese',
       malay: 'Malay',
-      tamil: 'Tamil'
+      tamil: 'Tamil',
+      poa: 'Principles of Accounts',
+      designAndTechnology: 'Design & Technology',
+      foodAndNutrition: 'Food & Nutrition',
+      art: 'Art',
+      music: 'Music'
     },
     gridCols: 'md:grid-cols-3'
   },
@@ -56,28 +62,37 @@ const teachingOptions = {
     title: 'Junior College (JC) Level',
     subjects: {
       generalPaper: 'General Paper (GP)',
+      knowledgeInquiry: 'Knowledge & Inquiry (KI)',
       h1Math: 'H1 Mathematics',
       h2Math: 'H2 Mathematics',
+      h2furtherMath: 'H2 Further Mathematics',
       h1Physics: 'H1 Physics',
       h2Physics: 'H2 Physics',
       h1Chemistry: 'H1 Chemistry',
       h2Chemistry: 'H2 Chemistry',
       h1Biology: 'H1 Biology',
       h2Biology: 'H2 Biology',
+      h2Computing: 'H2 Computing',
       h1Economics: 'H1 Economics',
       h2Economics: 'H2 Economics',
       h1History: 'H1 History',
       h2History: 'H2 History',
-      h1Literature: 'H1 Literature',
-      h2Literature: 'H2 Literature',
       h1Geography: 'H1 Geography',
       h2Geography: 'H2 Geography',
+      h1Literature: 'H1 Literature',
+      h2Literature: 'H2 Literature',
+      h1Chinese: 'H1 Chinese',
+      h2Chinese: 'H2 Chinese',
+      h1Malay: 'H1 Malay',
+      h2Malay: 'H2 Malay',
+      h1Tamil: 'H1 Tamil',
+      h2Tamil: 'H2 Tamil',
       h2Art: 'H2 Art',
       h3Math: 'H3 Mathematics',
       h3Physics: 'H3 Physics',
       h3Chemistry: 'H3 Chemistry',
       h3Economics: 'H3 Economics',
-      h3Biology: 'H3 Biology',
+      h3Biology: 'H3 Biology'
     },
     gridCols: 'md:grid-cols-3'
   },
@@ -115,6 +130,21 @@ const teachingOptions = {
       flute: 'Flute'
     },
     gridCols: 'md:grid-cols-4'
+  },
+  computing: {
+    subjects: {
+      python: 'Python',
+      java: 'Java',
+      cpp: 'C++',
+      cSharp: 'C#',
+      webDevelopment: 'Web Development',
+      dataScience: 'Data Science',
+      aiAndMachineLearning: 'AI & Machine Learning',
+      mobileAppDevelopment: 'Mobile App Development',
+      photoshop: 'Photoshop',
+      videoEditing: 'Video Editing'
+    },
+    gridCols: 'md:grid-cols-4'
   }
 };
 
@@ -136,10 +166,11 @@ const initialFormData = {
   teachingLevels: {
     preschool: { english: false, chinese: false, malay: false, tamil: false, phonics: false },
     primary: { english: false, math: false, science: false, chinese: false, higherchinese: false, malay: false, highermalay: false, tamil: false, highertamil: false, art: false },
-    secondary: { english: false, math: false, aMath: false, eMath: false, physics: false, chemistry: false, biology: false, science: false, history: false, geography: false, literature: false, chinese: false, malay: false, tamil: false },
-    jc: { generalPaper: false, h1Math: false, h2Math: false, h1Physics: false, h2Physics: false, h1Chemistry: false, h2Chemistry: false, h1Biology: false, h2Biology: false, h1Economics: false, h2Economics: false, h1History: false, h2History: false, h1Literature: false, h2Literature: false, h1Geography: false, h2Geography: false, h2Art: false, h3Math: false, h3Physics: false, h3Chemistry: false, h3Economics: false, h3Biology: false },
+    secondary: { english: false, math: false, aMath: false, eMath: false, physics: false, chemistry: false, biology: false, science: false, computing: false, history: false, geography: false, literature: false, chinese: false, malay: false, tamil: false, poa: false, designAndTechnology: false, foodAndNutrition: false, art: false, music: false },
+    jc: { generalPaper: false, knowledgeInquiry: false, h1Math: false, h2Math: false, h2furtherMath: false, h1Physics: false, h2Physics: false, h1Chemistry: false, h2Chemistry: false, h1Biology: false, h2Biology: false, h2Computing: false, h1Economics: false, h2Economics: false, h1History: false, h2History: false, h1Geography: false, h2Geography: false, h1Literature: false, h2Literature: false, h1Chinese: false, h2Chinese: false, h1Malay: false, h2Malay: false, h1Tamil: false, h2Tamil: false, h2Art: false, h3Math: false, h3Physics: false, h3Chemistry: false, h3Economics: false, h3Biology: false },
     ib: { englishLanguage: false, englishLiterature: false, chinese: false, mathematics: false, physics: false, chemistry: false, biology: false, businessAndManagement: false, economics: false, geography: false, history: false, malay: false, tamil: false, music: false, drama: false, artAndDesign: false },
-    music: { musictheory: false, piano: false, violin: false, guitar: false, drum: false, clarinet: false, flute: false }
+    music: { musictheory: false, piano: false, violin: false, guitar: false, drum: false, clarinet: false, flute: false },
+    computing: { python: false, java: false, cpp: false, cSharp: false, webDevelopment: false, dataScience: false, aiAndMachineLearning: false, mobileAppDevelopment: false, photoshop: false, videoEditing: false }
   },
   
   // Locations
