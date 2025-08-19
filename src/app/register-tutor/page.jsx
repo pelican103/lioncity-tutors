@@ -874,7 +874,7 @@ export default function RegisterAsTutor() {
               <div className="border-b border-gray-200 pb-6">
               < p className="mb-4"></p>
                 <h2 className="text-2xl font-semibold mb-6 text-blue-700">5. Fee Structure</h2>
-                <p className="text-gray-600 mb-4">Indicate your hourly rate (SGD) for each educational level. Fill for the levels you can teach:</p>
+                <p className="text-gray-600 mb-4">Indicate your hourly rate (SGD) for each educational level. Fill for the levels you teach:</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
@@ -964,6 +964,21 @@ export default function RegisterAsTutor() {
                         type="number" 
                         value={formData.hourlyRate.music} 
                         onChange={(e) => handleHourlyRateChange('music', e.target.value)} 
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        placeholder="Hourly rate"
+                        min="0"
+                      />
+                      <span className="ml-2">/hr</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Computing Rate</label>
+                    <div className="flex items-center">
+                      <span className="mr-2">$</span>
+                      <input 
+                        type="number" 
+                        value={formData.hourlyRate.computing} 
+                        onChange={(e) => handleHourlyRateChange('computing', e.target.value)} 
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                         placeholder="Hourly rate"
                         min="0"
