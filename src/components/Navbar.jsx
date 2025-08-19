@@ -62,7 +62,7 @@ export default function Navbar() {
       <nav ref={navRef} className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative">
         {/* Logo */}
         <Link href="/" className="flex flex-col items-center text-xl font-bold text-red-500">
-          <Image src="/favicon1.png" alt="LionCity Logo" width={40} height={40} priority />
+          <Image src="/favicon.png" alt="LionCity Logo" width={40} height={40} priority />
           LionCity Tutors
         </Link>
 
