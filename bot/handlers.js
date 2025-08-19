@@ -184,6 +184,87 @@ function formatTutorProfile(tutor) {
 
   return profile;
 }
+function formatTutorProfileSummary(tutor) {
+  let profile = `*📋 Your Profile*\n\n`;
+  
+  // Personal Information
+  profile += `*👤 Personal Information*\n`;
+  profile += `*Name:* ${tutor.fullName || 'Not set'}\n`;
+  profile += `*Contact:* ${tutor.contactNumber || 'Not set'}\n`;
+  profile += `*Email:* ${tutor.email || 'Not set'}\n`;
+  profile += `*Gender:* ${tutor.gender || 'Not set'}\n`;
+  profile += `*Age:* ${tutor.age || 'Not set'}\n`;
+  profile += `*Race:* ${tutor.race || 'Not set'}\n`;
+  profile += `*Nationality:* ${tutor.nationality || 'Not set'}\n`;
+  if (tutor.nationality === 'Other' && tutor.nationalityOther) {
+    profile += `*Other Nationality:* ${tutor.nationalityOther}\n`;
+  }
+  profile += `*NRIC (Last 4):* ${tutor.nricLast4 ? '****' + tutor.nricLast4 : 'Not set'}\n`;
+  
+  // Date of Birth
+  if (tutor.dob) {
+    const dob = tutor.dob;
+    const dobStr = [dob.day, dob.month, dob.year].filter(Boolean).join('/');
+    profile += `*Date of Birth:* ${dobStr || 'Not set'}\n`;
+  } else {
+    profile += `*Date of Birth:* Not set\n`;
+  }
+  
+  // Education & Experience
+  profile += `\n*🎓 Education & Experience*\n`;
+  profile += `*Highest Education:* ${tutor.highestEducation || 'Not set'}\n`;
+  profile += `*Current School:* ${tutor.currentSchool || 'Not set'}\n`;
+  profile += `*Previous Schools:* ${tutor.previousSchools || 'Not set'}\n`;
+  profile += `*Tutor Type:* ${tutor.tutorType || 'Not set'}\n`;
+  profile += `*Years of Experience:* ${tutor.yearsOfExperience || 'Not set'}\n`;
+  
+  // Teaching Levels
+  if (tutor.teachingLevels) {
+    profile += `\n*📚 Teaching Levels*\n`;
+    const levels = [];
+    if (Object.values(tutor.teachingLevels.primary || {}).some(v => v)) levels.push('Primary');
+    if (Object.values(tutor.teachingLevels.secondary || {}).some(v => v)) levels.push('Secondary');
+    if (Object.values(tutor.teachingLevels.jc || {}).some(v => v)) levels.push('JC');
+    if (Object.values(tutor.teachingLevels.international || {}).some(v => v)) levels.push('International');
+    profile += `*Levels:* ${levels.length ? levels.join(', ') : 'Not set'}\n`;
+  }
+
+  // Locations
+  if (tutor.locations) {
+    profile += `\n*📍 Teaching Locations*\n`;
+    const locations = [];
+    Object.entries(tutor.locations).forEach(([key, value]) => {
+      if (value) locations.push(key.charAt(0).toUpperCase() + key.slice(1));
+    });
+    profile += `*Areas:* ${locations.length ? locations.join(', ') : 'Not set'}\n`;
+  }
+
+  // Availability
+  if (tutor.availableTimeSlots) {
+    profile += `\n*⏰ Availability*\n`;
+    const slots = [];
+    Object.entries(tutor.availableTimeSlots).forEach(([key, value]) => {
+      if (value) {
+        const formatted = key.replace(/([A-Z])/g, ' $1').toLowerCase();
+        slots.push(formatted.charAt(0).toUpperCase() + formatted.slice(1));
+      }
+    });
+    profile += `*Time Slots:* ${slots.length ? slots.join(', ') : 'Not set'}\n`;
+  }
+
+  // Hourly Rates
+  if (tutor.hourlyRate) {
+    profile += `\n*💰 Hourly Rates*\n`;
+    const rates = [];
+    if (tutor.hourlyRate.primary) rates.push(`Primary: $${tutor.hourlyRate.primary}`);
+    if (tutor.hourlyRate.secondary) rates.push(`Secondary: $${tutor.hourlyRate.secondary}`);
+    if (tutor.hourlyRate.jc) rates.push(`JC: $${tutor.hourlyRate.jc}`);
+    if (tutor.hourlyRate.international) rates.push(`International: $${tutor.hourlyRate.international}`);
+    profile += `*Rates:* ${rates.length ? rates.join('\n') : 'Not set'}\n`;
+  }
+
+  return profile;
+}
 
 function formatAssignment(assignment) {
   let msg = `*🎯 ${assignment.title || 'Assignment'}*\n\n`;
@@ -746,19 +827,24 @@ async function handleContact(bot, chatId, userId, contact, Tutor, userSessions, 
       return;
     }
     
-    // Default flow: Show profile and main menu
-    const profileMsg = formatTutorProfile(tutor);
-    let message = `Welcome back, ${tutor.fullName}! `;
+   let welcomeMessage = `Welcome back, ${tutor.fullName}!`;
     if (pendingApplications.length > 0) {
-      message += `You have ${pendingApplications.length} pending application(s).\n\n`;
+      welcomeMessage += ` You have ${pendingApplications.length} pending application(s).`;
     }
-    message += 'Here is your profile:\n\n' + profileMsg;
-    await safeSend(bot, chatId, message, {
-      parse_mode: 'Markdown',
-      reply_markup: {
-        inline_keyboard: [[{ text: '🏠 Main Menu', callback_data: 'main_menu' }]]
-      }
-    });
+    await safeSend(bot, chatId, welcomeMessage);
+
+    const profileSummary = formatTutorProfileSummary(tutor);
+    await safeSend(bot, chatId, `Here is your profile summary:\n\n${profileSummary}`, { parse_mode: 'Markdown' });
+
+    if (tutor.introduction) {
+      await safeSend(bot, chatId, `*📝 Your Introduction:*\n\n${tutor.introduction}`, { parse_mode: 'Markdown' });
+    }
+
+    if (tutor.teachingExperience) {
+      await safeSend(bot, chatId, `*👨‍🏫 Your Teaching Experience:*\n\n${tutor.teachingExperience}`, { parse_mode: 'Markdown' });
+    }
+
+    // 5. Finally, show the main menu
     await showMainMenu(chatId, bot, userId, ADMIN_USERS);
     
   } catch (error) {
@@ -1873,12 +1959,21 @@ async function handleCallbackQuery(
         return await safeSend(bot, chatId, '❌ We couldn\'t find your profile. Please type /start and share your contact number again.');
       }
     
-      const profileMsg = formatTutorProfile(tutor);
-      const keyboard = showProfileEditMenu(); 
-      
-      return await safeSend(bot, chatId, `${profileMsg}\n\nWhat would you like to edit?`, {
-        parse_mode: 'Markdown',
-        reply_markup: keyboard  
+      await safeSend(bot, chatId, "Here's your current profile:");
+
+      const profileSummary = formatTutorProfileSummary(tutor);
+      await safeSend(bot, chatId, profileSummary, { parse_mode: 'Markdown' });
+
+      if (tutor.introduction) {
+        await safeSend(bot, chatId, `*📝 Your Introduction:*\n\n${tutor.introduction}`, { parse_mode: 'Markdown' });
+      }
+
+      if (tutor.teachingExperience) {
+        await safeSend(bot, chatId, `*👨‍🏫 Your Teaching Experience:*\n\n${tutor.teachingExperience}`, { parse_mode: 'Markdown' });
+      }
+      const keyboard = showProfileEditMenu();
+      return await safeSend(bot, chatId, 'What would you like to edit?', {
+        reply_markup: keyboard
       });
     }
     
@@ -2806,6 +2901,7 @@ export {
   
   // Format functions
   formatTutorProfile,
+  formatTutorProfileSummary,
   formatAssignment,
   formatAssignmentForChannel,
   
