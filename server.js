@@ -207,9 +207,9 @@ const testPaperLeadSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phone: { type: String, required: true },
   downloads: [{
-    subject: String,   
-    year: String,      
-    level: String,   
+    subject: String,        
+    level: String, 
+    paperTitle: String,
     downloadedAt: { type: Date, default: Date.now }
   }]
 }, { timestamps: true });
@@ -252,21 +252,22 @@ app.post('/api/registerfortutor', async (req, res) => {
 // Test paper leads endpoint
 app.post('/api/test-paper-leads', async (req, res) => {
   try {
-    const { email, phone, subject, year, level } = req.body;
+    const { email, phone, subject, level, paperTitle} = req.body;
     
     // Find existing lead or create new one
     let lead = await TestPaperLead.findOne({ email });
-    
+    const newDownload = { level, subject, paperTitle };
+
     if (lead) {
       // Add new download to existing lead
-      lead.downloads.push({ subject, year, level });
+      lead.downloads.push(newDownload);
       await lead.save();
     } else {
       // Create new lead
       lead = new TestPaperLead({
         email,
         phone,
-        downloads: [{ subject, year, level }]
+        downloads: [newDownload]
       });
       await lead.save();
     }
