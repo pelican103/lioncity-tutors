@@ -46,7 +46,7 @@ const PaperListItem = ({ paper, onDownloadClick, colorScheme = "indigo" }) => (
   </li>
 );
 
-// ✅ Enhanced Subject card with search functionality
+// Subject card with search functionality
 const SubjectCard = ({ subjectTitle, subjectData, onDownloadClick, searchTerm, colorScheme = "indigo" }) => {
   const hasExamTypes =
     typeof subjectData === "object" && !Array.isArray(subjectData) && Object.keys(subjectData).length > 0;
@@ -164,7 +164,7 @@ const SubjectCard = ({ subjectTitle, subjectData, onDownloadClick, searchTerm, c
   );
 };
 
-// ✅ Enhanced Level section with paper count
+// Level section with paper count
 const LevelSection = ({ title, icon, papers, onDownloadClick, colorClass, searchTerm, colorScheme = "indigo" }) => {
   // Calculate total papers for this level
   const totalPapers = Object.values(papers).reduce((total, subjectData) => {
@@ -434,7 +434,7 @@ export default function FreeTestPapers() {
                   {paperInfo.examType && (
                     <>
                       <span>→</span>
-                      <span className="capitalize">{paperInfo.examType}</span>
+                      <span className="capitalize">{paperInfo.examType.toUpperCase()}</span>
                     </>
                   )}
                 </div>

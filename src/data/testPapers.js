@@ -2,30 +2,30 @@ export const testPapers = {
   primary: {
     'P5 English': {
       wa1: [
-        { title: 'Primary 5 English 2024 WA1 - ACS', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_WA1_acs.pdf' },
-        { title: 'Primary 5 English 2024 WA1 - Catholic High', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_WA1_catholic_high.pdf' },
-        { title: 'Primary 5 English 2024 WA1 - Henry Park', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_WA1_henrypark.pdf' },
-        { title: 'Primary 5 English 2024 WA1 - Nanyang Primary', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_WA1_nanyang.pdf' },
-        { title: 'Primary 5 English 2024 WA1 - Raffles Girls', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_WA1_raffles.pdf' },
-        { title: 'Primary 5 English 2024 WA1 - SCGS', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_WA1_scgs.pdf' },
-        { title: 'Primary 5 English 2024 WA1 - Tao Nan', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_WA1_taonan.pdf' }
+        { title: 'Primary 5 English 2024 WA1 - ACS', downloadUrl: 'https://drive.google.com/uc?export=download&id=16ppUT8RlDpjOOBV13AkBVU1qJbvg7EI6' },
+        { title: 'Primary 5 English 2024 WA1 - Catholic High', downloadUrl: 'https://drive.google.com/uc?export=download&id=1ecxALjfbBz_9Q-U_ZQe7BXQxr93zTwbn' },
+        { title: 'Primary 5 English 2024 WA1 - Henry Park', downloadUrl: 'https://drive.google.com/uc?export=download&id=1PE2fkN-dnWy96CbCx8D3cT6lC3MeaaH3' },
+        { title: 'Primary 5 English 2024 WA1 - Nanyang Primary', downloadUrl: 'https://drive.google.com/uc?export=download&id=1t4hMaOBdWurZGpil0NrrOp84OGBjLj4H' },
+        { title: 'Primary 5 English 2024 WA1 - Raffles Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=1knxVYCzvdS-GluQJA686ywtQlSHePZE5' },
+        { title: 'Primary 5 English 2024 WA1 - SCGS', downloadUrl: 'https://drive.google.com/uc?export=download&id=1lML8OIv_yKTs5rRdDvQ-c_h0SLsMKgYL' },
+        { title: 'Primary 5 English 2024 WA1 - Tao Nan', downloadUrl: 'https://drive.google.com/uc?export=download&id=1Ar9L1SvxAXF52eZyewm7S-T4CP6tOC-c' }
       ],
       sa2: [
-        { title: 'Primary 5 English 2024 SA2 - CHIJ', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_SA2_chij.pdf' },
-        { title: 'Primary 5 English 2024 SA2 - Henry Park', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_SA2_henrypark.pdf' },
-        { title: 'Primary 5 English 2024 SA2 - Methodist Girls', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_SA2_methodist.pdf' },
-        { title: 'Primary 5 English 2024 SA2 - Nanhua', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_SA2_nanhua.pdf' },
-        { title: 'Primary 5 English 2024 SA2 - Nanyang', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_SA2_nanyang.pdf' },
-        { title: 'Primary 5 English 2024 SA2 - Raffles Girls', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_SA2_raffles.pdf' },
-        { title: 'Primary 5 English 2024 SA2 - SCGS', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_SA2_scgs.pdf' },
-        { title: 'Primary 5 English 2024 SA2 - Tao Nan', downloadUrl: '/papers/primary/P5/2024/english/P5_English_2024_SA2_taonan.pdf' }
+        { title: 'Primary 5 English 2024 SA2 - CHIJ', downloadUrl: 'https://drive.google.com/uc?export=download&id=1z137GDe7VE-qS-wPI9esVJuCF5if8F8e' },
+        { title: 'Primary 5 English 2024 SA2 - Henry Park', downloadUrl: 'https://drive.google.com/uc?export=download&id=10ZhQ6bz0DkVMlKBvm-nsaXMkgVNNoG_B' },
+        { title: 'Primary 5 English 2024 SA2 - Methodist Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=19gsV76_iUOmonlFpfGv9KNY9013v7Izy' },
+        { title: 'Primary 5 English 2024 SA2 - Nanhua', downloadUrl: 'https://drive.google.com/uc?export=download&id=1mJOuSDpeub-G-5vPIxUv-o-1j-p13Ivx' },
+        { title: 'Primary 5 English 2024 SA2 - Nanyang', downloadUrl: 'https://drive.google.com/uc?export=download&id=1gFf3lTb_7Lwdlr0t-wyhXmbUTvZCJ1t_' },
+        { title: 'Primary 5 English 2024 SA2 - Raffles Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=1UwDZSZ3BS8_r1A0VJffD0HMz6MpRGdxM' },
+        { title: 'Primary 5 English 2024 SA2 - SCGS', downloadUrl: 'https://drive.google.com/uc?export=download&id=1bg7KRUCiKGEsro_4EzkepmBoS0Eafdfh' },
+        { title: 'Primary 5 English 2024 SA2 - Tao Nan', downloadUrl: 'https://drive.google.com/uc?export=download&id=1TT5pt3SCXoVaKimgPXDlVUVLBQnWtLKU' }
       ]
     },
     'P6 English': {
       sa2: [
-        { title: 'Primary 6 English 2024 SA2 - Nanyang', downloadUrl: '/papers/primary/P6/2024/english/P6_English_2024_SA2_nanyang.pdf' },
-        { title: 'Primary 6 English 2024 SA2 - Raffles Girls', downloadUrl: '/papers/primary/P6/2024/english/P6_English_2024_SA2_rafflesgirls.pdf' },
-        { title: 'Primary 6 English 2024 SA2 - SCGS', downloadUrl: '/papers/primary/P6/2024/english/P6_English_2024_SA2_scgs.pdf' }
+        { title: 'Primary 6 English 2024 SA2 - Nanyang', downloadUrl: 'https://drive.google.com/uc?export=download&id=1whfPd0zkv_e9pa9ty2dhplHCa8RGBbsm' },
+        { title: 'Primary 6 English 2024 SA2 - Raffles Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=11rrvnLEdYAumk5xHurXhW5z_cjhYWoKG' },
+        { title: 'Primary 6 English 2024 SA2 - SCGS', downloadUrl: 'https://drive.google.com/uc?export=download&id=1PktHAXDsaRlvA8yAeb0J_Mg4mDP0SQwP' }
       ]
     },
     'P6 Math': {
