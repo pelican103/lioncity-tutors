@@ -9,7 +9,79 @@ from google_auth_oauthlib.flow import Flow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+import zipfile
+import tempfile
 
+def process_zip_file_and_repackage(zip_path, banner_img, service, target_folder_id, opacity=0.6, cover_page_number=True, cover_page_pdf=None):
+    """
+    Extracts a ZIP, processes all PDFs inside, re-packages them into a new ZIP,
+    and uploads it to Google Drive.
+    """
+    zip_filename = os.path.basename(zip_path)
+    print(f"\n📦 Found ZIP file: {zip_filename}. Starting processing...")
+
+    # Create two temporary directories
+    # 1. To extract the original ZIP
+    # 2. To store the processed PDFs
+    with tempfile.TemporaryDirectory() as extract_dir, tempfile.TemporaryDirectory() as processed_dir:
+        
+        # --- Step 1: Extract the original ZIP ---
+        try:
+            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                zip_ref.extractall(extract_dir)
+            print(f"  📂 Extracted contents to a temporary location.")
+        except zipfile.BadZipFile:
+            print(f"  ❌ Error: '{zip_filename}' is not a valid ZIP file.")
+            return None, None # Return None for file_id and url
+        
+        # --- Step 2: Find and process PDFs inside ---
+        pdf_files = glob.glob(os.path.join(extract_dir, "**/*.pdf"), recursive=True)
+        if not pdf_files:
+            print(f"  ❌ No PDF files found inside '{zip_filename}'.")
+            return None, None
+
+        print(f"  📄 Found {len(pdf_files)} PDF(s) inside the ZIP. Processing each...")
+        for pdf_file in pdf_files:
+            original_pdf_name = os.path.basename(pdf_file)
+            processed_pdf_path = os.path.join(processed_dir, original_pdf_name)
+            
+            # Use your existing banner function
+            success = add_banner_with_pymupdf_v1(
+                input_pdf=pdf_file,
+                output_pdf=processed_pdf_path,
+                banner_img=banner_img,
+                opacity=opacity,
+                cover_page_number=cover_page_number,
+                cover_page_pdf=cover_page_pdf
+            )
+            if not success:
+                print(f"  ❌ Failed to process '{original_pdf_name}' within the ZIP.")
+
+        # --- Step 3: Re-package into a new ZIP ---
+        new_zip_name = f"processed_{zip_filename}"
+        new_zip_path = os.path.join(tempfile.gettempdir(), new_zip_name)
+        
+        print(f"  🎁 Re-packaging processed PDFs into '{new_zip_name}'...")
+        with zipfile.ZipFile(new_zip_path, 'w') as new_zip:
+            for item in os.listdir(processed_dir):
+                new_zip.write(os.path.join(processed_dir, item), arcname=item)
+        
+        # --- Step 4: Upload the new ZIP ---
+        print(f"  📤 Uploading '{new_zip_name}' to Google Drive...")
+        file_id = upload_to_google_drive(service, new_zip_path, target_folder_id)
+        
+        # --- Step 5: Clean up the new ZIP file ---
+        os.remove(new_zip_path)
+
+        if file_id:
+            download_url = generate_download_url(file_id)
+            print(f"  ✅ Successfully processed and uploaded ZIP: {new_zip_name}")
+            return file_id, download_url
+        else:
+            print(f"  ❌ Failed to upload the processed ZIP.")
+            return None, None
+        
+        
 def add_banner_with_pymupdf_v1(input_pdf, output_pdf, banner_img, opacity=0.6, cover_page_number=True, cover_page_pdf=None):
     """
     Solution 1: Pre-process the banner image to add transparency using PIL
@@ -329,7 +401,7 @@ def generate_download_url(file_id):
     return f"https://drive.google.com/uc?export=download&id={file_id}"
 
 
-def process_all_pdfs_with_drive_upload(input_folder, banner_img, create_folders=True, opacity=0.6, cover_page_number=True, cover_page_pdf=None):
+def process_all_files_with_drive_upload(input_folder, banner_img, create_folders=True, opacity=0.6, cover_page_number=True, cover_page_pdf=None):
     """
     Process all PDF files and upload them to Google Drive with organized folder structure
     
@@ -356,16 +428,16 @@ def process_all_pdfs_with_drive_upload(input_folder, banner_img, create_folders=
         os.makedirs(temp_output_folder)
     
     # Find all PDF files in the input folder
-    pdf_pattern = os.path.join(input_folder, "*.pdf")
-    pdf_files = glob.glob(pdf_pattern)
+    all_files = glob.glob(os.path.join(input_folder, "*.pdf")) + glob.glob(os.path.join(input_folder, "*.zip"))
+
     
-    if not pdf_files:
+    if not all_files:
         print(f"❌ No PDF files found in '{input_folder}'")
         return {}
     
-    print(f"📄 Found {len(pdf_files)} PDF files to process:")
-    for pdf_file in pdf_files:
-        print(f"  - {os.path.basename(pdf_file)}")
+    print(f"📄 Found {len(all_files)} files to process:")
+    for file_path in all_files:
+        print(f"  - {os.path.basename(file_path)}")
     
     # Set up Google Drive
     print("\n🔑 Setting up Google Drive authentication...")
@@ -397,42 +469,51 @@ def process_all_pdfs_with_drive_upload(input_folder, banner_img, create_folders=
     url_mapping = {}
     
     # Process each PDF file
-    for pdf_file in pdf_files:
-        filename = os.path.basename(pdf_file)
-        temp_output_path = os.path.join(temp_output_folder, filename)
-        
-        print(f"\n🔄 Processing: {filename}")
-        
-        # Process the PDF with banner
-        success = add_banner_with_pymupdf_v1(
-            input_pdf=pdf_file,
-            output_pdf=temp_output_path,
-            banner_img=banner_img,
-            opacity=opacity,
-            cover_page_number=cover_page_number,
-            cover_page_pdf=cover_page_pdf
-        )
-        
-        if success:
-            # Upload to Google Drive
-            print(f"📤 Uploading to Google Drive: {filename}")
-            file_id = upload_to_google_drive(service, temp_output_path, target_folder_id)
+    for file_path in all_files:
+        filename = os.path.basename(file_path)
+        if filename.lower().endswith('.pdf'):
+            # --- Process individual PDF ---
+            temp_output_path = os.path.join(temp_output_folder, filename)
+            print(f"\n🔄 Processing PDF: {filename}")
             
-            if file_id:
-                download_url = generate_download_url(file_id)
-                url_mapping[filename] = download_url
-                print(f"✅ Successfully processed and uploaded: {filename}")
-                print(f"🔗 Download URL: {download_url}")
-                successful_count += 1
-                
-                # Clean up temporary file
-                os.remove(temp_output_path)
+            success = add_banner_with_pymupdf_v1(
+                input_pdf=file_path,
+                output_pdf=temp_output_path,
+                banner_img=banner_img,
+                opacity=opacity,
+                cover_page_number=cover_page_number,
+                cover_page_pdf=cover_page_pdf
+            )
+            
+            if success:
+                print(f"📤 Uploading to Google Drive: {filename}")
+                file_id = upload_to_google_drive(service, temp_output_path, target_folder_id)
+                if file_id:
+                    url_mapping[filename] = generate_download_url(file_id)
+                    successful_count += 1
+                    os.remove(temp_output_path)
+                else:
+                    failed_count += 1
             else:
-                print(f"❌ Failed to upload: {filename}")
                 failed_count += 1
-        else:
-            print(f"❌ Failed to process: {filename}")
-            failed_count += 1
+        
+        elif filename.lower().endswith('.zip'):
+            # --- Process ZIP file ---
+            file_id, download_url = process_zip_file_and_repackage(
+                zip_path=file_path,
+                banner_img=banner_img,
+                service=service,
+                target_folder_id=target_folder_id,
+                opacity=opacity,
+                cover_page_number=cover_page_number,
+                cover_page_pdf=cover_page_pdf
+            )
+            if file_id and download_url:
+                processed_zip_name = f"processed_{filename}"
+                url_mapping[processed_zip_name] = download_url
+                successful_count += 1
+            else:
+                failed_count += 1
     
     # Clean up temporary folder
     if os.path.exists(temp_output_folder) and not os.listdir(temp_output_folder):
@@ -457,7 +538,7 @@ def process_all_pdfs_with_drive_upload(input_folder, banner_img, create_folders=
 # --- Example Usage ---
 if __name__ == "__main__":
     # Define your paths (relative to project root)
-    input_folder = "public/papers/primary/P6/2024/english/original"
+    input_folder = "public/papers/secondary/O Level/2024/EMath"
     banner_image = "public/papers/banner.png"
     cover_page = "public/papers/cover_page.pdf"  
     
@@ -466,7 +547,7 @@ if __name__ == "__main__":
     drive_folder_id = None
     
     try:
-        url_mapping = process_all_pdfs_with_drive_upload(
+        url_mapping = process_all_files_with_drive_upload(
             input_folder=input_folder,
             banner_img=banner_image,
             create_folders=True,  # Set to False if you don't want organized folders

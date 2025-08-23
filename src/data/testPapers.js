@@ -30,35 +30,35 @@ export const testPapers = {
     },
     'P6 Math': {
       wa1: [
-        { title: 'Primary 6 Math 2024 WA1 - Raffles Girls', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_WA1_rafflesgirls.pdf' },
-        { title: 'Primary 6 Math 2024 WA1 - Nanyang', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_WA1_Nanyang.pdf' },
-        { title: 'Primary 6 Math 2024 WA1 - Methodist Girls', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_SA2_Methodistgirls.pdf' },
-        { title: 'Primary 6 Math 2024 WA1 - Nanhua', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_SA2_Nanhua.pdf' },
-        { title: 'Primary 6 Math 2024 WA1 - Red Swastika', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_SA2_Redswastika.pdf' }
+        { title: 'Primary 6 Math 2024 WA1 - Raffles Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=1chIvKfHdsWt2WzR8eEndiXH7gsny8oJg' },
+        { title: 'Primary 6 Math 2024 WA1 - Nanyang', downloadUrl: 'https://drive.google.com/uc?export=download&id=1LLW0yOHkstGXI0xYE9TyoqlwM0p5RFIi' },
+        { title: 'Primary 6 Math 2024 WA1 - Methodist Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=1JW7tFHqmxYdTd7gy7r-CxpcWZ3R65Bji' },
+        { title: 'Primary 6 Math 2024 WA1 - Nanhua', downloadUrl: 'https://drive.google.com/uc?export=download&id=17HL9zjlPJfBPmfgkl6yjs-9Em8OvkLvR' },
+        { title: 'Primary 6 Math 2024 WA1 - Red Swastika', downloadUrl: 'https://drive.google.com/uc?export=download&id=1Sr1zCxL1jmMv6ZkazafqmqKwrbwgK9zJ' }
       ],
       sa2: [
-        { title: 'Primary 6 Math 2024 SA2 - ACS Primary', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_SA2_acsprimary.pdf' },
-        { title: 'Primary 6 Math 2024 SA2 - Raffles Girls', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_SA2_rafflesgirls.pdf' },
-        { title: 'Primary 6 Math 2024 SA2 - Nanyang', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_SA2_nanyang.pdf' },
-        { title: 'Primary 6 Math 2024 SA2 - Methodist Girls', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_SA2_methodistgirls.pdf' },
-        { title: 'Primary 6 Math 2024 SA2 - Catholic High', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_SA2_catholichigh.pdf' },
-        { title: 'Primary 6 Math 2024 SA2 - Henry Park', downloadUrl: '/papers/primary/P6/2024/math/P6_Maths_2024_SA2_henrypark.pdf' }
+        { title: 'Primary 6 Math 2024 SA2 - ACS Primary', downloadUrl: 'https://drive.google.com/uc?export=download&id=1dRYZBQZxIy5DbPdhsKB2gJ9KawkHn0TW' },
+        { title: 'Primary 6 Math 2024 SA2 - Raffles Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=14S7xq4ithN-5iJb19gQQfAYJ4Q-N2qZS' },
+        { title: 'Primary 6 Math 2024 SA2 - Nanyang', downloadUrl: 'https://drive.google.com/uc?export=download&id=1NDmiTYG2ZsoWbhKo0P2YiABL3Zv5uuCz' },
+        { title: 'Primary 6 Math 2024 SA2 - Methodist Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=1h62i3U0KSFiChfzt77eshyghDpu8UvpU' },
+        { title: 'Primary 6 Math 2024 SA2 - Catholic High', downloadUrl: 'https://drive.google.com/uc?export=download&id=1gAPmBJyvFRwJ-e_8y9VcLdt7fdRAlEBJ' },
+        { title: 'Primary 6 Math 2024 SA2 - Henry Park', downloadUrl: 'https://drive.google.com/uc?export=download&id=17JSDpUQgxrmcW2dvb0litWiIYnQFUOUq' }
       ]
     },
     'P6 Science': {
       wa1: [
-        { title: 'Primary 6 Science 2024 WA1 - ACS Junior', downloadUrl: '/papers/primary/P6/2024/science/P6_Science_2024_WA1_acsjunior.pdf' },
-        { title: 'Primary 6 Science 2024 WA1 - Methodist Girls', downloadUrl: '/papers/primary/P6/2024/science/P6_Science_2024_WA1_mgs.pdf' },
-        { title: 'Primary 6 Science 2024 WA1 - Nanhua', downloadUrl: '/papers/primary/P6/2024/science/P6_Science_2024_WA1_nanhua.pdf' },
-        { title: 'Primary 6 Science 2024 WA1 - Nanyang', downloadUrl: '/papers/primary/P6/2024/science/P6_Science_2024_WA1_nanyang.pdf' },
-        { title: 'Primary 6 Science 2024 WA1 - Raffles Girls', downloadUrl: '/papers/primary/P6/2024/science/P6_Science_2024_WA1_raffles.pdf' },
+        { title: 'Primary 6 Science 2024 WA1 - ACS Junior', downloadUrl: 'https://drive.google.com/uc?export=download&id=1NpV2uMZXQ-laoYXcgGZ2W06g8zx9PqB6' },
+        { title: 'Primary 6 Science 2024 WA1 - Methodist Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=10j4o3caz2Z4rTrULGm1jloETFLDgLLF1' },
+        { title: 'Primary 6 Science 2024 WA1 - Nanhua', downloadUrl: 'https://drive.google.com/uc?export=download&id=1rQoAc4rIDATNqOBuH8araOwf49iT99gB' },
+        { title: 'Primary 6 Science 2024 WA1 - Nanyang', downloadUrl: 'https://drive.google.com/uc?export=download&id=17Eqca8KEayNuG_jMWXCh6fNh5vg35ERm' },
+        { title: 'Primary 6 Science 2024 WA1 - Raffles Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=1DT6ZdicxNA_C3neSuQCed-MJR4GL_NzA' },
       ],
       sa2: [
-        { title: 'Primary 6 Science 2024 SA2 - Raffles Girls', downloadUrl: '/papers/primary/P6/2024/science/P6_Science_2024_SA2_raffles.pdf' },
-        { title: 'Primary 6 Science 2024 SA2 - Nanyang', downloadUrl: '/papers/primary/P6/2024/science/P6_Science_2024_SA2_nanyang.pdf' },
-        { title: 'Primary 6 Science 2024 SA2 - Nanhua', downloadUrl: '/papers/primary/P6/2024/science/P6_Science_2024_SA2_nanhua.pdf' },
-        { title: 'Primary 6 Science 2024 SA2 - Methodist Girls', downloadUrl: '/papers/primary/P6/2024/science/P6_Science_2024_SA2_mgs.pdf' },
-        { title: 'Primary 6 Science 2024 SA2 - Catholic High', downloadUrl: '/papers/primary/P6/2024/science/P6_Science_2024_SA2_catholic.pdf' },
+        { title: 'Primary 6 Science 2024 SA2 - Raffles Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=1Tk9hacv2AVmV7hQU8eimclfwp-cI9cJI' },
+        { title: 'Primary 6 Science 2024 SA2 - Nanyang', downloadUrl: 'https://drive.google.com/uc?export=download&id=1-2zD6BwVbUFqkB8vk97hGitwkB4IDQlq' },
+        { title: 'Primary 6 Science 2024 SA2 - Nanhua', downloadUrl: 'https://drive.google.com/uc?export=download&id=18t5oD9ujZaiGhfBsiXV_gWpfSAKrOxy3' },
+        { title: 'Primary 6 Science 2024 SA2 - Methodist Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=1qZQfD2rVVLXbdSN5-lh8wfsfoeZWSwMc' },
+        { title: 'Primary 6 Science 2024 SA2 - Catholic High', downloadUrl: 'https://drive.google.com/uc?export=download&id=1PuU52xPafPYCReDAcRRap3PW777a-ve9' },
       ]
     }
   },
@@ -66,34 +66,34 @@ export const testPapers = {
     o_level: {
       'O Level English': {
         prelim: [
-          { title: 'O Level English 2024 Prelim (with Answers) - ACJC', downloadUrl: '/papers/secondary/O Level/2024/English/Sec4 English 2024 ACJC.zip' },
-          { title: 'O Level English 2023 Prelim (with Answers) - Anderson', downloadUrl: '/papers/secondary/O Level/2023/english/Sec4 English 2023 Anderson.zip' },
-          { title: 'O Level English 2023 Prelim (with Answers) - Cedar Girls', downloadUrl: '/papers/secondary/O Level/2023/english/Sec4 English 2023 Cedar Girls.zip' },
-          { title: 'O Level English 2023 Prelim (with Answers) - Chung Cheng', downloadUrl: '/papers/secondary/O Level/2023/english/Sec4 English 2023 Chung Cheng.zip' },
-          { title: 'O Level English 2023 Prelim (with Answers) - NCHS', downloadUrl: '/papers/secondary/O Level/2023/english/Sec4 English 2023 NCHS.zip' },
+          { title: 'O Level English 2024 Prelim (with Answers) - ACJC', downloadUrl: 'https://drive.google.com/uc?export=download&id=1gYDxDmXhaAoWYCdo3i_VpVBN1tRBBR3U' },
+          { title: 'O Level English 2023 Prelim (with Answers) - Anderson', downloadUrl: 'https://drive.google.com/uc?export=download&id=1UUR0WmoQrnWo262o4oW2LYJPJUyP-DEB' },
+          { title: 'O Level English 2023 Prelim (with Answers) - Cedar Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=1OFwP-X2Cqkskz7URNnM6zcbnXcqjyroO' },
+          { title: 'O Level English 2023 Prelim (with Answers) - Chung Cheng', downloadUrl: 'https://drive.google.com/uc?export=download&id=1HfPKhG49Mha2NqLaxWMbuiATHNtdxkSY' },
+          { title: 'O Level English 2023 Prelim (with Answers) - NCHS', downloadUrl: 'https://drive.google.com/uc?export=download&id=1X8H-mlcjiSCzlFCA9kGQPHJqk5M-McoO' },
         ]
       },
       'O Level A Math': {
         'Prelim Paper 1': [
-          { title: 'O Level A Math 2024 Paper 1 Prelim - Methodist Girls', downloadUrl: '/papers/secondary/O Level/2024/Math/P1/Sec4_AMaths1_2024_SA2_methodist.pdf' },
-          { title: 'O Level A Math 2024 Paper 1 Prelim - ACS', downloadUrl: '/papers/secondary/O Level/2024/Math/P1/Sec4_AMaths1_2024_SA2_acs.pdf' },
-          { title: 'O Level A Math 2024 Paper 1 Prelim - Gan Eng Seng', downloadUrl: '/papers/secondary/O Level/2024/Math/P1/Sec4_AMaths1_2024_SA2_ganeng.pdf' },
-          { title: 'O Level A Math 2024 Paper 1 Prelim - Juying Sec', downloadUrl: '/papers/secondary/O Level/2024/Math/P1/Sec4_AMaths1_2024_SA2_juying.pdf' }
+          { title: 'O Level A Math 2024 Paper 1 Prelim - Methodist Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=1r4nkx88zfqD5HDmSoU7kXTT7G9Erd009' },
+          { title: 'O Level A Math 2024 Paper 1 Prelim - ACS', downloadUrl: 'https://drive.google.com/uc?export=download&id=1wNvTvXgE4ROT0qGjZ8OqekPj5iq6K3Wo' },
+          { title: 'O Level A Math 2024 Paper 1 Prelim - Gan Eng Seng', downloadUrl: 'https://drive.google.com/uc?export=download&id=1TktgMiZLNSpaCRZxeLzmMI6nstRYIUeA' },
+          { title: 'O Level A Math 2024 Paper 1 Prelim - Juying Sec', downloadUrl: 'https://drive.google.com/uc?export=download&id=1feozlFDJeCofhZDfCxcJck13Or8W7eHB' }
         ],
         'Prelim Paper 2': [
-          { title: 'O Level A Math 2024 Paper 2 Prelim - Methodist Girls', downloadUrl: '/papers/secondary/O Level/2024/Math/P2/Sec4_AMaths2_2024_SA2_methodist.pdf' },
-          { title: 'O Level A Math 2024 Paper 2 Prelim - ACS', downloadUrl: '/papers/secondary/O Level/2024/Math/P2/Sec4_AMaths2_2024_SA2_acs.pdf' },
-          { title: 'O Level A Math 2024 Paper 2 Prelim - Gan Eng Seng', downloadUrl: '/papers/secondary/O Level/2024/Math/P2/Sec4_AMaths2_2024_SA2_ganeng.pdf' },
-          { title: 'O Level A Math 2024 Paper 2 Prelim - Juying Sec', downloadUrl: '/papers/secondary/O Level/2024/Math/P2/Sec4_AMaths2_2024_SA2_juying.pdf' }
+          { title: 'O Level A Math 2024 Paper 2 Prelim - Methodist Girls', downloadUrl: 'https://drive.google.com/uc?export=download&id=15v94Rlt9J2jl0Z_1zP4xgWjcDeqWTwCm' },
+          { title: 'O Level A Math 2024 Paper 2 Prelim - ACS', downloadUrl: ' https://drive.google.com/uc?export=download&id=1GVk81-CWEgQ7qkW2yoPDBQlD_hQApnH5' },
+          { title: 'O Level A Math 2024 Paper 2 Prelim - Gan Eng Seng', downloadUrl: 'https://drive.google.com/uc?export=download&id=1OyugKcuoT3100KiZ4Hh-_zVmIza5Gyzm' },
+          { title: 'O Level A Math 2024 Paper 2 Prelim - Juying Sec', downloadUrl: 'https://drive.google.com/uc?export=download&id=1nLtZCdh8D61CAg5xp0V2tPMTghdEmIUB' }
         ]
       },
       'O Level E Math': {
         prelim: [
-          { title: 'O Level E Math 2024 Prelim - ACS', downloadUrl: '/papers/secondary/O Level/2024/EMath/Olevel__Emaths_2024_SA2_acsindependent.pdf' },
-          { title: 'O Level E Math 2024 Prelim - CHIJ', downloadUrl: '/papers/secondary/O Level/2024/EMath/Olevel__Emaths_2024_SA2_chij.pdf' },
-          { title: 'O Level E Math 2024 Prelim - SJI', downloadUrl: '/papers/secondary/O Level/2024/EMath/Olevel__Emaths_2024_SA2_stjoseph.pdf' },
-          { title: 'O Level E Math 2024 Prelim - Tampines', downloadUrl: '/papers/secondary/O Level/2024/EMath/Olevel__Emaths_2024_SA2_tampines.pdf' },
-          { title: 'O Level E Math 2024 Prelim - Xinmin', downloadUrl: '/papers/secondary/O Level/2024/EMath/Olevel__Emaths_2024_SA2_xinmin.pdf' }
+          { title: 'O Level E Math 2024 Prelim - ACS', downloadUrl: 'https://drive.google.com/uc?export=download&id=1bMm3dKGhaASNfjAp-nEY3d13BZAXPD5p' },
+          { title: 'O Level E Math 2024 Prelim - CHIJ', downloadUrl: 'https://drive.google.com/uc?export=download&id=1E0XpHUsUTbQw9WNmU_8WsTx2DefcBuOS' },
+          { title: 'O Level E Math 2024 Prelim - SJI', downloadUrl: 'https://drive.google.com/uc?export=download&id=13s-TvgwZTYJ8VrAGaBVoVIh1l55ybyXy' },
+          { title: 'O Level E Math 2024 Prelim - Tampines', downloadUrl: 'https://drive.google.com/uc?export=download&id=1GruSZrXoSRwDAbq701hvAx4GPMy_6XAG' },
+          { title: 'O Level E Math 2024 Prelim - Xinmin', downloadUrl: 'https://drive.google.com/uc?export=download&id=1WrPUFJ-np9uEGb_C6yArIM_Upq4J4HnM' }
         ]
       },
       'O Level Chemistry': {
