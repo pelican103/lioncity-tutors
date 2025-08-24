@@ -8,8 +8,37 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Download, BookOpen, GraduationCap, Atom, FileText, Search } from "lucide-react";
+import { Download, BookOpen, GraduationCap, Atom, FileText, Search, Clock } from "lucide-react";
 import { testPapers } from "../../data/testPapers";
+
+// Coming Soon Component for empty arrays
+const ComingSoonCard = ({ examType, colorScheme = "indigo" }) => (
+  <div className={`flex flex-col items-center justify-center p-6 rounded-lg border-2 border-dashed transition-colors ${
+    colorScheme === 'emerald'
+      ? 'border-emerald-200 bg-emerald-50/30'
+      : colorScheme === 'blue'
+      ? 'border-blue-200 bg-blue-50/30'
+      : colorScheme === 'purple'
+      ? 'border-purple-200 bg-purple-50/30'
+      : 'border-indigo-200 bg-indigo-50/30'
+  }`}>
+    <Clock className={`h-8 w-8 mb-3 ${
+      colorScheme === 'emerald'
+        ? 'text-emerald-400'
+        : colorScheme === 'blue'
+        ? 'text-blue-400'
+        : colorScheme === 'purple'
+        ? 'text-purple-400'
+        : 'text-indigo-400'
+    }`} />
+    <p className="text-gray-500 font-medium text-center">
+      Coming Soon
+    </p>
+    <p className="text-gray-400 text-sm text-center mt-1">
+      {examType.replace(/_/g, ' ').toUpperCase()} papers will be available soon
+    </p>
+  </div>
+);
 
 // ✅ Improved Paper list item with better spacing and responsive design
 const PaperListItem = ({ paper, onDownloadClick, colorScheme = "indigo" }) => (
@@ -46,7 +75,7 @@ const PaperListItem = ({ paper, onDownloadClick, colorScheme = "indigo" }) => (
   </li>
 );
 
-// Subject card with search functionality
+// Subject card with search functionality and coming soon support
 const SubjectCard = ({ subjectTitle, subjectData, onDownloadClick, searchTerm, colorScheme = "indigo" }) => {
   const hasExamTypes =
     typeof subjectData === "object" && !Array.isArray(subjectData) && Object.keys(subjectData).length > 0;
@@ -72,9 +101,29 @@ const SubjectCard = ({ subjectTitle, subjectData, onDownloadClick, searchTerm, c
     }
   };
 
+  // Calculate total available papers (excluding empty arrays)
+  const totalAvailablePapers = () => {
+    if (hasExamTypes) {
+      return examTypes.reduce((total, type) => {
+        if (Array.isArray(subjectData[type])) {
+          return total + subjectData[type].length;
+        } else if (typeof subjectData[type] === 'object') {
+          return total + Object.values(subjectData[type] || {}).reduce((subTotal, papers) => {
+            return subTotal + (Array.isArray(papers) ? papers.length : 0);
+          }, 0);
+        }
+        return total;
+      }, 0);
+    } else {
+      return Array.isArray(subjectData) ? subjectData.length : 0;
+    }
+  };
+
   if (searchTerm && !hasMatchingPapers()) {
     return null; // Hide card if no matching papers
   }
+
+  const availablePapers = totalAvailablePapers();
 
   return (
     <Card className="hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ease-in-out rounded-2xl overflow-hidden">
@@ -82,10 +131,7 @@ const SubjectCard = ({ subjectTitle, subjectData, onDownloadClick, searchTerm, c
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <h4 className="font-bold text-xl text-gray-900">{subjectTitle}</h4>
           <div className="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full whitespace-nowrap self-start sm:self-auto">
-            {hasExamTypes 
-              ? Object.values(subjectData).flat().length
-              : Array.isArray(subjectData) ? subjectData.length : 0
-            } papers
+            {availablePapers} papers available
           </div>
         </div>
         
@@ -112,61 +158,80 @@ const SubjectCard = ({ subjectTitle, subjectData, onDownloadClick, searchTerm, c
             </TabsList>
             {examTypes.map((type) => (
               <TabsContent key={type} value={type} className="mt-4">
-                <ul className="space-y-3">
-                  {Array.isArray(subjectData[type]) ? 
-                    filterPapers(subjectData[type]).map((paper, index) => (
-                      <PaperListItem
-                        key={index}
-                        paper={paper}
-                        colorScheme={colorScheme}
-                        onDownloadClick={() =>
-                          onDownloadClick(paper, { subject: subjectTitle, examType: type })
-                        }
-                      />
-                    )) :
-                    Object.entries(subjectData[type] || {}).map(([subType, papers]) => (
+                {Array.isArray(subjectData[type]) ? (
+                  subjectData[type].length === 0 ? (
+                    <ComingSoonCard examType={type} colorScheme={colorScheme} />
+                  ) : (
+                    <ul className="space-y-3">
+                      {filterPapers(subjectData[type]).map((paper, index) => (
+                        <PaperListItem
+                          key={index}
+                          paper={paper}
+                          colorScheme={colorScheme}
+                          onDownloadClick={() =>
+                            onDownloadClick(paper, { subject: subjectTitle, examType: type })
+                          }
+                        />
+                      ))}
+                    </ul>
+                  )
+                ) : (
+                  <div className="space-y-4">
+                    {Object.entries(subjectData[type] || {}).map(([subType, papers]) => (
                       <div key={subType} className="space-y-2">
                         <h5 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
                           {subType.replace(/_/g, ' ')}
                         </h5>
-                        {filterPapers(papers).map((paper, index) => (
-                          <PaperListItem
-                            key={index}
-                            paper={paper}
-                            colorScheme={colorScheme}
-                            onDownloadClick={() =>
-                              onDownloadClick(paper, { subject: subjectTitle, examType: `${type} - ${subType}` })
-                            }
-                          />
-                        ))}
+                        {Array.isArray(papers) && papers.length === 0 ? (
+                          <ComingSoonCard examType={`${type} ${subType}`} colorScheme={colorScheme} />
+                        ) : (
+                          <ul className="space-y-3">
+                            {filterPapers(papers).map((paper, index) => (
+                              <PaperListItem
+                                key={index}
+                                paper={paper}
+                                colorScheme={colorScheme}
+                                onDownloadClick={() =>
+                                  onDownloadClick(paper, { subject: subjectTitle, examType: `${type} - ${subType}` })
+                                }
+                              />
+                            ))}
+                          </ul>
+                        )}
                       </div>
-                    ))
-                  }
-                </ul>
+                    ))}
+                  </div>
+                )}
               </TabsContent>
             ))}
           </Tabs>
         ) : (
-          <ul className="space-y-3">
-            {Array.isArray(subjectData) &&
-              filterPapers(subjectData).map((paper, index) => (
-                <PaperListItem
-                  key={index}
-                  paper={paper}
-                  colorScheme={colorScheme}
-                  onDownloadClick={() => onDownloadClick(paper, { subject: subjectTitle })}
-                />
-              ))}
-          </ul>
+          <div>
+            {Array.isArray(subjectData) && subjectData.length === 0 ? (
+              <ComingSoonCard examType="papers" colorScheme={colorScheme} />
+            ) : (
+              <ul className="space-y-3">
+                {Array.isArray(subjectData) &&
+                  filterPapers(subjectData).map((paper, index) => (
+                    <PaperListItem
+                      key={index}
+                      paper={paper}
+                      colorScheme={colorScheme}
+                      onDownloadClick={() => onDownloadClick(paper, { subject: subjectTitle })}
+                    />
+                  ))}
+              </ul>
+            )}
+          </div>
         )}
       </CardContent>
     </Card>
   );
 };
 
-// Level section with paper count
+// Level section with paper count (only counting available papers)
 const LevelSection = ({ title, icon, papers, onDownloadClick, colorClass, searchTerm, colorScheme = "indigo" }) => {
-  // Calculate total papers for this level
+  // Calculate total available papers for this level (excluding empty arrays)
   const totalPapers = Object.values(papers).reduce((total, subjectData) => {
     if (Array.isArray(subjectData)) {
       return total + subjectData.length;
@@ -175,7 +240,9 @@ const LevelSection = ({ title, icon, papers, onDownloadClick, colorClass, search
         if (Array.isArray(typeData)) {
           return subTotal + typeData.length;
         } else if (typeof typeData === 'object') {
-          return subTotal + Object.values(typeData).flat().length;
+          return subTotal + Object.values(typeData).reduce((deepTotal, papers) => {
+            return deepTotal + (Array.isArray(papers) ? papers.length : 0);
+          }, 0);
         }
         return subTotal;
       }, 0);
@@ -374,9 +441,9 @@ export default function FreeTestPapers() {
             )}
             {(selectedLevel === "all" || selectedLevel === "secondary") && (
               <LevelSection
-                title="Secondary School (O-Level)"
+                title="Secondary School"
                 icon={<GraduationCap className="h-8 w-8 text-blue-600" />}
-                papers={testPapers.secondary.o_level}
+                papers={testPapers.secondary}
                 onDownloadClick={handleDownloadClick}
                 colorClass="text-blue-700"
                 searchTerm={searchTerm}
