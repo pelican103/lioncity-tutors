@@ -108,7 +108,9 @@ export const testPapers = {
     },
     'Secondary 4 E Math': {
       sa1: [
-
+        { title: 'O Level E Math 2021 SA1 - Bukit Batok', downloadUrl: 'https://drive.google.com/uc?export=download&id=1oE1zOnGQekk9xPoH74baZ9fKFyP2uoEQ' },
+        { title: 'O Level E Math 2021 SA1 - Fuchun', downloadUrl: 'https://drive.google.com/uc?export=download&id=1eUbMK5hqfQEwRLjJhV_vjen3F3DDqRkn' },
+        { title: 'O Level E Math 2021 SA1 - Peirce', downloadUrl: 'https://drive.google.com/uc?export=download&id=1_bZJYAmqT4y_mujhr3hE3nDGJyzhBRur' },
       ],
       prelim: [
         { title: 'O Level E Math 2024 Prelim - ACS', downloadUrl: 'https://drive.google.com/uc?export=download&id=1bMm3dKGhaASNfjAp-nEY3d13BZAXPD5p' },
@@ -119,7 +121,11 @@ export const testPapers = {
       ]
     },
     'Secondary 4 Chemistry': {
-      sa1: [],
+      sa1: [
+        { title: 'O Level Chemistry 2018 SA1 - Temasek', downloadUrl: 'https://drive.google.com/uc?export=download&id=1qazJBEcfIMtgcNnpcmLDDuRmaVTZuyzY' },
+        { title: 'O Level Chemistry 2018 SA1 - Gan Eng Seng', downloadUrl: 'https://drive.google.com/uc?export=download&id=198JMJoz_765oVpxTvBKCj-5Wlc7KNfsd' },
+        { title: 'O Level Chemistry 2018 SA1 - Hua Yi', downloadUrl: 'https://drive.google.com/uc?export=download&id=1km8BK02fcc7VzBiPXKkt7gqFZbhScE54' }
+      ],
       prelim: [
         { title: 'O Level Chemistry 2024 Prelim - Catholic High', downloadUrl: 'https://drive.google.com/uc?export=download&id=1OFTz7w9-QspHc9u7Bx0QEg1gKQYTPIci' },
         { title: 'O Level Chemistry 2024 Prelim - CHIJ', downloadUrl: 'https://drive.google.com/uc?export=download&id=1Fv2b1kJTvImER1x7H7rJf0W4AE_vGgjd' },
@@ -130,7 +136,6 @@ export const testPapers = {
       ]
     },
     'Secondary 4 Physics': {
-      sa1: [],
       prelim: [
         { title: 'O Level Physics 2022 Prelim - Bukit Batok', downloadUrl: 'https://drive.google.com/uc?export=download&id=1JkiCO7zsWyLLZxkCBMVptT95NymTJEOH' },
         { title: 'O Level Physics 2022 Prelim - Fuhua', downloadUrl: 'https://drive.google.com/uc?export=download&id=1E5Z65pluihhoAkFR1TmUmrMNWZ5hBALd' },

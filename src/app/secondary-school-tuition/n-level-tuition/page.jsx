@@ -373,7 +373,8 @@ export default function NLevelTuition() {
           <p className="text-gray-600 text-center max-w-3xl mx-auto mb-8">
             Access our curated tips and resources to help you excel in your N-Level journey. Each resource is crafted by experienced educators to provide comprehensive coverage of the syllabus.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Link href="/blog/n-level-preparation-guide" className="block group">
               <Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer border-2 border-transparent group-hover:border-indigo-500">
                 <CardContent className="p-6 relative">
@@ -384,6 +385,86 @@ export default function NLevelTuition() {
                   </div>
                   <h3 className="font-bold text-xl text-indigo-700 mb-2 group-hover:text-indigo-600">N-Level Preparation Guide</h3>
                   <p className="text-gray-600">Essential tips and strategies for N-Level success.</p>
+                  <div className="mt-4 text-sm text-indigo-600 font-medium flex items-center">
+                    View Guide
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/combined-science-overview" className="block group">
+              <Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer border-2 border-transparent group-hover:border-indigo-500">
+                <CardContent className="p-6 relative">
+                  <div className="absolute top-4 right-4 text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                  <h3 className="font-bold text-xl text-indigo-700 mb-2 group-hover:text-indigo-600">Combined Science Overview</h3>
+                  <p className="text-gray-600">Complete Guide to All Three Combinations of Combined Science</p>
+                  <div className="mt-4 text-sm text-indigo-600 font-medium flex items-center">
+                    View Guide
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/combined-chemistry-physics" className="block group">
+              <Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer border-2 border-transparent group-hover:border-indigo-500">
+                <CardContent className="p-6 relative">
+                  <div className="absolute top-4 right-4 text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                  <h3 className="font-bold text-xl text-indigo-700 mb-2 group-hover:text-indigo-600">Combined Chemistry/Physics Guide</h3>
+                  <p className="text-gray-600">Excel in N Level Combined Chemistry/Physics with our Singapore-focused guide.</p>
+                  <div className="mt-4 text-sm text-indigo-600 font-medium flex items-center">
+                    View Guide
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/combined-chemistry-biology" className="block group">
+              <Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer border-2 border-transparent group-hover:border-indigo-500">
+                <CardContent className="p-6 relative">
+                  <div className="absolute top-4 right-4 text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                  <h3 className="font-bold text-xl text-indigo-700 mb-2 group-hover:text-indigo-600">Combined Chemistry/Biology Guide</h3>
+                  <p className="text-gray-600">Comprehensive N(A) Combined Chemistry/Biology guide for Secondary 4 N(A) students in Singapore.</p>
+                  <div className="mt-4 text-sm text-indigo-600 font-medium flex items-center">
+                    View Guide
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/combined-physics-biology" className="block group">
+              <Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer border-2 border-transparent group-hover:border-indigo-500">
+                <CardContent className="p-6 relative">
+                  <div className="absolute top-4 right-4 text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                  <h3 className="font-bold text-xl text-indigo-700 mb-2 group-hover:text-indigo-600">Combined Physics/Biology Guide</h3>
+                  <p className="text-gray-600">Excel in N Level Combined Physics/Biology with our Singapore-focused guide.</p>
                   <div className="mt-4 text-sm text-indigo-600 font-medium flex items-center">
                     View Guide
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

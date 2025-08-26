@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import physicsImage from "../../../public/o-level-physics.webp"
 
 export const metadata = {
   title: 'O Level Physics Guide 2025: Complete Study Strategy for Singapore Students | LionCity Tutors',
@@ -29,6 +31,18 @@ export default function OLevelPhysics() {
     <main className="px-4 py-12 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold text-blue-800 mb-4">O Level Physics Guide 2025: Master Mechanics, Waves & Electricity</h1>
       <p className="text-sm text-gray-500 mb-8">Posted on June 14, 2025 • 15 min read</p>
+
+       <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
+        <Image 
+          src= {physicsImage}
+          alt="Singapore students mastering O Level Biology using advanced memory techniques and local ecosystem studies"
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 768px" 
+          placeholder="blur"
+          priority
+        />
+      </div>
 
       <article className="space-y-6 text-gray-700 leading-relaxed">
         <p className="text-lg font-medium text-gray-800">

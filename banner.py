@@ -538,7 +538,7 @@ def process_all_files_with_drive_upload(input_folder, banner_img, create_folders
 # --- Example Usage ---
 if __name__ == "__main__":
     # Define your paths (relative to project root)
-    input_folder = "public/papers/jc/economics"
+    input_folder = "public/papers/secondary/2021/emath"
     banner_image = "public/papers/banner.png"
     cover_page = "public/papers/cover_page.pdf"  
     

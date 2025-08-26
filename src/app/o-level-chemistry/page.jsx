@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import chemistryImage from "../../../public/o-level-chemistry.webp"
 
 export const metadata = {
   title: 'O Level Chemistry Guide 2025: Complete Study Strategy for Singapore Students | LionCity Tutors',
@@ -31,7 +33,18 @@ export default function OLevelChemistry() {
 
       <h1 className="text-3xl font-bold text-green-800 mb-4">O Level Chemistry Guide 2025: Master Physical, Organic & Inorganic Chemistry</h1>
       <p className="text-sm text-gray-500 mb-8">Posted on June 14, 2025 • 18 min read</p>
-
+       <div className="my-8 relative w-full max-w-3xl mx-auto aspect-video overflow-hidden rounded-xl shadow-lg"> 
+        <Image 
+          src= {chemistryImage}
+          alt="Singapore students mastering O Level Biology using advanced memory techniques and local ecosystem studies"
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 768px" 
+          placeholder="blur"
+          priority
+        />
+      </div>
+      
       <article className="space-y-6 text-gray-700 leading-relaxed">
         <p className="text-lg font-medium text-gray-800">
           O Level Chemistry is one of the most challenging and rewarding subjects in the Singapore GCE O Level curriculum. With its comprehensive coverage of physical, organic, and inorganic chemistry, O Level Chemistry demands both theoretical understanding and practical application skills. This detailed guide provides proven strategies for achieving A1 grades in O Level Chemistry 2025.
