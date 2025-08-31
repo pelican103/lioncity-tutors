@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+apps/*/node_modules/
+packages/*/node_modules/
+
+# Environment variables
+.env
+.env.local
+apps/*/.env
+apps/*/.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Build outputs
+apps/website/.next/
+apps/website/out/
+apps/backend/dist/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Virtual environments
+venv/
+env/
+.env/
+virtualenv/
+.env*/
