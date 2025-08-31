@@ -1,0 +1,674 @@
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { Assignment } from '../../packages/shared/server-exports.js';
+
+// ES modules don't have __dirname, so we need to create it
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:5173', 
+    'https://www.lioncitytutors.com',
+    'https://lioncitytutors.com',
+    'http://www.lioncitytutors.com',
+    'http://lioncitytutors.com'
+  ],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'], // Specify allowed headers
+  credentials: true
+}));
+
+app.use(express.json());
+
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => console.log('Connected to MongoDB Atlas'))
+.catch((err) => console.error('MongoDB connection error:', err));
+
+
+const tutorSchema = new mongoose.Schema({
+  // Personal Information
+  fullName: String,
+  contactNumber: String,
+  email: String,
+  dob: {
+    day: String,
+    month: String,
+    year: String
+  },
+  gender: String,
+  age: String,
+  nationality: String,
+  nationalityOther: String,
+  race: String,
+  nricLast4: String,
+  telegramId: { type: String, index: true },
+  // Tutoring Preferences
+  teachingLevels: {
+    // Pre-School
+    preschool: { 
+      englishLanguage: Boolean, 
+      chinese: Boolean, 
+      malay: Boolean, 
+      tamil: Boolean, 
+      mathematics: Boolean,
+      phonics: Boolean,
+      art: Boolean,
+      music: Boolean,
+      physicalEducation: Boolean
+    },
+    
+    // Primary (Simplified - same subjects across P1-P6 with some variations)
+    primary: {
+      englishLanguage: Boolean,
+      chinese: Boolean,
+      malay: Boolean,
+      tamil: Boolean,
+      mathematics: Boolean,
+      science: Boolean,
+      art: Boolean,
+      music: Boolean,
+      physicalEducation: Boolean,
+      socialStudies: Boolean, // From P3 onwards
+      characterAndCitizenshipEducation: Boolean
+    },
+    
+    // Secondary (Updated for Full SBB system - no more streaming)
+    secondary: {
+      englishLanguage: Boolean,
+      chinese: Boolean,
+      malay: Boolean,
+      tamil: Boolean,
+      mathematics: Boolean,
+      elementaryMathematics: Boolean,
+      additionalMathematics: Boolean,
+      physics: Boolean,
+      chemistry: Boolean,
+      biology: Boolean,
+      combinedSciencePhysicsChemistry: Boolean,
+      combinedScienceChemistryBiology: Boolean,
+      science: Boolean, // For lower secondary
+      computing: Boolean,
+      history: Boolean,
+      geography: Boolean,
+      socialStudies: Boolean,
+      literatureInEnglish: Boolean,
+      art: Boolean,
+      music: Boolean,
+      designAndTechnology: Boolean,
+      nutritionAndFoodScience: Boolean,
+      foodAndConsumerEducation: Boolean, // For lower secondary
+      principlesOfAccounts: Boolean,
+      physicalEducation: Boolean,
+      characterAndCitizenshipEducation: Boolean
+    },
+    
+    // Junior College (A-Level)
+    jc: {
+      generalPaper: Boolean,
+      projectWork: Boolean,
+      chineseLanguage: Boolean,
+      malayLanguage: Boolean,
+      tamilLanguage: Boolean,
+      knowledgeAndInquiry: Boolean,
+      
+      // H1 Subjects
+      h1Mathematics: Boolean,
+      h1Physics: Boolean,
+      h1Chemistry: Boolean,
+      h1Biology: Boolean,
+      h1Economics: Boolean,
+      h1History: Boolean,
+      h1Geography: Boolean,
+      h1LiteratureInEnglish: Boolean,
+      h1ChineseLanguageAndLiterature: Boolean,
+      h1MalayLanguageAndLiterature: Boolean,
+      h1TamilLanguageAndLiterature: Boolean,
+      
+      // H2 Subjects
+      h2Mathematics: Boolean,
+      h2Physics: Boolean,
+      h2Chemistry: Boolean,
+      h2Biology: Boolean,
+      h2Computing: Boolean,
+      h2Economics: Boolean,
+      h2History: Boolean,
+      h2Geography: Boolean,
+      h2LiteratureInEnglish: Boolean,
+      h2Art: Boolean,
+      h2Music: Boolean,
+      h2ChineseLanguageAndLiterature: Boolean,
+      h2MalayLanguageAndLiterature: Boolean,
+      h2TamilLanguageAndLiterature: Boolean,
+      
+      // H3 Subjects
+      h3Mathematics: Boolean,
+      h3Physics: Boolean,
+      h3Chemistry: Boolean,
+      h3Biology: Boolean,
+      h3Economics: Boolean,
+      h3History: Boolean,
+      h3Geography: Boolean,
+      h3LiteratureInEnglish: Boolean,
+      h3Art: Boolean
+    },
+    
+    // Millennia Institute (3-year A-Level program)
+    millenniaInstitute: {
+      generalPaper: Boolean,
+      projectWork: Boolean,
+      h1Mathematics: Boolean,
+      h1Physics: Boolean,
+      h1Chemistry: Boolean,
+      h1Biology: Boolean,
+      h1Economics: Boolean,
+      h2Mathematics: Boolean,
+      h2Physics: Boolean,
+      h2Chemistry: Boolean,
+      h2Biology: Boolean,
+      h2Economics: Boolean,
+      h2Geography: Boolean,
+      h2History: Boolean,
+      h2LiteratureInEnglish: Boolean
+    },
+    
+    // IB Programme
+    ib: { 
+      ibEnglishLanguageAndLiterature: Boolean,
+      ibChinese: Boolean,
+      ibMalay: Boolean,
+      ibTamil: Boolean,
+      ibMathematics: Boolean,
+      ibPhysics: Boolean,
+      ibChemistry: Boolean,
+      ibBiology: Boolean,
+      ibBusinessManagement: Boolean,
+      ibEconomics: Boolean,
+      ibGeography: Boolean,
+      ibHistory: Boolean,
+      ibVisualArts: Boolean,
+      ibMusic: Boolean,
+      ibTheatre: Boolean,
+      ibTheoryOfKnowledge: Boolean,
+      ibExtendedEssay: Boolean
+    },
+    
+    // Polytechnic
+    polytechnic: {
+      english: Boolean,
+      mathematics: Boolean,
+      engineeringMathematics: Boolean,
+      communicationSkills: Boolean,
+      computerApplications: Boolean,
+      businessStudies: Boolean,
+      accounting: Boolean,
+      science: Boolean,
+      statistics: Boolean,
+      projectManagement: Boolean,
+      majorSubjects: Boolean // Specialized subjects based on course
+    },
+    
+    // University
+    university: {
+      engineeringMathematics: Boolean,
+      calculus: Boolean,
+      linearAlgebra: Boolean,
+      statistics: Boolean,
+      universityPhysics: Boolean,
+      chemistry: Boolean,
+      biology: Boolean,
+      economics: Boolean,
+      psychology: Boolean,
+      computerScience: Boolean,
+      programming: Boolean,
+      accounting: Boolean,
+      businessStudies: Boolean,
+      law: Boolean,
+      medicine: Boolean,
+      researchMethods: Boolean,
+      majorSpecificSubjects: Boolean
+    },
+    
+    // Music Academy
+    music: { 
+      musicTheory: Boolean, 
+      piano: Boolean, 
+      violin: Boolean, 
+      guitar: Boolean, 
+      drums: Boolean, 
+      clarinet: Boolean, 
+      flute: Boolean,
+      saxophone: Boolean,
+      trumpet: Boolean,
+      cello: Boolean,
+      ukulele: Boolean,
+      voiceSinging: Boolean,
+      musicComposition: Boolean,
+      ensemblePlaying: Boolean
+    },
+    
+    // Professional Development & Skills
+    professional: { 
+      // Test Preparation
+      ielts: Boolean,
+      toefl: Boolean,
+      sat: Boolean,
+      gmat: Boolean,
+      gre: Boolean,
+      
+      // Programming & Technology (Not formal MOE subjects but popular for private tuition)
+      pythonProgramming: Boolean, 
+      javaProgramming: Boolean, 
+      cppProgramming: Boolean,
+      cSharpProgramming: Boolean, 
+      webDevelopment: Boolean, 
+      dataScience: Boolean, 
+      aiAndMachineLearning: Boolean, 
+      mobileAppDevelopment: Boolean, 
+      photoshop: Boolean, 
+      videoEditing: Boolean,
+      
+      // Soft Skills
+      publicSpeaking: Boolean,
+      creativeWriting: Boolean,
+      essayWriting: Boolean,
+      criticalThinking: Boolean,
+      studySkills: Boolean,
+      
+      // Languages
+      french: Boolean,
+      german: Boolean,
+      spanish: Boolean,
+      japanese: Boolean,
+      korean: Boolean,
+      
+      // Business & Professional
+      leadership: Boolean,
+      projectManagement: Boolean,
+      digitalMarketing: Boolean,
+      businessWriting: Boolean
+    }
+  },
+  
+  // Locations
+  locations: {
+    north: Boolean,
+    south: Boolean,
+    east: Boolean,
+    west: Boolean,
+    central: Boolean,
+    northeast: Boolean,
+    northwest: Boolean,
+    online: Boolean 
+  },
+  
+  // Qualifications & Experience
+  tutorType: String,
+  yearsOfExperience: String,
+  highestEducation: String,
+  currentSchool: String,
+  previousSchools: String,
+  
+  // Fee Structure
+  hourlyRate: {
+    preschool: String,
+    primary: String,
+    secondary: String,
+    jc: String,
+    ib: String,
+    music: String,
+    polytechnic: String,
+    university: String,
+    professional: String
+  },
+  
+  // Tutor Profile
+  introduction: String,
+  teachingExperience: String,
+  trackRecord: String,
+  
+  // Availability
+  availableTimeSlots: {
+    weekdayMorning: Boolean,
+    weekdayAfternoon: Boolean,
+    weekdayEvening: Boolean,
+    weekendMorning: Boolean,
+    weekendAfternoon: Boolean,
+    weekendEvening: Boolean
+  },
+  
+  // Form metadata
+  formType: String
+}, { timestamps: true });
+
+const Tutor = mongoose.model('Tutor', tutorSchema);
+
+const contactSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  mobile: { type: String, required: true },
+  level: { type: String, required: true },
+  location: { type: String },
+  
+  // Lesson details
+  lessonDuration: { type: String, default: "1.5 Hours" },
+  customDuration: { type: String },
+  lessonFrequency: { type: String, default: "1 Lesson/Week" },
+  customFrequency: { type: String },
+  preferredTime: { type: String },
+  
+  // Tutor preferences
+  tutorType: {
+    partTime: { type: Boolean, default: false },
+    fullTime: { type: Boolean, default: false },
+    moeTeacher: { type: Boolean, default: false }
+  },
+  
+  // Budget information
+  budget: {
+    marketRate: { type: Boolean, default: true },
+    custom: { type: Boolean, default: false },
+    customAmount: { type: String }
+  },
+  
+  // Additional preferences
+  genderPreference: { type: String, default: "No preference" },
+  bilingualRequired: { type: String, default: "No" },
+  preferences: { type: String }
+}, { timestamps: true }); // timestamps will auto add createdAt and updatedAt fields
+
+
+const Contact = mongoose.model('Contact', contactSchema);
+
+// New schema for test paper leads
+const testPaperLeadSchema = new mongoose.Schema({
+  email: { type: String, required: true },
+  phone: { type: String, required: true },
+  downloads: [{
+    subject: String,        
+    level: String, 
+    paperTitle: String,
+    downloadedAt: { type: Date, default: Date.now }
+  }]
+}, { timestamps: true });
+
+const TestPaperLead = mongoose.model('TestPaperLead', testPaperLeadSchema);
+
+// --- API ROUTES ---
+
+// Root route
+app.get('/', (req, res) => {
+  res.send('Contact form API is running');
+});
+
+app.get("/keep-alive", (req, res) => {
+  res.status(200).send("Backend is awake");
+});
+
+// Contact form endpoint
+app.post('/api/requestfortutor', async (req, res) => {
+  try {
+    const newContact = new Contact(req.body);
+    await newContact.save();
+    res.status(200).json({ success: true, message: 'Form submitted and saved successfully!' });
+  } catch (err) {
+    console.error('Error saving form:', err);
+    res.status(500).json({ success: false, error: 'Failed to save form submission.' });
+  }
+});
+
+
+app.post('/api/registerfortutor', async (req, res) => {
+  try {
+    // --- NEW: Sanitize contact number before saving ---
+    if (req.body.contactNumber) {
+      req.body.contactNumber = req.body.contactNumber.replace(/[\s\-\+]/g, '').replace(/^65/, '');
+    }
+    // --- NEW: Sanitize email before saving ---
+    if (req.body.email) {
+      req.body.email = req.body.email.toLowerCase().trim();
+    }
+
+    const newTutor = new Tutor(req.body);
+    await newTutor.save();
+    res.status(200).json({ message: 'Tutor registration saved successfully!' });
+  } catch (err) {
+    console.error('Failed to save tutor registration:', err);
+    // Check for duplicate key error
+    if (err.code === 11000) {
+      return res.status(409).json({ error: 'A tutor with this email or contact number already exists.' });
+    }
+    res.status(500).json({ error: 'Failed to register tutor.' });
+  }
+});
+
+function normalizePhone(phone) {
+  if (!phone || typeof phone !== 'string') {
+    return '';
+  }
+  
+  // Remove all non-digits, then remove leading 65 if present
+  return phone.replace(/\D/g, '').replace(/^65/, '');
+}
+
+function generatePhoneVariations(phone) {
+  const normalized = normalizePhone(phone);
+  if (!normalized) return [];
+  
+  // Generate all possible variations that might exist in your DB
+  const variations = [
+    normalized,                    // 91234567
+    `65${normalized}`,            // 6591234567
+    `+65${normalized}`,           // +6591234567
+    // Add formatted versions if you might have stored them
+    normalized.replace(/(\d{4})(\d{4})/, '$1 $2'), // 9123 4567
+    `65 ${normalized.replace(/(\d{4})(\d{4})/, '$1 $2')}` // 65 9123 4567
+  ];
+  
+  // Remove duplicates and empty strings
+  return [...new Set(variations)].filter(v => v.length > 0);
+}
+
+/**
+ * @route   POST /api/tutors/verify
+ * @desc    Verifies if a tutor exists using email or contact number
+ * @access  Public
+ */
+app.post('/api/tutors/verify', async (req, res) => {
+  const { identifier } = req.body;
+
+  if (!identifier) {
+    return res.status(400).json({ error: 'Identifier (email or contact number) is required.' });
+  }
+
+  const sanitizedIdentifier = identifier.toLowerCase().trim();
+  const phoneRegex = /^[89]\d{7}$/;
+  const normalizedPhone = normalizePhone(identifier);
+
+  try {
+    let query;
+    
+    if (phoneRegex.test(normalizedPhone)) {
+      // It's a phone number - search using all variations
+      const phoneVariations = generatePhoneVariations(identifier);
+      query = {
+        $or: [
+          { email: sanitizedIdentifier },
+          { contactNumber: { $in: phoneVariations } }
+        ]
+      };
+    } else {
+      // It's an email
+      query = { email: sanitizedIdentifier };
+    }
+
+    const tutor = await Tutor.findOne(query).select('_id fullName').lean();
+
+    if (tutor) {
+      res.json({
+        exists: true,
+        tutor: {
+          id: tutor._id,
+          fullName: tutor.fullName,
+        },
+      });
+    } else {
+      res.json({ exists: false });
+    }
+  } catch (err) {
+    console.error('Error verifying tutor:', err);
+    res.status(500).json({ error: 'An error occurred during verification.' });
+  }
+});
+
+/**
+ * @route   POST /api/assignments/apply
+ * @desc    Submits an application for assignments on behalf of a tutor
+ * @access  Public (Relies on verified tutorId)
+ */
+app.post('/api/assignments/apply', async (req, res) => {
+  const { assignmentIds, tutorId } = req.body;
+
+  if (!Array.isArray(assignmentIds) || assignmentIds.length === 0 || !tutorId) {
+    return res.status(400).json({ error: 'Missing assignment IDs or tutor ID.' });
+  }
+
+  try {
+    // STEP 1: Fetch the full tutor profile to get their details
+    // RENAMED from tutorExists to tutor for clarity
+    const tutor = await Tutor.findById(tutorId).lean(); // .lean() for performance
+    if (!tutor) {
+      return res.status(404).json({ error: 'Tutor profile not found.' });
+    }
+
+    // STEP 2: Construct the detailed applicant object, just like your bot does
+    // NEW applicant object
+    const newApplicant = {
+      tutorId: tutor._id,
+      status: 'Pending',
+      appliedAt: new Date(),
+      contactDetails: tutor.contactNumber || 'N/A', // Add a fallback
+      notes: `Applied via API by ${tutor.fullName}`
+    };
+
+    // STEP 3: Update the query to prevent duplicate applications
+    // The filter now checks that the tutorId is NOT already in the applicants array
+    // The update operation now pushes the full 'newApplicant' object
+    const result = await Assignment.updateMany(
+      { 
+        _id: { $in: assignmentIds },
+        'applicants.tutorId': { $ne: tutor._id } // IMPORTANT: Prevents duplicates
+      },
+      { 
+        $push: { applicants: newApplicant } // Use $push as the filter handles uniqueness
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      res.status(200).json({ success: true, message: `Successfully applied to ${result.modifiedCount} new assignment(s).` });
+    } else {
+      // This now correctly means the user has already applied to all selected assignments
+      res.status(200).json({ success: true, message: 'You have already applied for the selected assignment(s).' });
+    }
+
+  } catch (err) {
+    console.error('Error applying for assignments:', err);
+    res.status(500).json({ error: 'An error occurred while submitting your application.' });
+  }
+});
+
+// Test paper leads endpoint
+app.post('/api/test-paper-leads', async (req, res) => {
+  try {
+    const { email, phone, subject, level, paperTitle} = req.body;
+    
+    // Find existing lead or create new one
+    let lead = await TestPaperLead.findOne({ email });
+    const newDownload = { level, subject, paperTitle };
+
+    if (lead) {
+      // Add new download to existing lead
+      lead.downloads.push(newDownload);
+      await lead.save();
+    } else {
+      // Create new lead
+      lead = new TestPaperLead({
+        email,
+        phone,
+        downloads: [newDownload]
+      });
+      await lead.save();
+    }
+    
+    res.status(200).json({ success: true, message: 'Download tracked successfully!' });
+  } catch (err) {
+    console.error('Error tracking download:', err);
+    res.status(500).json({ success: false, error: 'Failed to track download.' });
+  }
+});
+
+app.get('/api/assignments', async (req, res) => {
+  try {
+    const assignments = await Assignment
+      .find({ status: 'Open' }) // Only fetch open assignments
+      .sort({ createdAt: -1 }) // Sort by newest first
+      .select('title level subject location frequency rate description createdAt _id') // Only select fields needed for the webpage
+      .lean(); // Use lean() for better performance
+    
+    res.status(200).json(assignments);
+  } catch (err) {
+    console.error('Error fetching assignments:', err);
+    res.status(500).json({ error: 'Failed to fetch assignments.' });
+  }
+});
+
+app.get('/api/analytics/popular-papers', async (req, res) => {
+  try {
+    const leads = await TestPaperLead.find({});
+    
+    // Count downloads by subject, level, year
+    const analytics = {};
+    
+    leads.forEach(lead => {
+      lead.downloads.forEach(download => {
+        const key = `${download.level}-${download.subject}-${download.year}`;
+        analytics[key] = (analytics[key] || 0) + 1;
+      });
+    });
+    
+    // Sort by popularity
+    const sorted = Object.entries(analytics)
+      .map(([paper, count]) => ({ paper, count }))
+      .sort((a, b) => b.count - a.count);
+    
+    res.json(sorted);
+  } catch (err) {
+    console.error('Error getting analytics:', err);
+    res.status(500).json({ error: 'Failed to get analytics.' });
+  }
+});
+
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, 'my-tuition-site/dist'))); // Adjust path if needed
+  
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'my-tuition-site/dist', 'index.html'));
+  });
+}
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
