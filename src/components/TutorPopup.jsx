@@ -67,10 +67,10 @@ export default function TutorPopup() {
 
         {/* Bullet points */}
         <ul className="text-gray-700 mb-6 space-y-2">
-          <li>✔ 100% Free & No Obligations</li>
-          <li>✔ Request Now, Decide Later</li>
-          <li>✔ Experienced & Vetted Tutors</li>
-          <li>✔ Fast Response from Our Team</li>
+          <li>✅ 100% Free & No Obligations</li>
+          <li>✅ Request Now, Decide Later</li>
+          <li>✅ Experienced & Vetted Tutors</li>
+          <li>✅ Fast Response from Our Team</li>
         </ul>
 
         {/* Form */}

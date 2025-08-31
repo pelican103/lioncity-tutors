@@ -8,148 +8,249 @@ const teachingOptions = {
   preschool: {
     title: 'Preschool Level',
     subjects: {
-      english: 'English',
+      englishLanguage: 'English Language',
       chinese: 'Chinese',
       malay: 'Malay',
       tamil: 'Tamil',
-      phonics: 'Phonics'
+      mathematics: 'Mathematics',
+      phonics: 'Phonics',
+      art: 'Art',
+      music: 'Music',
+      physicalEducation: 'Physical Education'
     },
-    gridCols: 'md:grid-cols-4'
+    gridCols: 'md:grid-cols-3'
   },
   primary: {
     title: 'Primary Level',
     subjects: {
-      english: 'English',
-      math: 'Math',
-      science: 'Science',
+      englishLanguage: 'English Language',
       chinese: 'Chinese',
-      higherchinese: 'Higher Chinese',
       malay: 'Malay',
-      highermalay: 'Higher Malay',
       tamil: 'Tamil',
-      highertamil: 'Higher Tamil',
-      art: 'Art'
+      mathematics: 'Mathematics',
+      science: 'Science',
+      art: 'Art',
+      music: 'Music',
+      physicalEducation: 'Physical Education',
+      socialStudies: 'Social Studies',
+      characterAndCitizenshipEducation: 'Character & Citizenship Education'
     },
     gridCols: 'md:grid-cols-3'
   },
   secondary: {
     title: 'Secondary Level',
     subjects: {
-      english: 'English',
-      math: 'Mathematics',
-      aMath: 'Additional Mathematics',
-      eMath: 'Elementary Mathematics',
-      physics: 'Physics',
-      chemistry: 'Chemistry',
-      biology: 'Biology',
-      science: 'Combined Science',
-      computing: 'Computing',
-      history: 'History',
-      geography: 'Geography',
-      literature: 'Literature',
+      englishLanguage: 'English Language',
       chinese: 'Chinese',
       malay: 'Malay',
       tamil: 'Tamil',
-      poa: 'Principles of Accounts',
-      designAndTechnology: 'Design & Technology',
-      foodAndNutrition: 'Food & Nutrition',
+      mathematics: 'Mathematics',
+      elementaryMathematics: 'Elementary Mathematics',
+      additionalMathematics: 'Additional Mathematics',
+      physics: 'Physics',
+      chemistry: 'Chemistry',
+      biology: 'Biology',
+      combinedSciencePhysicsChemistry: 'Combined Science (Physics/Chemistry)',
+      combinedScienceChemistryBiology: 'Combined Science (Chemistry/Biology)',
+      science: 'Science (Lower Secondary)',
+      computing: 'Computing',
+      history: 'History',
+      geography: 'Geography',
+      socialStudies: 'Social Studies',
+      literatureInEnglish: 'Literature in English',
       art: 'Art',
-      music: 'Music'
+      music: 'Music',
+      designAndTechnology: 'Design and Technology',
+      nutritionAndFoodScience: 'Nutrition and Food Science',
+      foodAndConsumerEducation: 'Food and Consumer Education',
+      principlesOfAccounts: 'Principles of Accounts',
+      physicalEducation: 'Physical Education',
+      characterAndCitizenshipEducation: 'Character & Citizenship Education'
     },
     gridCols: 'md:grid-cols-3'
   },
   jc: {
-    title: 'Junior College (JC) Level',
+    title: 'Junior College',
     subjects: {
-      generalPaper: 'General Paper (GP)',
-      knowledgeInquiry: 'Knowledge & Inquiry (KI)',
-      h1Math: 'H1 Mathematics',
-      h2Math: 'H2 Mathematics',
-      h2furtherMath: 'H2 Further Mathematics',
+      generalPaper: 'General Paper',
+      projectWork: 'Project Work',
+      chineseLanguage: 'Chinese Language',
+      malayLanguage: 'Malay Language',
+      tamilLanguage: 'Tamil Language',
+      knowledgeAndInquiry: 'Knowledge and Inquiry',
+      
+      // H1 Subjects
+      h1Mathematics: 'H1 Mathematics',
       h1Physics: 'H1 Physics',
-      h2Physics: 'H2 Physics',
       h1Chemistry: 'H1 Chemistry',
-      h2Chemistry: 'H2 Chemistry',
       h1Biology: 'H1 Biology',
+      h1Economics: 'H1 Economics',
+      h1History: 'H1 History',
+      h1Geography: 'H1 Geography',
+      h1LiteratureInEnglish: 'H1 Literature in English',
+      h1ChineseLanguageAndLiterature: 'H1 Chinese Language and Literature',
+      h1MalayLanguageAndLiterature: 'H1 Malay Language and Literature',
+      h1TamilLanguageAndLiterature: 'H1 Tamil Language and Literature',
+      
+      // H2 Subjects
+      h2Mathematics: 'H2 Mathematics',
+      h2Physics: 'H2 Physics',
+      h2Chemistry: 'H2 Chemistry',
       h2Biology: 'H2 Biology',
       h2Computing: 'H2 Computing',
-      h1Economics: 'H1 Economics',
       h2Economics: 'H2 Economics',
-      h1History: 'H1 History',
       h2History: 'H2 History',
-      h1Geography: 'H1 Geography',
       h2Geography: 'H2 Geography',
-      h1Literature: 'H1 Literature',
-      h2Literature: 'H2 Literature',
-      h1Chinese: 'H1 Chinese',
-      h2Chinese: 'H2 Chinese',
-      h1Malay: 'H1 Malay',
-      h2Malay: 'H2 Malay',
-      h1Tamil: 'H1 Tamil',
-      h2Tamil: 'H2 Tamil',
+      h2LiteratureInEnglish: 'H2 Literature in English',
       h2Art: 'H2 Art',
-      h3Math: 'H3 Mathematics',
+      h2Music: 'H2 Music',
+      h2ChineseLanguageAndLiterature: 'H2 Chinese Language and Literature',
+      h2MalayLanguageAndLiterature: 'H2 Malay Language and Literature',
+      h2TamilLanguageAndLiterature: 'H2 Tamil Language and Literature',
+      
+      // H3 Subjects
+      h3Mathematics: 'H3 Mathematics',
       h3Physics: 'H3 Physics',
       h3Chemistry: 'H3 Chemistry',
+      h3Biology: 'H3 Biology',
       h3Economics: 'H3 Economics',
-      h3Biology: 'H3 Biology'
+      h3History: 'H3 History',
+      h3Geography: 'H3 Geography',
+      h3LiteratureInEnglish: 'H3 Literature in English',
+      h3Art: 'H3 Art'
     },
     gridCols: 'md:grid-cols-3'
   },
   ib: {
-    title: 'International Baccalaureate (IB) / IGCSE',
+    title: 'International Baccalaureate (IB)',
     subjects: {
-      englishLanguage: 'English Language',
-      englishLiterature: 'English Literature',
-      chinese: 'Chinese',
+      ibEnglishLanguageAndLiterature: 'IB English Language and Literature',
+      ibChinese: 'IB Chinese',
+      ibMalay: 'IB Malay',
+      ibTamil: 'IB Tamil',
+      ibMathematics: 'IB Mathematics',
+      ibPhysics: 'IB Physics',
+      ibChemistry: 'IB Chemistry',
+      ibBiology: 'IB Biology',
+      ibBusinessManagement: 'IB Business Management',
+      ibEconomics: 'IB Economics',
+      ibGeography: 'IB Geography',
+      ibHistory: 'IB History',
+      ibVisualArts: 'IB Visual Arts',
+      ibMusic: 'IB Music',
+      ibTheatre: 'IB Theatre',
+      ibTheoryOfKnowledge: 'IB Theory of Knowledge',
+      ibExtendedEssay: 'IB Extended Essay'
+    },
+    gridCols: 'md:grid-cols-3'
+  },
+  polytechnic: {
+    title: 'Polytechnic',
+    subjects: {
+      english: 'English',
       mathematics: 'Mathematics',
-      physics: 'Physics',
+      engineeringMathematics: 'Engineering Mathematics',
+      communicationSkills: 'Communication Skills',
+      computerApplications: 'Computer Applications',
+      businessStudies: 'Business Studies',
+      accounting: 'Accounting',
+      science: 'Science',
+      statistics: 'Statistics',
+      projectManagement: 'Project Management',
+      majorSubjects: 'Major Subjects (Course-specific)'
+    },
+    gridCols: 'md:grid-cols-3'
+  },
+  university: {
+    title: 'University',
+    subjects: {
+      engineeringMathematics: 'Engineering Mathematics',
+      calculus: 'Calculus',
+      linearAlgebra: 'Linear Algebra',
+      statistics: 'Statistics',
+      universityPhysics: 'University Physics',
       chemistry: 'Chemistry',
       biology: 'Biology',
-      businessAndManagement: 'Business & Management',
       economics: 'Economics',
-      geography: 'Geography',
-      history: 'History',
-      malay: 'Malay',
-      tamil: 'Tamil',
-      music: 'Music',
-      drama: 'Drama',
-      artAndDesign: 'Art & Design',
+      psychology: 'Psychology',
+      computerScience: 'Computer Science',
+      programming: 'Programming',
+      accounting: 'Accounting',
+      businessStudies: 'Business Studies',
+      law: 'Law',
+      medicine: 'Medicine',
+      researchMethods: 'Research Methods',
+      majorSpecificSubjects: 'Major-specific Subjects'
     },
     gridCols: 'md:grid-cols-3'
   },
   music: {
     title: 'Music',
     subjects: {
-      musictheory: 'Music Theory',
+      musicTheory: 'Music Theory',
       piano: 'Piano',
       violin: 'Violin',
       guitar: 'Guitar',
-      drum: 'Drum',
+      drums: 'Drums',
       clarinet: 'Clarinet',
-      flute: 'Flute'
+      flute: 'Flute',
+      saxophone: 'Saxophone',
+      trumpet: 'Trumpet',
+      cello: 'Cello',
+      ukulele: 'Ukulele',
+      voiceSinging: 'Voice/Singing',
+      musicComposition: 'Music Composition',
+      ensemblePlaying: 'Ensemble Playing'
     },
     gridCols: 'md:grid-cols-4'
   },
-  computing: {
-    title: 'Computing',
+  professional: {
+    title: 'Professional Development & Skills',
     subjects: {
-      python: 'Python',
-      java: 'Java',
-      cpp: 'C++',
-      cSharp: 'C#',
+      // Test Preparation
+      ielts: 'IELTS',
+      toefl: 'TOEFL',
+      sat: 'SAT',
+      gmat: 'GMAT',
+      gre: 'GRE',
+      
+      // Programming & Technology
+      pythonProgramming: 'Python Programming',
+      javaProgramming: 'Java Programming',
+      cppProgramming: 'C++ Programming',
+      cSharpProgramming: 'C# Programming',
       webDevelopment: 'Web Development',
       dataScience: 'Data Science',
       aiAndMachineLearning: 'AI & Machine Learning',
       mobileAppDevelopment: 'Mobile App Development',
       photoshop: 'Photoshop',
-      videoEditing: 'Video Editing'
+      videoEditing: 'Video Editing',
+      
+      // Soft Skills
+      publicSpeaking: 'Public Speaking',
+      creativeWriting: 'Creative Writing',
+      essayWriting: 'Essay Writing',
+      criticalThinking: 'Critical Thinking',
+      studySkills: 'Study Skills',
+      
+      // Languages
+      french: 'French',
+      german: 'German',
+      spanish: 'Spanish',
+      japanese: 'Japanese',
+      korean: 'Korean',
+      
+      // Business & Professional
+      leadership: 'Leadership',
+      projectManagement: 'Project Management',
+      digitalMarketing: 'Digital Marketing',
+      businessWriting: 'Business Writing'
     },
     gridCols: 'md:grid-cols-4'
   }
 };
 
-// Define the initial state for the form data
+// Updated initial form data to match the new structure
 const initialFormData = {
   // Personal Information
   fullName: '',
@@ -163,15 +264,71 @@ const initialFormData = {
   race: '',
   nricLast4: '',
   
-  // Tutoring Preferences - structured to match teachingOptions
+  // Tutoring Preferences - updated to match new teachingOptions structure
   teachingLevels: {
-    preschool: { english: false, chinese: false, malay: false, tamil: false, phonics: false },
-    primary: { english: false, math: false, science: false, chinese: false, higherchinese: false, malay: false, highermalay: false, tamil: false, highertamil: false, art: false },
-    secondary: { english: false, math: false, aMath: false, eMath: false, physics: false, chemistry: false, biology: false, science: false, computing: false, history: false, geography: false, literature: false, chinese: false, malay: false, tamil: false, poa: false, designAndTechnology: false, foodAndNutrition: false, art: false, music: false },
-    jc: { generalPaper: false, knowledgeInquiry: false, h1Math: false, h2Math: false, h2furtherMath: false, h1Physics: false, h2Physics: false, h1Chemistry: false, h2Chemistry: false, h1Biology: false, h2Biology: false, h2Computing: false, h1Economics: false, h2Economics: false, h1History: false, h2History: false, h1Geography: false, h2Geography: false, h1Literature: false, h2Literature: false, h1Chinese: false, h2Chinese: false, h1Malay: false, h2Malay: false, h1Tamil: false, h2Tamil: false, h2Art: false, h3Math: false, h3Physics: false, h3Chemistry: false, h3Economics: false, h3Biology: false },
-    ib: { englishLanguage: false, englishLiterature: false, chinese: false, mathematics: false, physics: false, chemistry: false, biology: false, businessAndManagement: false, economics: false, geography: false, history: false, malay: false, tamil: false, music: false, drama: false, artAndDesign: false },
-    music: { musictheory: false, piano: false, violin: false, guitar: false, drum: false, clarinet: false, flute: false },
-    computing: { python: false, java: false, cpp: false, cSharp: false, webDevelopment: false, dataScience: false, aiAndMachineLearning: false, mobileAppDevelopment: false, photoshop: false, videoEditing: false }
+    preschool: { 
+      englishLanguage: false, chinese: false, malay: false, tamil: false, mathematics: false,
+      phonics: false, art: false, music: false, physicalEducation: false 
+    },
+    primary: { 
+      englishLanguage: false, chinese: false, malay: false, tamil: false, mathematics: false,
+      science: false, art: false, music: false, physicalEducation: false, socialStudies: false,
+      characterAndCitizenshipEducation: false 
+    },
+    secondary: { 
+      englishLanguage: false, chinese: false, malay: false, tamil: false, mathematics: false,
+      elementaryMathematics: false, additionalMathematics: false, physics: false, chemistry: false,
+      biology: false, combinedSciencePhysicsChemistry: false, combinedScienceChemistryBiology: false,
+      science: false, computing: false, history: false, geography: false, socialStudies: false,
+      literatureInEnglish: false, art: false, music: false, designAndTechnology: false,
+      nutritionAndFoodScience: false, foodAndConsumerEducation: false, principlesOfAccounts: false,
+      physicalEducation: false, characterAndCitizenshipEducation: false 
+    },
+    jc: { 
+      generalPaper: false, projectWork: false, chineseLanguage: false, malayLanguage: false,
+      tamilLanguage: false, knowledgeAndInquiry: false, h1Mathematics: false, h1Physics: false,
+      h1Chemistry: false, h1Biology: false, h1Economics: false, h1History: false, h1Geography: false,
+      h1LiteratureInEnglish: false, h1ChineseLanguageAndLiterature: false, h1MalayLanguageAndLiterature: false,
+      h1TamilLanguageAndLiterature: false, h2Mathematics: false, h2Physics: false, h2Chemistry: false,
+      h2Biology: false, h2Computing: false, h2Economics: false, h2History: false, h2Geography: false,
+      h2LiteratureInEnglish: false, h2Art: false, h2Music: false, h2ChineseLanguageAndLiterature: false,
+      h2MalayLanguageAndLiterature: false, h2TamilLanguageAndLiterature: false, h3Mathematics: false,
+      h3Physics: false, h3Chemistry: false, h3Biology: false, h3Economics: false, h3History: false,
+      h3Geography: false, h3LiteratureInEnglish: false, h3Art: false 
+    },
+    ib: { 
+      ibEnglishLanguageAndLiterature: false, ibChinese: false, ibMalay: false, ibTamil: false,
+      ibMathematics: false, ibPhysics: false, ibChemistry: false, ibBiology: false,
+      ibBusinessManagement: false, ibEconomics: false, ibGeography: false, ibHistory: false,
+      ibVisualArts: false, ibMusic: false, ibTheatre: false, ibTheoryOfKnowledge: false,
+      ibExtendedEssay: false 
+    },
+    polytechnic: {
+      english: false, mathematics: false, engineeringMathematics: false, communicationSkills: false,
+      computerApplications: false, businessStudies: false, accounting: false, science: false,
+      statistics: false, projectManagement: false, majorSubjects: false
+    },
+    university: {
+      engineeringMathematics: false, calculus: false, linearAlgebra: false, statistics: false,
+      universityPhysics: false, chemistry: false, biology: false, economics: false,
+      psychology: false, computerScience: false, programming: false, accounting: false,
+      businessStudies: false, law: false, medicine: false, researchMethods: false,
+      majorSpecificSubjects: false
+    },
+    music: { 
+      musicTheory: false, piano: false, violin: false, guitar: false, drums: false,
+      clarinet: false, flute: false, saxophone: false, trumpet: false, cello: false,
+      ukulele: false, voiceSinging: false, musicComposition: false, ensemblePlaying: false 
+    },
+    professional: { 
+      ielts: false, toefl: false, sat: false, gmat: false, gre: false, pythonProgramming: false,
+      javaProgramming: false, cppProgramming: false, cSharpProgramming: false, webDevelopment: false,
+      dataScience: false, aiAndMachineLearning: false, mobileAppDevelopment: false, photoshop: false,
+      videoEditing: false, publicSpeaking: false, creativeWriting: false, essayWriting: false,
+      criticalThinking: false, studySkills: false, french: false, german: false, spanish: false,
+      japanese: false, korean: false, leadership: false, projectManagement: false,
+      digitalMarketing: false, businessWriting: false 
+    }
   },
   
   // Locations
@@ -184,8 +341,12 @@ const initialFormData = {
   currentSchool: '',
   previousSchools: '',
   
-  // Fee Structure
-  hourlyRate: { preschool: '', primary: '', secondary: '', jc: '', international: '', music: '' },
+  // Updated Fee Structure
+  hourlyRate: { 
+    preschool: '', primary: '', secondary: '', 
+    jc: '', ib: '', music: '', polytechnic: '',  
+    university: '', professional: '' 
+  },
   
   // Tutor Profile
   introduction: '',
@@ -193,7 +354,10 @@ const initialFormData = {
   trackRecord: '',
   
   // Availability
-  availableTimeSlots: { weekdayMorning: false, weekdayAfternoon: false, weekdayEvening: false, weekendMorning: false, weekendAfternoon: false, weekendEvening: false }
+  availableTimeSlots: { 
+    weekdayMorning: false, weekdayAfternoon: false, weekdayEvening: false, 
+    weekendMorning: false, weekendAfternoon: false, weekendEvening: false 
+  }
 };
 
 export default function RegisterAsTutor() {
@@ -365,10 +529,11 @@ export default function RegisterAsTutor() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">Contact Number <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-medium mb-1">Contact Number (Fill Accurately) <span className="text-red-500">*</span></label>
                     <input 
                       name="contactNumber" 
                       value={formData.contactNumber} 
+                      placeholder='e.g. 81234567'
                       onChange={handleInputChange} 
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                       required 
@@ -947,8 +1112,8 @@ export default function RegisterAsTutor() {
                       <span className="mr-2">$</span>
                       <input 
                         type="number" 
-                        value={formData.hourlyRate.international} 
-                        onChange={(e) => handleHourlyRateChange('international', e.target.value)} 
+                        value={formData.hourlyRate.ib} 
+                        onChange={(e) => handleHourlyRateChange('ib', e.target.value)} 
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                         placeholder="Hourly rate"
                         min="0"
@@ -972,13 +1137,43 @@ export default function RegisterAsTutor() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Computing Rate</label>
+                    <label className="block text-sm font-medium mb-1">Polytechnic Rate</label>
                     <div className="flex items-center">
                       <span className="mr-2">$</span>
                       <input 
                         type="number" 
-                        value={formData.hourlyRate.computing} 
-                        onChange={(e) => handleHourlyRateChange('computing', e.target.value)} 
+                        value={formData.hourlyRate.polytechnic} 
+                        onChange={(e) => handleHourlyRateChange('polytechnic', e.target.value)} 
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        placeholder="Hourly rate"
+                        min="0"
+                      />
+                      <span className="ml-2">/hr</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">University Rate</label>
+                    <div className="flex items-center">
+                      <span className="mr-2">$</span>
+                      <input 
+                        type="number" 
+                        value={formData.hourlyRate.university} 
+                        onChange={(e) => handleHourlyRateChange('university', e.target.value)} 
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        placeholder="Hourly rate"
+                        min="0"
+                      />
+                      <span className="ml-2">/hr</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Professional Development Rate</label>
+                    <div className="flex items-center">
+                      <span className="mr-2">$</span>
+                      <input 
+                        type="number" 
+                        value={formData.hourlyRate.professional} 
+                        onChange={(e) => handleHourlyRateChange('professional', e.target.value)} 
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                         placeholder="Hourly rate"
                         min="0"

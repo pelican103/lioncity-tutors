@@ -12,6 +12,7 @@ import TutorPopup from "@/components/TutorPopup";
 
 // Lazy-loaded sections
 import dynamic from 'next/dynamic';
+import ReviewStrip from "@/components/ReviewStrip";
 const Testimonials = dynamic(() => import('@/components/TestimonialsSection'), { ssr: false });
 const SuccessStories = dynamic(() => import('@/components/SuccessStoriesSection'), { ssr: false });
 const FAQSection = dynamic(() => import('@/components/FAQSection'), { ssr: false });
@@ -114,8 +115,8 @@ export default function HomePageClient() {
   return (
     <>
       <Head>
-        <title>#1 Home Tuition Agency in Singapore | LionCity Tutors</title>
-        <meta name="description" content="Get 3 qualified tutor profiles in 24h – Free. Connect with trusted home tutors for Primary, Secondary & JC subjects in Singapore." />
+        <title>LionCity Tutors – MOE-Certified PSLE, O-Level & JC Tutors</title>
+        <meta name="description" content="LionCity Tutors connects Singapore parents with qualified MOE-certified tutors for PSLE, O-Level & JC. 100% free for parents." />
         {/* Local Business Schema */}
         <script type="application/ld+json">
           {`
@@ -258,64 +259,115 @@ export default function HomePageClient() {
             }
           `}
         </script>
+
+        {/* Educational Organization Schema */}
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "EducationalOrganization",
+              "name": "LionCity Tutors",
+              "url": "https://www.lioncitytutors.com/",
+              "logo": "https://www.lioncitytutors.com/logo.png",
+              "description": "Singapore's trusted home tuition agency connecting parents with MOE-certified tutors for PSLE, O-Level, and JC subjects.",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Boon Lay Wy, Tradehub 21",
+                "addressLocality": "Singapore",
+                "postalCode": "609966",
+                "addressCountry": "SG"
+              },
+              "telephone": "+65 88701152",
+              "email": "hello@lioncitytutors.com",
+              "foundingDate": "2020",
+              "numberOfEmployees": "10-50",
+              "areaServed": {
+                "@type": "Country",
+                "name": "Singapore"
+              },
+              "sameAs": [
+                "https://www.facebook.com/lioncitytutors",
+                "https://www.instagram.com/lioncitytutors"
+              ],
+              "hasCredential": [
+                {
+                  "@type": "EducationalOccupationalCredential",
+                  "name": "MOE Teaching Certification",
+                  "description": "Ministry of Education teaching qualifications"
+                }
+              ],
+              "offers": {
+                "@type": "Offer",
+                "name": "Home Tuition Matching Service",
+                "description": "Free matching service connecting parents with qualified tutors",
+                "price": "0",
+                "priceCurrency": "SGD"
+              }
+            }
+          `}
+        </script>
       </Head>
 
       <main className="bg-white text-gray-800">
         <TutorPopup />
         {/* Hero */}
-        <section className="relative w-full overflow-hidden"> 
-          <motion.div 
-            className="absolute inset-0" 
-            initial={{ scale: 1.1 }} 
-            animate={{ scale: 1 }} 
-            transition={{ duration: 1.5 }}
-          >
-            <Image 
-              src="/final.webp" 
-              alt="Students receiving personalized home tuition" 
-              fill 
-              className="object-cover object-top" 
-              priority 
-              sizes="100vw" 
-            />
-          </motion.div>
-          <div className="relative z-10 bg-black/40 flex items-center justify-center py-8 sm:py-20 md:py-20 min-h-[480px] sm:min-h-[450px] md:min-h-[550px]">
-            <div className="text-center text-white px-4 max-w-4xl">
-              <p className="text-lg sm:text-xl uppercase font-extrabold text-red-500 mb-2">
-                LionCity Tutors
-              </p>
-              <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold leading-tight mb-2">
-                Unlock Your Child's Potential with Singapore's Top Tutors
+        <section className="bg-white px-4 py-12 md:py-16">
+          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+                Trusted PSLE, O-Level & JC Tutors —{" "}
+                <span className="text-emerald-600">100% Free for Parents</span>
               </h1>
-              <p className="text-base sm:text-lg mb-2">
-                Rated <span className="font-bold text-yellow-400">4.8/5 stars</span> by parents across Singapore
+              <p className="mt-4 text-gray-700 text-lg">
+                MOE-trained & top-scoring tutors, matched in under 24 hours. No agency
+                fee for parents — we only charge tutors.
               </p>
-              <p className="text-sm sm:text-lg md:text-xl mb-8">
-                Get matched with a qualified professional for free – guaranteed within 24 hours.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button className="bg-red-500 hover:bg-red-600 text-white font-bold px-8 py-3 text-base" onClick={scrollToForm}>
-                  Get Tutor Profiles in 24h – Free
+              <div className="mt-6 flex items-center gap-4">
+                <Button
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-3 rounded-xl shadow"
+                  onClick={() => {
+                    formRef.current?.scrollIntoView({ behavior: "smooth" });
+                    gaEvent("lead_view", { form_id: "parent_request" });
+                  }}
+                >
+                  Request a Tutor
                 </Button>
-                <Button className="bg-transparent border border-white hover:bg-white hover:text-red-500 text-white px-8 py-3 text-base" onClick={() => router.push("/tuition-rates")}>
-                  View Tuition Rates
-                </Button>
+                <a
+                  href="https://wa.me/6588701152?text=Hi%20LionCity%20Tutors%2C%20I%27m%20looking%20for%20a%20tutor."
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => gaEvent("lead_submit", { method: "whatsapp" })}
+                  className="underline text-emerald-700"
+                >
+                  Prefer WhatsApp? Chat now
+                </a>
               </div>
-              <div className="mt-8 flex flex-wrap justify-center gap-x-4 gap-y-3"> 
-                {[
-                  { text: "100% Free Service", action: scrollToForm },
-                  { text: "24h Response Time", action: scrollToForm },
-                  { text: "Qualified Tutors", action: scrollToFAQ }
-                ].map((badge, i) => (
-                  <div key={i} onClick={badge.action} className="flex items-center bg-black/20 px-3 py-1.5 rounded-full text-sm cursor-pointer hover:bg-black/30">
-                    <span className="text-yellow-400 mr-2">✓</span> {badge.text}
-                  </div>
-                ))}
-              </div>
+
+              {/* Trust strip */}
+              <ul className="mt-6 flex flex-wrap items-center gap-6 text-sm text-gray-600">
+                <li>⭐ 4.9/5 from Singapore parents</li>
+                <li>✔️ MOE-familiar syllabus</li>
+                <li>⚡ Match within 24 hours</li>
+                <li>🛡️ No parent fees, ever</li>
+              </ul>
             </div>
+            
+                  
+            {/* Optional placeholder illustration */}
+            <div className="rounded-2xl overflow-hidden shadow-inner h-64 md:h-80 relative">
+              <Image
+                src="/final.webp"
+                alt="LionCity Tutors - Singapore Tuition Agency"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>                
           </div>
         </section>
-
+        
+        <ReviewStrip />
+        
         {/* Stats */}
         <section className="bg-white py-12">
           <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
@@ -369,6 +421,8 @@ export default function HomePageClient() {
         {/* Form */}
         <div ref={formRef} className="max-w-4xl mx-auto py-16 px-6">
           <h2 className="text-4xl font-bold text-center text-blue-700 mb-10">Free Request For Tutor</h2>
+          <p className="text-center text-gray-600 mb-10">Get matched with qualified tutors in 24 hours</p>
+
           <div className="bg-white rounded-xl shadow-lg p-8">
             {status.submitted ? (
               <div className="text-center py-10">
