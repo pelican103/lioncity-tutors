@@ -1,3 +1,5 @@
+import { EDUCATION_LEVELS, getSubjectsForLevel } from '../../../packages/shared/index.js';
+
 /* global process */
 
 function normalizePhone(phone) {
@@ -30,7 +32,10 @@ function initializeTeachingLevels(tutor) {
       primary: {},
       secondary: {},
       jc: {},
-      international: {}
+      ib: {},
+      polytechnic: {},
+      university: {},
+      music: {},
     };
   }
 }
@@ -97,93 +102,6 @@ function getTick(value) {
   return value ? '✅' : '❌';
 }
 
-// Format functions
-function formatTutorProfile(tutor) {
-  let profile = `*📋 Your Profile*\n\n`;
-  
-  // Personal Information
-  profile += `*👤 Personal Information*\n`;
-  profile += `*Name:* ${tutor.fullName || 'Not set'}\n`;
-  profile += `*Contact:* ${tutor.contactNumber || 'Not set'}\n`;
-  profile += `*Email:* ${tutor.email || 'Not set'}\n`;
-  profile += `*Gender:* ${tutor.gender || 'Not set'}\n`;
-  profile += `*Age:* ${tutor.age || 'Not set'}\n`;
-  profile += `*Race:* ${tutor.race || 'Not set'}\n`;
-  profile += `*Nationality:* ${tutor.nationality || 'Not set'}\n`;
-  if (tutor.nationality === 'Other' && tutor.nationalityOther) {
-    profile += `*Other Nationality:* ${tutor.nationalityOther}\n`;
-  }
-  profile += `*NRIC (Last 4):* ${tutor.nricLast4 ? '****' + tutor.nricLast4 : 'Not set'}\n`;
-  
-  // Date of Birth
-  if (tutor.dob) {
-    const dob = tutor.dob;
-    const dobStr = [dob.day, dob.month, dob.year].filter(Boolean).join('/');
-    profile += `*Date of Birth:* ${dobStr || 'Not set'}\n`;
-  } else {
-    profile += `*Date of Birth:* Not set\n`;
-  }
-  
-  // Education & Experience
-  profile += `\n*🎓 Education & Experience*\n`;
-  profile += `*Highest Education:* ${tutor.highestEducation || 'Not set'}\n`;
-  profile += `*Current School:* ${tutor.currentSchool || 'Not set'}\n`;
-  profile += `*Previous Schools:* ${tutor.previousSchools || 'Not set'}\n`;
-  profile += `*Tutor Type:* ${tutor.tutorType || 'Not set'}\n`;
-  profile += `*Years of Experience:* ${tutor.yearsOfExperience || 'Not set'}\n`;
-  
-  // Teaching Levels
-  if (tutor.teachingLevels) {
-    profile += `\n*📚 Teaching Levels*\n`;
-    const levels = [];
-    if (Object.values(tutor.teachingLevels.primary || {}).some(v => v)) levels.push('Primary');
-    if (Object.values(tutor.teachingLevels.secondary || {}).some(v => v)) levels.push('Secondary');
-    if (Object.values(tutor.teachingLevels.jc || {}).some(v => v)) levels.push('JC');
-    if (Object.values(tutor.teachingLevels.international || {}).some(v => v)) levels.push('International');
-    profile += `*Levels:* ${levels.length ? levels.join(', ') : 'Not set'}\n`;
-  }
-
-  // Locations
-  if (tutor.locations) {
-    profile += `\n*📍 Teaching Locations*\n`;
-    const locations = [];
-    Object.entries(tutor.locations).forEach(([key, value]) => {
-      if (value) locations.push(key.charAt(0).toUpperCase() + key.slice(1));
-    });
-    profile += `*Areas:* ${locations.length ? locations.join(', ') : 'Not set'}\n`;
-  }
-
-  // Availability
-  if (tutor.availableTimeSlots) {
-    profile += `\n*⏰ Availability*\n`;
-    const slots = [];
-    Object.entries(tutor.availableTimeSlots).forEach(([key, value]) => {
-      if (value) {
-        const formatted = key.replace(/([A-Z])/g, ' $1').toLowerCase();
-        slots.push(formatted.charAt(0).toUpperCase() + formatted.slice(1));
-      }
-    });
-    profile += `*Time Slots:* ${slots.length ? slots.join(', ') : 'Not set'}\n`;
-  }
-
-  // Hourly Rates
-  if (tutor.hourlyRate) {
-    profile += `\n*💰 Hourly Rates*\n`;
-    const rates = [];
-    if (tutor.hourlyRate.primary) rates.push(`Primary: $${tutor.hourlyRate.primary}`);
-    if (tutor.hourlyRate.secondary) rates.push(`Secondary: $${tutor.hourlyRate.secondary}`);
-    if (tutor.hourlyRate.jc) rates.push(`JC: $${tutor.hourlyRate.jc}`);
-    if (tutor.hourlyRate.international) rates.push(`International: $${tutor.hourlyRate.international}`);
-    profile += `*Rates:* ${rates.length ? rates.join('\n') : 'Not set'}\n`;
-  }
-
-  // Introduction & Experience
-  profile += `\n*📝 Profile Details*\n`;
-  profile += `*Introduction:* ${tutor.introduction || 'Not set'}\n`;
-  profile += `*Teaching Experience:* ${tutor.teachingExperience || 'Not set'}\n`;
-
-  return profile;
-}
 function formatTutorProfileSummary(tutor) {
   let profile = `*📋 Your Profile*\n\n`;
   
@@ -225,7 +143,12 @@ function formatTutorProfileSummary(tutor) {
     if (Object.values(tutor.teachingLevels.primary || {}).some(v => v)) levels.push('Primary');
     if (Object.values(tutor.teachingLevels.secondary || {}).some(v => v)) levels.push('Secondary');
     if (Object.values(tutor.teachingLevels.jc || {}).some(v => v)) levels.push('JC');
-    if (Object.values(tutor.teachingLevels.international || {}).some(v => v)) levels.push('International');
+    if (Object.values(tutor.teachingLevels.ib || {}).some(v => v)) levels.push('IB/IGCSE');
+    if (Object.values(tutor.teachingLevels.polytechnic || {}).some(v => v)) levels.push('Polytechnic');
+    if (Object.values(tutor.teachingLevels.university || {}).some(v => v)) levels.push('University');
+    if (Object.values(tutor.teachingLevels.music || {}).some(v => v)) levels.push('Music');
+    if (Object.values(tutor.teachingLevels.professional || {}).some(v => v)) levels.push('Professional');
+    
     profile += `*Levels:* ${levels.length ? levels.join(', ') : 'Not set'}\n`;
   }
 
@@ -259,7 +182,12 @@ function formatTutorProfileSummary(tutor) {
     if (tutor.hourlyRate.primary) rates.push(`Primary: $${tutor.hourlyRate.primary}`);
     if (tutor.hourlyRate.secondary) rates.push(`Secondary: $${tutor.hourlyRate.secondary}`);
     if (tutor.hourlyRate.jc) rates.push(`JC: $${tutor.hourlyRate.jc}`);
-    if (tutor.hourlyRate.international) rates.push(`International: $${tutor.hourlyRate.international}`);
+    if (tutor.hourlyRate.ib) rates.push(`IB/IGCSE: $${tutor.hourlyRate.ib}`);
+    if (tutor.hourlyRate.polytechnic) rates.push(`Polytechnic: $${tutor.hourlyRate.polytechnic}`);
+    if (tutor.hourlyRate.university) rates.push(`University: $${tutor.hourlyRate.university}`);
+    if (tutor.hourlyRate.music) rates.push(`Music: $${tutor.hourlyRate.music}`);
+    if (tutor.hourlyRate.professional) rates.push(`Professional: $${tutor.hourlyRate.professional}`);
+
     profile += `*Rates:* ${rates.length ? rates.join('\n') : 'Not set'}\n`;
   }
 
@@ -393,17 +321,27 @@ function getPersonalInfoMenu(tutor) {
 function getTeachingLevelsMenu(tutor) {
   initializeTeachingLevels(tutor);
   
+  const preschoolCount = Object.values(tutor.teachingLevels.preschool || {}).filter(v => v).length;
   const primaryCount = Object.values(tutor.teachingLevels.primary || {}).filter(v => v).length;
   const secondaryCount = Object.values(tutor.teachingLevels.secondary || {}).filter(v => v).length;
   const jcCount = Object.values(tutor.teachingLevels.jc || {}).filter(v => v).length;
-  const intlCount = Object.values(tutor.teachingLevels.international || {}).filter(v => v).length;
-  
+  const ibCount = Object.values(tutor.teachingLevels.ib || {}).filter(v => v).length;
+  const polytechnicCount = Object.values(tutor.teachingLevels.polytechnic || {}).filter(v => v).length;
+  const universityCount = Object.values(tutor.teachingLevels.university || {}).filter(v => v).length;
+  const musicCount = Object.values(tutor.teachingLevels.music || {}).filter(v => v).length;
+  const professionalCount = Object.values(tutor.teachingLevels.professional || {}).filter(v => v).length;
+
   return {
     inline_keyboard: [
+      [{ text: `🧸 Preschool (${preschoolCount} subjects)`, callback_data: 'edit_preschool_subjects' }],
       [{ text: `📚 Primary (${primaryCount} subjects)`, callback_data: 'edit_primary_subjects' }],
       [{ text: `📖 Secondary (${secondaryCount} subjects)`, callback_data: 'edit_secondary_subjects' }],
       [{ text: `🎓 JC (${jcCount} subjects)`, callback_data: 'edit_jc_subjects' }],
-      [{ text: `🌍 International (${intlCount} subjects)`, callback_data: 'edit_international_subjects' }],
+      [{ text: `🌍 IB (${ibCount} subjects)`, callback_data: 'edit_ib_subjects' }],
+      [{ text: `🏫 Polytechnic (${polytechnicCount} subjects)`, callback_data: 'edit_polytechnic_subjects' }],
+      [{ text: `🎓 University (${universityCount} subjects)`, callback_data: 'edit_university_subjects' }],
+      [{ text: `🎵 Music (${musicCount} subjects)`, callback_data: 'edit_music_subjects' }],
+      [{ text: `💼 Professional (${professionalCount} subjects)`, callback_data: 'edit_professional_subjects' }],
       [{ text: '🔙 Back to Profile Edit', callback_data: 'profile_edit' }]
     ]
   };
@@ -458,16 +396,48 @@ function getAvailabilityMenu(tutor) {
   return { inline_keyboard: keyboard };
 }
 
+function getPreschoolSubjectsMenu(tutor) {
+  initializeTeachingLevels(tutor);
+  
+  const subjects = [
+    { key: 'englishLanguage', label: 'English Language' },
+    { key: 'chinese', label: 'Chinese' },
+    { key: 'malay', label: 'Malay' },
+    { key: 'tamil', label: 'Tamil' },
+    { key: 'mathematics', label: 'Mathematics' },
+    { key: 'phonics', label: 'Phonics' },
+    { key: 'art', label: 'Art' },
+    { key: 'music', label: 'Music' },
+    { key: 'physicalEducation', label: 'Physical Education' }
+  ];
+  
+  const keyboard = subjects.map(subject => [
+    { 
+      text: `${getTick(tutor.teachingLevels.preschool[subject.key])} ${subject.label}`, 
+      callback_data: `toggle_preschool_${subject.key}` 
+    }
+  ]);
+  
+  keyboard.push([{ text: '🔙 Back to Teaching Levels', callback_data: 'edit_teaching_levels' }]);
+  
+  return { inline_keyboard: keyboard };
+}
+
 function getPrimarySubjectsMenu(tutor) {
   initializeTeachingLevels(tutor);
   
   const subjects = [
-    { key: 'english', label: 'English' },
-    { key: 'math', label: 'Math' },
-    { key: 'science', label: 'Science' },
+    { key: 'englishLanguage', label: 'English Language' },
     { key: 'chinese', label: 'Chinese' },
     { key: 'malay', label: 'Malay' },
-    { key: 'tamil', label: 'Tamil' }
+    { key: 'tamil', label: 'Tamil' },
+    { key: 'mathematics', label: 'Mathematics' },
+    { key: 'science', label: 'Science' },
+    { key: 'art', label: 'Art' },
+    { key: 'music', label: 'Music' },
+    { key: 'physicalEducation', label: 'Physical Education' },
+    { key: 'socialStudies', label: 'Social Studies' },
+    { key: 'characterAndCitizenshipEducation', label: 'Character & Citizenship Education' }
   ];
   
   const keyboard = subjects.map(subject => [
@@ -486,20 +456,32 @@ function getSecondarySubjectsMenu(tutor) {
   initializeTeachingLevels(tutor);
   
   const subjects = [
-    { key: 'english', label: 'English' },
-    { key: 'math', label: 'Math' },
-    { key: 'aMath', label: 'A Math' },
-    { key: 'eMath', label: 'E Math' },
+    { key: 'englishLanguage', label: 'English Language' },
+    { key: 'chinese', label: 'Chinese' },
+    { key: 'malay', label: 'Malay' },
+    { key: 'tamil', label: 'Tamil' },
+    { key: 'mathematics', label: 'Mathematics' },
+    { key: 'elementaryMathematics', label: 'Elementary Mathematics' },
+    { key: 'additionalMathematics', label: 'Additional Mathematics' },
     { key: 'physics', label: 'Physics' },
     { key: 'chemistry', label: 'Chemistry' },
     { key: 'biology', label: 'Biology' },
+    { key: 'combinedSciencePhysicsChemistry', label: 'Combined Science (Physics/Chemistry)' },
+    { key: 'combinedScienceChemistryBiology', label: 'Combined Science (Chemistry/Biology)' },
     { key: 'science', label: 'Science' },
+    { key: 'computing', label: 'Computing' },
     { key: 'history', label: 'History' },
     { key: 'geography', label: 'Geography' },
-    { key: 'literature', label: 'Literature' },
-    { key: 'chinese', label: 'Chinese' },
-    { key: 'malay', label: 'Malay' },
-    { key: 'tamil', label: 'Tamil' }
+    { key: 'socialStudies', label: 'Social Studies' },
+    { key: 'literatureInEnglish', label: 'Literature in English' },
+    { key: 'art', label: 'Art' },
+    { key: 'music', label: 'Music' },
+    { key: 'designAndTechnology', label: 'Design & Technology' },
+    { key: 'nutritionAndFoodScience', label: 'Nutrition & Food Science' },
+    { key: 'foodAndConsumerEducation', label: 'Food & Consumer Education' },
+    { key: 'principlesOfAccounts', label: 'Principles of Accounts' },
+    { key: 'physicalEducation', label: 'Physical Education' },
+    { key: 'characterAndCitizenshipEducation', label: 'Character & Citizenship Education' }
   ];
   
   const keyboard = subjects.map(subject => [
@@ -519,18 +501,45 @@ function getJCSubjectsMenu(tutor) {
   
   const subjects = [
     { key: 'generalPaper', label: 'General Paper' },
-    { key: 'h1Math', label: 'H1 Math' },
-    { key: 'h2Math', label: 'H2 Math' },
+    { key: 'projectWork', label: 'Project Work' },
+    { key: 'chineseLanguage', label: 'Chinese Language' },
+    { key: 'malayLanguage', label: 'Malay Language' },
+    { key: 'tamilLanguage', label: 'Tamil Language' },
+    { key: 'knowledgeAndInquiry', label: 'Knowledge & Inquiry' },
+    { key: 'h1Mathematics', label: 'H1 Mathematics' },
     { key: 'h1Physics', label: 'H1 Physics' },
-    { key: 'h2Physics', label: 'H2 Physics' },
     { key: 'h1Chemistry', label: 'H1 Chemistry' },
-    { key: 'h2Chemistry', label: 'H2 Chemistry' },
     { key: 'h1Biology', label: 'H1 Biology' },
-    { key: 'h2Biology', label: 'H2 Biology' },
     { key: 'h1Economics', label: 'H1 Economics' },
-    { key: 'h2Economics', label: 'H2 Economics' },
     { key: 'h1History', label: 'H1 History' },
-    { key: 'h2History', label: 'H2 History' }
+    { key: 'h1Geography', label: 'H1 Geography' },
+    { key: 'h1LiteratureInEnglish', label: 'H1 Literature in English' },
+    { key: 'h1ChineseLanguageAndLiterature', label: 'H1 Chinese Language & Literature' },
+    { key: 'h1MalayLanguageAndLiterature', label: 'H1 Malay Language & Literature' },
+    { key: 'h1TamilLanguageAndLiterature', label: 'H1 Tamil Language & Literature' },
+    { key: 'h2Mathematics', label: 'H2 Mathematics' },
+    { key: 'h2Physics', label: 'H2 Physics' },
+    { key: 'h2Chemistry', label: 'H2 Chemistry' },
+    { key: 'h2Biology', label: 'H2 Biology' },
+    { key: 'h2Computing', label: 'H2 Computing' },
+    { key: 'h2Economics', label: 'H2 Economics' },
+    { key: 'h2History', label: 'H2 History' },
+    { key: 'h2Geography', label: 'H2 Geography' },
+    { key: 'h2LiteratureInEnglish', label: 'H2 Literature in English' },
+    { key: 'h2Art', label: 'H2 Art' },
+    { key: 'h2Music', label: 'H2 Music' },
+    { key: 'h2ChineseLanguageAndLiterature', label: 'H2 Chinese Language & Literature' },
+    { key: 'h2MalayLanguageAndLiterature', label: 'H2 Malay Language & Literature' },
+    { key: 'h2TamilLanguageAndLiterature', label: 'H2 Tamil Language & Literature' },
+    { key: 'h3Mathematics', label: 'H3 Mathematics' },
+    { key: 'h3Physics', label: 'H3 Physics' },
+    { key: 'h3Chemistry', label: 'H3 Chemistry' },
+    { key: 'h3Biology', label: 'H3 Biology' },
+    { key: 'h3Economics', label: 'H3 Economics' },
+    { key: 'h3History', label: 'H3 History' },
+    { key: 'h3Geography', label: 'H3 Geography' },
+    { key: 'h3LiteratureInEnglish', label: 'H3 Literature in English' },
+    { key: 'h3Art', label: 'H3 Art' }
   ];
   
   const keyboard = subjects.map(subject => [
@@ -545,25 +554,185 @@ function getJCSubjectsMenu(tutor) {
   return { inline_keyboard: keyboard };
 }
 
-function getInternationalSubjectsMenu(tutor) {
+function getIBSubjectsMenu(tutor) {
   initializeTeachingLevels(tutor);
-  
+
   const subjects = [
-    { key: 'ib', label: 'IB' },
-    { key: 'igcse', label: 'IGCSE' },
-    { key: 'ielts', label: 'IELTS' },
-    { key: 'toefl', label: 'TOEFL' }
+    { key: 'ibEnglishLanguageAndLiterature', label: 'IB English Language & Literature' },
+    { key: 'ibChinese', label: 'IB Chinese' },
+    { key: 'ibMalay', label: 'IB Malay' },
+    { key: 'ibTamil', label: 'IB Tamil' },
+    { key: 'ibMathematics', label: 'IB Mathematics' },
+    { key: 'ibPhysics', label: 'IB Physics' },
+    { key: 'ibChemistry', label: 'IB Chemistry' },
+    { key: 'ibBiology', label: 'IB Biology' },
+    { key: 'ibBusinessManagement', label: 'IB Business Management' },
+    { key: 'ibEconomics', label: 'IB Economics' },
+    { key: 'ibGeography', label: 'IB Geography' },
+    { key: 'ibHistory', label: 'IB History' },
+    { key: 'ibVisualArts', label: 'IB Visual Arts' },
+    { key: 'ibMusic', label: 'IB Music' },
+    { key: 'ibTheatre', label: 'IB Theatre' },
+    { key: 'ibTheoryOfKnowledge', label: 'IB Theory of Knowledge' },
+    { key: 'ibExtendedEssay', label: 'IB Extended Essay' }
   ];
-  
+
   const keyboard = subjects.map(subject => [
-    { 
-      text: `${getTick(tutor.teachingLevels.international[subject.key])} ${subject.label}`, 
-      callback_data: `toggle_international_${subject.key}` 
+    {
+      text: `${getTick(tutor.teachingLevels.ib?.[subject.key])} ${subject.label}`,
+      callback_data: `toggle_ib_${subject.key}`
     }
   ]);
-  
+
   keyboard.push([{ text: '🔙 Back to Teaching Levels', callback_data: 'edit_teaching_levels' }]);
-  
+  return { inline_keyboard: keyboard };
+}
+
+function getPolytechnicSubjectsMenu(tutor) {
+  initializeTeachingLevels(tutor);
+
+  const subjects = [
+    { key: 'english', label: 'English' },
+    { key: 'mathematics', label: 'Mathematics' },
+    { key: 'engineeringMathematics', label: 'Engineering Mathematics' },
+    { key: 'communicationSkills', label: 'Communication Skills' },
+    { key: 'computerApplications', label: 'Computer Applications' },
+    { key: 'businessStudies', label: 'Business Studies' },
+    { key: 'accounting', label: 'Accounting' },
+    { key: 'science', label: 'Science' },
+    { key: 'statistics', label: 'Statistics' },
+    { key: 'projectManagement', label: 'Project Management' },
+    { key: 'majorSubjects', label: 'Major Subjects' }
+  ];
+
+  const keyboard = subjects.map(subject => [
+    {
+      text: `${getTick(tutor.teachingLevels.polytechnic?.[subject.key])} ${subject.label}`,
+      callback_data: `toggle_polytechnic_${subject.key}`
+    }
+  ]);
+
+  keyboard.push([{ text: '🔙 Back to Teaching Levels', callback_data: 'edit_teaching_levels' }]);
+  return { inline_keyboard: keyboard };
+}
+
+function getUniversitySubjectsMenu(tutor) {
+  initializeTeachingLevels(tutor);
+
+  const subjects = [
+    { key: 'engineeringMathematics', label: 'Engineering Mathematics' },
+    { key: 'calculus', label: 'Calculus' },
+    { key: 'linearAlgebra', label: 'Linear Algebra' },
+    { key: 'statistics', label: 'Statistics' },
+    { key: 'universityPhysics', label: 'University Physics' },
+    { key: 'chemistry', label: 'Chemistry' },
+    { key: 'biology', label: 'Biology' },
+    { key: 'economics', label: 'Economics' },
+    { key: 'psychology', label: 'Psychology' },
+    { key: 'computerScience', label: 'Computer Science' },
+    { key: 'programming', label: 'Programming' },
+    { key: 'accounting', label: 'Accounting' },
+    { key: 'businessStudies', label: 'Business Studies' },
+    { key: 'law', label: 'Law' },
+    { key: 'medicine', label: 'Medicine' },
+    { key: 'researchMethods', label: 'Research Methods' },
+    { key: 'majorSpecificSubjects', label: 'Major Specific Subjects' }
+  ];
+
+  const keyboard = subjects.map(subject => [
+    {
+      text: `${getTick(tutor.teachingLevels.university?.[subject.key])} ${subject.label}`,
+      callback_data: `toggle_university_${subject.key}`
+    }
+  ]);
+
+  keyboard.push([{ text: '🔙 Back to Teaching Levels', callback_data: 'edit_teaching_levels' }]);
+  return { inline_keyboard: keyboard };
+}
+
+function getMusicSubjectsMenu(tutor) {
+  initializeTeachingLevels(tutor);
+
+  const subjects = [
+    { key: 'musicTheory', label: 'Music Theory' },
+    { key: 'piano', label: 'Piano' },
+    { key: 'violin', label: 'Violin' },
+    { key: 'guitar', label: 'Guitar' },
+    { key: 'drums', label: 'Drums' },
+    { key: 'clarinet', label: 'Clarinet' },
+    { key: 'flute', label: 'Flute' },
+    { key: 'saxophone', label: 'Saxophone' },
+    { key: 'trumpet', label: 'Trumpet' },
+    { key: 'cello', label: 'Cello' },
+    { key: 'ukulele', label: 'Ukulele' },
+    { key: 'voiceSinging', label: 'Voice/Singing' },
+    { key: 'musicComposition', label: 'Music Composition' },
+    { key: 'ensemblePlaying', label: 'Ensemble Playing' }
+  ];
+
+  const keyboard = subjects.map(subject => [
+    {
+      text: `${getTick(tutor.teachingLevels.music?.[subject.key])} ${subject.label}`,
+      callback_data: `toggle_music_${subject.key}`
+    }
+  ]);
+
+  keyboard.push([{ text: '🔙 Back to Teaching Levels', callback_data: 'edit_teaching_levels' }]);
+  return { inline_keyboard: keyboard };
+}
+
+function getProfessionalSubjectsMenu(tutor) {
+  initializeTeachingLevels(tutor);
+
+  const subjects = [
+    // Test Preparation
+    { key: 'ielts', label: 'IELTS' },
+    { key: 'toefl', label: 'TOEFL' },
+    { key: 'sat', label: 'SAT' },
+    { key: 'gmat', label: 'GMAT' },
+    { key: 'gre', label: 'GRE' },
+    
+    // Programming & Technology
+    { key: 'pythonProgramming', label: 'Python Programming' },
+    { key: 'javaProgramming', label: 'Java Programming' },
+    { key: 'cppProgramming', label: 'C++ Programming' },
+    { key: 'cSharpProgramming', label: 'C# Programming' },
+    { key: 'webDevelopment', label: 'Web Development' },
+    { key: 'dataScience', label: 'Data Science' },
+    { key: 'aiAndMachineLearning', label: 'AI & Machine Learning' },
+    { key: 'mobileAppDevelopment', label: 'Mobile App Development' },
+    { key: 'photoshop', label: 'Photoshop' },
+    { key: 'videoEditing', label: 'Video Editing' },
+    
+    // Soft Skills
+    { key: 'publicSpeaking', label: 'Public Speaking' },
+    { key: 'creativeWriting', label: 'Creative Writing' },
+    { key: 'essayWriting', label: 'Essay Writing' },
+    { key: 'criticalThinking', label: 'Critical Thinking' },
+    { key: 'studySkills', label: 'Study Skills' },
+    
+    // Languages
+    { key: 'french', label: 'French' },
+    { key: 'german', label: 'German' },
+    { key: 'spanish', label: 'Spanish' },
+    { key: 'japanese', label: 'Japanese' },
+    { key: 'korean', label: 'Korean' },
+    
+    // Business & Professional
+    { key: 'leadership', label: 'Leadership' },
+    { key: 'projectManagement', label: 'Project Management' },
+    { key: 'digitalMarketing', label: 'Digital Marketing' },
+    { key: 'businessWriting', label: 'Business Writing' }
+  ];
+
+  const keyboard = subjects.map(subject => [
+    {
+      text: `${getTick(tutor.teachingLevels.professional?.[subject.key])} ${subject.label}`,
+      callback_data: `toggle_professional_${subject.key}`
+    }
+  ]);
+
+  keyboard.push([{ text: '🔙 Back to Teaching Levels', callback_data: 'edit_teaching_levels' }]);
   return { inline_keyboard: keyboard };
 }
 
@@ -659,14 +828,20 @@ function getDOBMenu(tutor) {
 function getHourlyRatesMenu(tutor) {
   return {
     inline_keyboard: [
+      [{ text: `💰 Preschool Rate: $${tutor.hourlyRate?.preschool || 'Not set'}/hour`, callback_data: 'edit_rate_preschool' }],
       [{ text: `💰 Primary Rate: $${tutor.hourlyRate?.primary || 'Not set'}/hour`, callback_data: 'edit_rate_primary' }],
       [{ text: `💰 Secondary Rate: $${tutor.hourlyRate?.secondary || 'Not set'}/hour`, callback_data: 'edit_rate_secondary' }],
       [{ text: `💰 JC Rate: $${tutor.hourlyRate?.jc || 'Not set'}/hour`, callback_data: 'edit_rate_jc' }],
-      [{ text: `💰 International Rate: $${tutor.hourlyRate?.international || 'Not set'}/hour`, callback_data: 'edit_rate_international' }],
+      [{ text: `💰 IB Rate: $${tutor.hourlyRate?.ib || 'Not set'}/hour`, callback_data: 'edit_rate_ib' }],
+      [{ text: `💰 Music Rate: $${tutor.hourlyRate?.music || 'Not set'}/hour`, callback_data: 'edit_rate_music' }],
+      [{ text: `💰 Polytechnic Rate: $${tutor.hourlyRate?.polytechnic || 'Not set'}/hour`, callback_data: 'edit_rate_polytechnic' }],
+      [{ text: `💰 University Rate: $${tutor.hourlyRate?.university || 'Not set'}/hour`, callback_data: 'edit_rate_university' }],
+      [{ text: `💰 Professional Rate: $${tutor.hourlyRate?.professional || 'Not set'}/hour`, callback_data: 'edit_rate_professional' }],
       [{ text: '🔙 Back to Profile Edit', callback_data: 'profile_edit' }]
     ]
   };
 }
+
 
 const ITEMS_PER_PAGE = 5;
 
@@ -798,11 +973,12 @@ async function handleContact(bot, chatId, userId, contact, Tutor, userSessions, 
       }
       
       // Show profile and assignment details
-      const profileMsg = formatTutorProfile(tutor);
+      const profileMsg = formatTutorProfileSummary(tutor);
       const assignmentMsg = formatAssignment(assignment);
       
       await safeSend(bot, chatId, 
         `📋 *Profile Preview*\n\n${profileMsg}\n\n` +
+        `ℹ️ Your *Introduction* and *Teaching Experience* is not shown here to avoid long messages. If you want to review or edit them, please click *Update Profile* in the menu.`
         `🎯 *Assignment Details*\n\n${assignmentMsg}\n\n` +
         `Please review your profile and the assignment details above. Would you like to update your profile or proceed with the application?`, 
         {
@@ -909,42 +1085,6 @@ async function startAssignmentCreation(bot, chatId, userSessions) {
   });
 }
 
-// Flexible validation functions that accept any text
-function validateLevel(text) {
-  // Accept any text but provide guidance
-  const validLevels = [
-    'Primary 1', 'Primary 2', 'Primary 3', 'Primary 4', 'Primary 5', 'Primary 6',
-    'Secondary 1', 'Secondary 2', 'Secondary 3', 'Secondary 4', 'Secondary 5',
-    'JC 1', 'JC 2', 'Polytechnic', 'University', 'Adult Learning'
-  ];
-  
-  // If it matches a predefined level, return as is
-  if (validLevels.includes(text)) {
-    return text;
-  }
-  
-  // Otherwise, accept the custom text but warn
-  console.log(`Custom level entered: ${text}`);
-  return text;
-}
-
-function validateFrequency(text) {
-  // Accept any text but provide guidance
-  const validFrequencies = [
-    'Once a week', 'Twice a week', '3 times a week', '4 times a week', 
-    '5 times a week', 'Daily', 'Flexible'
-  ];
-  
-  // If it matches a predefined frequency, return as is
-  if (validFrequencies.includes(text)) {
-    return text;
-  }
-  
-  // Otherwise, accept the custom text
-  console.log(`Custom frequency entered: ${text}`);
-  return text;
-}
-
 function parseNaturalDate(text) {
   const today = new Date();
   const lowerText = text.toLowerCase().trim();
@@ -973,6 +1113,27 @@ function parseNaturalDate(text) {
   }
 }
 
+function createInlineKeyboard(options, callbackPrefix, columns = 2) {
+  const keyboard = [];
+  
+  for (let i = 0; i < options.length; i += columns) {
+    const row = [];
+    for (let j = 0; j < columns && i + j < options.length; j++) {
+      const option = options[i + j];
+      row.push({
+        text: option,
+        callback_data: `${callbackPrefix}_${encodeURIComponent(option)}`
+      });
+    }
+    keyboard.push(row);
+  }
+  
+  // Add cancel button
+  keyboard.push([{ text: '❌ Cancel', callback_data: 'admin_panel' }]);
+  
+  return keyboard;
+}
+
 
 // Handle assignment creation steps
 async function handleAssignmentStep(bot, chatId, text, userSessions) {
@@ -985,36 +1146,21 @@ async function handleAssignmentStep(bot, chatId, text, userSessions) {
         assignmentData.title = text.trim();
         session.currentStep = 'level';
         
-        await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 2 of 7: Enter the education level\n\n*Examples:* Primary 6, Secondary 1 NA, JC 2, University, etc.', {
+        // Show level selection with inline keyboard
+        await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 2 of 7: Select the education level:', {
           parse_mode: 'Markdown',
           reply_markup: {
-            inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
+            inline_keyboard: createInlineKeyboard(EDUCATION_LEVELS, 'select_level', 1)
           }
         });
         break;
       
       case 'level':
-        assignmentData.level = text.trim();
-        session.currentStep = 'subject';
-        
-        await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 3 of 7: Enter the subject(s)\n\n*Examples:* Mathematics, English, Science, Physics & Chemistry, etc.', {
-          parse_mode: 'Markdown',
-          reply_markup: {
-            inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
-          }
-        });
+        // This case is now handled by callback query
         break;
       
       case 'subject':
-        assignmentData.subject = text.trim();
-        session.currentStep = 'location';
-        
-        await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 4 of 7: Enter the location\n\n*Examples:* Tampines, Online, Tutor\'s place (Jurong), etc.', {
-          parse_mode: 'Markdown',
-          reply_markup: {
-            inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
-          }
-        });
+        // This case is now handled by callback query
         break;
       
       case 'location':
@@ -1096,6 +1242,56 @@ async function handleAssignmentStep(bot, chatId, text, userSessions) {
     delete userSessions[chatId].state;
     delete userSessions[chatId].assignmentData;
     delete userSessions[chatId].currentStep;
+  }
+}
+
+async function handleAssignmentCallbackQuery(bot, callbackQuery, userSessions) {
+  const chatId = callbackQuery.message.chat.id;
+  const data = callbackQuery.data;
+  const session = userSessions[chatId];
+  
+  if (!session || !session.assignmentData) {
+    return;
+  }
+  
+  try {
+    if (data.startsWith('select_level_')) {
+      const level = decodeURIComponent(data.replace('select_level_', ''));
+      session.assignmentData.level = level;
+      session.currentStep = 'subject';
+      
+      // Get subjects specific to the selected level using the mapping
+      const availableSubjects = getSubjectsForLevel(level);
+      
+      await bot.editMessageText('🎯 *Creating New Assignment*\n\nStep 3 of 7: Select the subject:', {
+        chat_id: chatId,
+        message_id: callbackQuery.message.message_id,
+        parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: createInlineKeyboard(availableSubjects, 'select_subject', 1)
+        }
+      });
+      
+    } else if (data.startsWith('select_subject_')) {
+      const subject = decodeURIComponent(data.replace('select_subject_', ''));
+      session.assignmentData.subject = subject;
+      session.currentStep = 'location';
+      
+      await bot.editMessageText('🎯 *Creating New Assignment*\n\nStep 4 of 7: Enter the location\n\n*Examples:* Tampines, Online, Tutor\'s place (Jurong), etc.\n\n*Please type your response:*', {
+        chat_id: chatId,
+        message_id: callbackQuery.message.message_id,
+        parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
+        }
+      });
+    }
+    
+    await bot.answerCallbackQuery(callbackQuery.id);
+    
+  } catch (error) {
+    console.error('Error handling assignment callback query:', error);
+    await bot.answerCallbackQuery(callbackQuery.id, { text: 'Error occurred. Please try again.' });
   }
 }
 
@@ -1619,28 +1815,6 @@ async function handleTrackRecordEdit(bot, chatId, text, userSessions, Tutor) {
   }
 }
 
-async function handleSellingPointsEdit(bot, chatId, text, userSessions, Tutor) {
-  try {
-    const session = userSessions[chatId];
-    const tutor = await getTutorFromSession(chatId, userSessions, Tutor);
-    
-    if (!tutor) {
-      return await safeSend(bot, chatId, '❌ We couldn\'t find your profile. Please type /start and share your contact number again.');
-    }
-    
-    tutor.sellingPoints = text.trim();
-    await tutor.save();
-    
-    session.state = 'idle';
-    return await safeSend(bot, chatId, '✅ Selling points updated successfully!', {
-      reply_markup: getPersonalInfoMenu(tutor)
-    });
-  } catch (error) {
-    console.error('Error updating selling points:', error);
-    await safeSend(bot, chatId, '❌ Error updating selling points. Please try again.');
-  }
-}
-
 async function handleYearsExperienceEdit(bot, chatId, text, userSessions, Tutor) {
   try {
     const session = userSessions[chatId];
@@ -1861,7 +2035,9 @@ async function handleSpecificRateEdit(bot, chatId, text, level, userSessions, Tu
         primary: '',
         secondary: '',
         jc: '',
-        international: ''
+        ib: '',
+        music: '',
+        computing: ''
       };
     }
     
@@ -1883,9 +2059,7 @@ async function handleSpecificRateEdit(bot, chatId, text, level, userSessions, Tu
 // Fixed version of handleCallbackQuery with all editable fields and menus handled
 async function handleCallbackQuery(
   bot,
-  chatId,
-  userId,
-  data,
+  callbackQuery, 
   Assignment,
   Tutor,
   userSessions,
@@ -1893,6 +2067,10 @@ async function handleCallbackQuery(
   CHANNEL_ID,
   BOT_USERNAME
 ) {
+  const chatId = callbackQuery.message.chat.id;
+  const userId = callbackQuery.from.id;
+  const data = callbackQuery.data;
+  
   try {
     console.log("📥 Callback data received:", data);
 
@@ -1930,6 +2108,11 @@ async function handleCallbackQuery(
     if (data.trim() === 'admin_post_assignment') {
       return await startAssignmentCreation(bot, chatId, userSessions);
     }
+
+    if (data.startsWith('select_level_') || data.startsWith('select_subject_')) {
+      return await handleAssignmentCallbackQuery(bot, callbackQuery, userSessions);
+    }
+
 
     if (data === 'view_assignments') {
       return await viewAssignments(bot, chatId, 0, Assignment);
@@ -2369,18 +2552,6 @@ async function handleCallbackQuery(
       return await safeSend(bot, chatId, '🏫 Please enter your previous schools:');
     }
 
-    // Teaching levels with proper toggle display
-    if (data === 'edit_teaching_levels_detailed') {
-      const tutor = await getTutorFromSession(chatId, userSessions, Tutor);
-      if (!tutor) {
-        return await safeSend(bot, chatId, '❌ We couldn\'t find your profile. Please type /start and share your contact number again.');
-      }
-
-      return await safeSend(bot, chatId, 'Select which teaching levels you want to configure:', {
-        reply_markup: getTeachingLevelsMenu(tutor)
-      });
-    }
-
     if (data.startsWith('toggle_level_')) {
       const level = data.replace('toggle_level_', '');
       const tutor = await getTutorFromSession(chatId, userSessions, Tutor);
@@ -2407,7 +2578,7 @@ async function handleCallbackQuery(
           primary: ['english', 'math'],
           secondary: ['english', 'math'],
           jc: ['generalPaper', 'h2Math'],
-          international: ['ib']
+          ib: ['ib']
         };
         
         commonSubjects[level]?.forEach(subject => {
@@ -2425,6 +2596,17 @@ async function handleCallbackQuery(
     }
 
     // Subject editing handlers
+    if (data === 'edit_preschool_subjects') {
+      const tutor = await getTutorFromSession(chatId, userSessions, Tutor);
+      if (!tutor) {
+        return await safeSend(bot, chatId, '❌ We couldn\'t find your profile. Please type /start and share your contact number again.');
+      }
+
+      return await safeSend(bot, chatId, 'Update Preschool subjects:', {
+        reply_markup: getPreschoolSubjectsMenu(tutor)
+      });
+    }
+
     if (data === 'edit_primary_subjects') {
       const tutor = await getTutorFromSession(chatId, userSessions, Tutor);
       if (!tutor) {
@@ -2458,14 +2640,57 @@ async function handleCallbackQuery(
       });
     }
     
-    if (data === 'edit_international_subjects') {
+    if (data === 'edit_ib_subjects') {
       const tutor = await getTutorFromSession(chatId, userSessions, Tutor);
       if (!tutor) {
         return await safeSend(bot, chatId, '❌ We couldn\'t find your profile. Please type /start and share your contact number again.');
       }
 
-      return await safeSend(bot, chatId, 'Update International level subjects:', {
-        reply_markup: getInternationalSubjectsMenu(tutor)
+      return await safeSend(bot, chatId, 'Update IB subjects:', {
+        reply_markup: getIBSubjectsMenu(tutor)
+      });
+    }
+    if (data === 'edit_polytechnic_subjects') {
+      const tutor = await getTutorFromSession(chatId, userSessions, Tutor);
+      if (!tutor) {
+        return await safeSend(bot, chatId, '❌ We couldn\'t find your profile. Please type /start and share your contact number again.');
+      }
+
+      return await safeSend(bot, chatId, 'Update Polytechnic subjects:', {
+        reply_markup: getPolytechnicSubjectsMenu(tutor)
+      });
+    }
+
+    if (data === 'edit_university_subjects') {
+      const tutor = await getTutorFromSession(chatId, userSessions, Tutor);
+      if (!tutor) {
+        return await safeSend(bot, chatId, '❌ We couldn\'t find your profile. Please type /start and share your contact number again.');
+      }
+
+      return await safeSend(bot, chatId, 'Update University subjects:', {
+        reply_markup: getUniversitySubjectsMenu(tutor)
+      });
+    }
+
+    if (data === 'edit_music_subjects') {
+      const tutor = await getTutorFromSession(chatId, userSessions, Tutor);
+      if (!tutor) {
+        return await safeSend(bot, chatId, '❌ We couldn\'t find your profile. Please type /start and share your contact number again.');
+      }
+
+      return await safeSend(bot, chatId, 'Update Music subjects:', {
+        reply_markup: getMusicSubjectsMenu(tutor)
+      });
+    }
+
+    if (data === 'edit_professional_subjects') {
+      const tutor = await getTutorFromSession(chatId, userSessions, Tutor);
+      if (!tutor) {
+        return await safeSend(bot, chatId, '❌ We couldn\'t find your profile. Please type /start and share your contact number again.');
+      }
+
+      return await safeSend(bot, chatId, 'Update Professional Development subjects:', {
+        reply_markup: getProfessionalSubjectsMenu(tutor)
       });
     }
 
@@ -2503,7 +2728,7 @@ async function handleCallbackQuery(
     }
 
     // Subject toggle handlers
-    const toggleCategories = ['primary', 'secondary', 'jc', 'international'];
+    const toggleCategories = ['primary', 'secondary', 'jc', 'ib', 'polytechnic', 'university', 'music', 'professional'];
     for (const cat of toggleCategories) {
       if (data.startsWith(`toggle_${cat}_`)) {
         const key = data.replace(`toggle_${cat}_`, '');
@@ -2519,7 +2744,11 @@ async function handleCallbackQuery(
           primary: getPrimarySubjectsMenu,
           secondary: getSecondarySubjectsMenu,
           jc: getJCSubjectsMenu,
-          international: getInternationalSubjectsMenu
+          ib: getIBSubjectsMenu,
+          polytechnic: getPolytechnicSubjectsMenu,
+          university: getUniversitySubjectsMenu,
+          music: getMusicSubjectsMenu,
+          professional: getProfessionalSubjectsMenu
         }[cat];
 
         return await safeSend(bot, chatId, `✅ ${cat.charAt(0).toUpperCase() + cat.slice(1)} subject updated.`, {
@@ -2619,7 +2848,6 @@ async function handleMessage(bot, chatId, userId, text, message, Tutor, Assignme
     return await handleQualificationsEdit(bot, chatId, text, userSessions, Tutor);
   }
 
-  // ADD ALL THE TEXT INPUT HANDLERS HERE (moved from handleCallbackQuery)
   if (session.state === 'awaiting_age') {
     return await handleAgeEdit(bot, chatId, text, userSessions, Tutor);
   }
@@ -2671,12 +2899,7 @@ async function handleMessage(bot, chatId, userId, text, message, Tutor, Assignme
   if (session.state === 'awaiting_track_record') {
     return await handleTrackRecordEdit(bot, chatId, text, userSessions, Tutor);
   }
-  
-  // Selling points editing
-  if (session.state === 'awaiting_selling_points') {
-    return await handleSellingPointsEdit(bot, chatId, text, userSessions, Tutor);
-  }
-  
+
   // Years experience editing
   if (session.state === 'awaiting_years_experience') {
     return await handleYearsExperienceEdit(bot, chatId, text, userSessions, Tutor);
@@ -2892,15 +3115,12 @@ export {
   handleMessage,
   normalizePhone,
   parseNaturalDate,
-  validateLevel,
-  validateFrequency,
   initializeTeachingLevels,
   initializeAvailability,
   initializeLocations,
   getTick,
   
   // Format functions
-  formatTutorProfile,
   formatTutorProfileSummary,
   formatAssignment,
   formatAssignmentForChannel,
@@ -2911,10 +3131,15 @@ export {
   getTeachingLevelsMenu,
   getLocationsMenu,
   getAvailabilityMenu,
+  getPreschoolSubjectsMenu,
   getPrimarySubjectsMenu,
   getSecondarySubjectsMenu,
   getJCSubjectsMenu,
-  getInternationalSubjectsMenu,
+  getIBSubjectsMenu,
+  getMusicSubjectsMenu,
+  getPolytechnicSubjectsMenu,
+  getUniversitySubjectsMenu,
+  getProfessionalSubjectsMenu,
   getGenderMenu,
   getRaceMenu,
   getEducationMenu,
@@ -2936,6 +3161,7 @@ export {
   showAdminPanel,
   startAssignmentCreation,
   handleAssignmentStep,
+  handleAssignmentCallbackQuery,
   postAssignmentToChannel,
   handleApplication,
   handleStartParameter,

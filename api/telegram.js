@@ -1,11 +1,8 @@
-// Try this import instead
 import TelegramBot from 'node-telegram-bot-api';
-// OR
-// const TelegramBot = require('node-telegram-bot-api');
 
 import mongoose from 'mongoose';
 import Tutor from '../models/Tutor.js';
-import Assignment from '../models/Assignment.js';
+import { Assignment } from '../../../packages/shared/index.js';
 
 let bot = null;
 let isConnected = false;
@@ -119,21 +116,18 @@ export default async function handler(req, res) {
         ADMIN_USERS
       );
     } else if (update.callback_query) {
-      const { message, from, data } = update.callback_query;
-      await botInstance.answerCallbackQuery(update.callback_query.id);
-      await handlers.handleCallbackQuery(
-        botInstance,
-        message.chat.id,
-        from.id,
-        data,
-        Assignment,
-        Tutor,
-        userSessions,
-        ADMIN_USERS,
-        CHANNEL_ID,
-        BOT_USERNAME
-      );
-    }
+  // Pass the entire callback_query object directly to the handler
+  await handlers.handleCallbackQuery(
+    botInstance,
+    update.callback_query,
+    Assignment,
+    Tutor,
+    userSessions,
+    ADMIN_USERS,
+    CHANNEL_ID,
+    BOT_USERNAME
+  );
+}
 
     return res.status(200).json({ ok: true });
 
