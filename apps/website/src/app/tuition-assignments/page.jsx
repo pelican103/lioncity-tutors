@@ -1027,9 +1027,45 @@ export default function TuitionAssignmentsPage() {
           />
 
           {/* Enhanced Sticky Action Bar */}
-          <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-gray-200/50 shadow-lg z-40">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-              <div className="flex items-center justify-between">
+          <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200/50 shadow-lg z-50">
+            <div className="max-w-7xl mx-auto px-4 py-3">
+              {/* Mobile Layout (simplified) */}
+              <div className="sm:hidden">
+                {selectedAssignments.length > 0 ? (
+                  <div className="flex items-center justify-between pr-20">
+                    {/* Left: Selection count */}
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+                      <span className="text-sm font-semibold text-gray-900">
+                        {selectedAssignments.length} Selected
+                      </span>
+                    </div>
+                    
+                    {/* Right: Action buttons */}
+                    <div className="flex items-center space-x-2">
+                      <button 
+                        onClick={() => setSelectedAssignments([])}
+                        className="text-xs text-gray-500 hover:text-gray-700 px-3 py-1 rounded"
+                      >
+                        Clear
+                      </button>
+                      <button 
+                        onClick={handleApplyClick}
+                        className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-medium py-3 px-4 rounded-lg text-sm shadow-lg"
+                      >
+                        Apply ({selectedAssignments.length})
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-2">
+                    <span className="text-sm text-gray-500">Select assignments to apply</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Desktop Layout (full featured) */}
+              <div className="hidden sm:flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
                     <div className={`w-3 h-3 rounded-full transition-colors duration-300 ${
@@ -1041,8 +1077,8 @@ export default function TuitionAssignmentsPage() {
                   </div>
                   
                   {selectedAssignments.length > 0 && (
-                    <div className="hidden sm:flex items-center text-sm text-gray-600 space-x-2">
-                      <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <div className="flex items-center text-sm text-gray-600 space-x-2">
+                      <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                       </svg>
                       <span>Ready to apply</span>
@@ -1071,31 +1107,26 @@ export default function TuitionAssignmentsPage() {
                   >
                     {selectedAssignments.length === 0 ? (
                       <span className="flex items-center">
-                        <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                         </svg>
                         Select Assignments
                       </span>
                     ) : (
                       <span className="flex items-center">
-                        <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                         </svg>
                         Apply for Selected ({selectedAssignments.length})
                       </span>
                     )}
-                    
-                    {/* Animated background for active state */}
-                    {selectedAssignments.length > 0 && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                    )}
                   </button>
                 </div>
               </div>
               
-              {/* Progress indicator */}
+              {/* Progress indicator - only on desktop */}
               {selectedAssignments.length > 0 && (
-                <div className="mt-3 flex items-center justify-center">
+                <div className="hidden sm:flex mt-3 items-center justify-center">
                   <div className="flex space-x-1">
                     {Array.from({ length: Math.min(selectedAssignments.length, 5) }).map((_, i) => (
                       <div
