@@ -2,7 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 
 import mongoose from 'mongoose';
 import Tutor from '../models/Tutor.js';
-import { Assignment } from '../../../packages/shared/index.js';
+import { Assignment } from '../../../packages/shared/server-exports.js';
 
 let bot = null;
 let isConnected = false;

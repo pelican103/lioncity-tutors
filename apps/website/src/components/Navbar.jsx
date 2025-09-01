@@ -73,6 +73,10 @@ export default function Navbar() {
           <Link href="/register-tutor" className={navLinkStyle("/register-tutor")}>
             Register As a Tutor
           </Link>
+          
+          <Link href="/tuition-assignments" className={navLinkStyle("/tuition-assignments")}>
+            Tuition Assignments
+          </Link>
 
           <Dropdown
             label="Levels & Exams"
@@ -129,6 +133,10 @@ export default function Navbar() {
             </Link>
             <Link href="/register-tutor" onClick={() => setMenuOpen(false)} className={navLinkStyle("/register-tutor")}>
               Register As a Tutor
+            </Link>
+            
+            <Link href="/tuition-assignments" onClick={() => setMenuOpen(false)} className={navLinkStyle("/tuition-assignments")}>
+              Tuition Assignments
             </Link>
 
             <Dropdown

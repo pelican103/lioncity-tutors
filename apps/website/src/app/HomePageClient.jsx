@@ -9,6 +9,7 @@ import Image from 'next/image';
 import UniqueFeaturesSection from "@/components/UniqueFeaturesSection";
 import { Step1, Step2, Step3 } from "@/components/FormSteps";
 import TutorPopup from "@/components/TutorPopup";
+import { Star, CheckCircle, Award, Users, Clock, Shield, Quote, TrendingUp, MapPin, Phone, Mail } from "lucide-react";
 
 // Lazy-loaded sections
 import dynamic from 'next/dynamic';
@@ -17,6 +18,21 @@ const Testimonials = dynamic(() => import('@/components/TestimonialsSection'), {
 const SuccessStories = dynamic(() => import('@/components/SuccessStoriesSection'), { ssr: false });
 const FAQSection = dynamic(() => import('@/components/FAQSection'), { ssr: false });
 const HowitWorksSection = dynamic(() => import('@/components/HowItWorksSection'), { ssr: false });
+const TestimonialCard = ({ t }) => (
+  <article className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+  <div className="flex items-start gap-4">
+    <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-700 font-bold">{t.initials}</div>
+    <div>
+      <div className="flex items-center gap-2 mb-1">
+        <h4 className="font-semibold text-slate-900">{t.name}</h4>
+        <div className="text-xs text-slate-500">• {t.relation}</div>
+      </div>
+      <p className="text-slate-700 text-sm leading-relaxed">{t.text}</p>
+      <div className="mt-3 text-xs text-slate-500">{t.subject} · {t.location}</div>
+    </div>
+    </div>
+  </article>
+  );
 
 // Counter component
 const Counter = ({ end, duration = 2.5, suffix = "", decimals = 0 }) => {
@@ -111,210 +127,21 @@ export default function HomePageClient() {
 
   const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: 'smooth' });
   const scrollToFAQ = () => faqRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const testimonials = [
+    { initials: 'S.T', name: 'Sharon T.', relation: 'Parent of Sec 4', text: 'Matched an excellent O-Level Math tutor within a day. Clear updates and professional service.', subject: 'O-Level Math', location: 'Tampines' },
+    { initials: 'D.L', name: 'David L.', relation: 'Parent of P6', text: 'No fees for parents. Tutor helped my son move up 3 grades in 2 months.', subject: 'PSLE Math', location: 'Jurong West' },
+    { initials: 'R.R', name: 'Mrs Rahman', relation: 'Parent of JC1', text: 'Great follow-up and tutor matched to learning style. Highly recommended.', subject: 'H2 Chemistry', location: 'Woodlands' }
+    ];
 
   return (
     <>
-      <Head>
-        <title>LionCity Tutors – MOE-Certified PSLE, O-Level & JC Tutors</title>
-        <meta name="description" content="LionCity Tutors connects Singapore parents with qualified MOE-certified tutors for PSLE, O-Level & JC. 100% free for parents." />
-        {/* Local Business Schema */}
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "LocalBusiness",
-              "name": "LionCity Tutors",
-              "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Boon Lay Wy, Tradehub 21",
-                "addressLocality": "Singapore",
-                "postalCode": "609966",
-                "addressCountry": "SG"
-              },
-              "url": "https://www.lioncitytutors.com/",
-              "telephone": "+65 88701152",
-              "openingHoursSpecification": [
-                {
-                  "@type": "OpeningHoursSpecification",
-                  "dayOfWeek": [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                    "Sunday"
-                  ],
-                  "opens": "09:00",
-                  "closes": "21:00"
-                }
-              ],
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.8", 
-                "reviewCount": "13",  
-                "bestRating": "5",
-                "worstRating": "3"
-              }
-            }
-          `}
-        </script>
-        {/* Service Schema */}
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "Service",
-              "name": "Home Tuition Services",
-              "description": "Professional home tuition matching service connecting students with qualified tutors for Primary, Secondary, and JC subjects in Singapore.",
-              "provider": {
-                "@type": "LocalBusiness",
-                "name": "LionCity Tutors",
-                "url": "https://www.lioncitytutors.com/"
-              },
-              "serviceType": "Home Tuition",
-              "areaServed": {
-                "@type": "Country",
-                "name": "Singapore"
-              },
-              "hasOfferingCatalog": {
-                "@type": "OfferingCatalog",
-                "name": "Tuition Services",
-                "itemListElement": [
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Primary School Tuition",
-                      "description": "Home tuition for Primary 1-6 students"
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Secondary School Tuition", 
-                      "description": "Home tuition for Secondary 1-5 students"
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Junior College Tuition",
-                      "description": "Home tuition for JC1-2 students"
-                    }
-                  }
-                ]
-              },
-              "offers": {
-                "@type": "Offer",
-                "description": "Free tutor matching service - no agency fees",
-                "price": "0",
-                "priceCurrency": "SGD"
-              }
-            }
-          `}
-        </script>
-        {/* FAQ Page Schema */}
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              "mainEntity": [
-                {
-                  "@type": "Question",
-                  "name": "How much does it cost to request a tutor?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Our matching service is completely free! You only pay the tutor's rate directly to them after the lessons begin."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "How quickly will I receive tutor profiles?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "We typically send you tutor profiles within 24 hours of your request. Our team works 7 days a week to ensure fast matching."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "What qualifications do your tutors have?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Our tutors range from university undergraduates to MOE teachers. All tutors are carefully vetted and have proven academic excellence."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "Can I try a lesson before committing?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes! We offer trial lessons so you can ensure the tutor is the right fit for your child before making a long-term commitment."
-                  }
-                }
-              ]
-            }
-          `}
-        </script>
-
-        {/* Educational Organization Schema */}
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "EducationalOrganization",
-              "name": "LionCity Tutors",
-              "url": "https://www.lioncitytutors.com/",
-              "logo": "https://www.lioncitytutors.com/logo.png",
-              "description": "Singapore's trusted home tuition agency connecting parents with MOE-certified tutors for PSLE, O-Level, and JC subjects.",
-              "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Boon Lay Wy, Tradehub 21",
-                "addressLocality": "Singapore",
-                "postalCode": "609966",
-                "addressCountry": "SG"
-              },
-              "telephone": "+65 88701152",
-              "email": "hello@lioncitytutors.com",
-              "foundingDate": "2020",
-              "numberOfEmployees": "10-50",
-              "areaServed": {
-                "@type": "Country",
-                "name": "Singapore"
-              },
-              "sameAs": [
-                "https://www.facebook.com/lioncitytutors",
-                "https://www.instagram.com/lioncitytutors"
-              ],
-              "hasCredential": [
-                {
-                  "@type": "EducationalOccupationalCredential",
-                  "name": "MOE Teaching Certification",
-                  "description": "Ministry of Education teaching qualifications"
-                }
-              ],
-              "offers": {
-                "@type": "Offer",
-                "name": "Home Tuition Matching Service",
-                "description": "Free matching service connecting parents with qualified tutors",
-                "price": "0",
-                "priceCurrency": "SGD"
-              }
-            }
-          `}
-        </script>
-      </Head>
-
       <main className="bg-white text-gray-800">
         <TutorPopup />
         {/* Hero */}
         <section className="bg-white px-4 py-12 md:py-16">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight">
                 Trusted PSLE, O-Level & JC Tutors —{" "}
                 <span className="text-emerald-600">100% Free for Parents</span>
               </h1>
@@ -322,7 +149,8 @@ export default function HomePageClient() {
                 MOE-trained & top-scoring tutors, matched in under 24 hours. No agency
                 fee for parents — we only charge tutors.
               </p>
-              <div className="mt-6 flex items-center gap-4">
+
+              <div className="mt-6 flex items-center gap-4 mb-8">
                 <Button
                   className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-3 rounded-xl shadow"
                   onClick={() => {
@@ -337,19 +165,31 @@ export default function HomePageClient() {
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => gaEvent("lead_submit", { method: "whatsapp" })}
-                  className="underline text-emerald-700"
-                >
+                  className="text-emerald-700 underline font-medium flex items-center gap-2"
+                ><Phone className="w-4 h-4" /> 
                   Prefer WhatsApp? Chat now
                 </a>
               </div>
 
-              {/* Trust strip */}
-              <ul className="mt-6 flex flex-wrap items-center gap-6 text-sm text-gray-600">
-                <li>⭐ 4.9/5 from Singapore parents</li>
-                <li>✔️ MOE-familiar syllabus</li>
-                <li>⚡ Match within 24 hours</li>
-                <li>🛡️ No parent fees, ever</li>
-              </ul>
+              {/* Trust Indicators */}
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="flex items-center gap-2 text-slate-600">
+                  <Star className="w-4 h-4 text-amber-500 fill-current" />
+                  <span>4.9/5 from Singapore parents</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span>MOE-familiar curriculum</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-600">
+                  <Clock className="w-4 h-4 text-blue-500" />
+                  <span>Match within 24 hours</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-600">
+                  <Shield className="w-4 h-4 text-purple-500" />
+                  <span>No parent fees, ever</span>
+                </div>
+              </div>
             </div>
             
                   
@@ -408,13 +248,30 @@ export default function HomePageClient() {
 
         {/* How It Works Section */}
         <HowitWorksSection formRef={formRef} />
+        
+        {/* SOCIAL PROOF */}
+<section className="py-12 bg-slate-50">
+<div className="max-w-6xl mx-auto px-6">
+<div className="text-center mb-8">
+<h2 className="text-2xl md:text-3xl font-bold">Real Parents. Real Results.</h2>
+<p className="text-slate-600">Verified reviews from families who improved grades and confidence.</p>
+</div>
+
+
+<div className="grid md:grid-cols-3 gap-6">
+{testimonials.map((t, i) => <TestimonialCard key={i} t={t} />)}
+</div>
+
+
+<div className="mt-8 text-center">
+<Button onClick={() => window.open('https://search.google.com/local/reviews?placeid=ChIJz5sczNYR2jERc_4Ka3tDwyY','_blank')} className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl">View more reviews on Google</Button>
+</div>
+</div>
+</section>
 
         {/* Unique Features */}
         <UniqueFeaturesSection />
         
-        {/* Testimonials */}
-        <Testimonials formRef = {formRef}/>
-
         {/* Success Stories */}
         <SuccessStories  />
 
@@ -566,6 +423,50 @@ export default function HomePageClient() {
         <div ref={faqRef}>
           <FAQSection />
         </div>
+        
+        {/* Contact Information Section for Local SEO */}
+        <section className="bg-slate-600 text-white py-16">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="md:col-span-2">
+                <h3 className="text-2xl font-bold mb-4">Get In Touch With Singapore's Top Tuition Agency</h3>
+                <p className="text-slate-300 mb-6 leading-relaxed">
+                  Ready to transform your child's academic journey? Our experienced team is here to help you find the perfect tutor for PSLE, O-Level, A-Level, or IB subjects.
+                </p>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 text-slate-300">
+                    <Phone className="w-5 h-5 text-blue-400" />
+                    <span>+65 8870 1152</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-slate-300">
+                    <Mail className="w-5 h-5 text-green-400" />
+                    <span>admin@lioncitytutors.com</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-slate-300">
+                    <MapPin className="w-5 h-5 text-orange-400" />
+                    <span>Serving all areas across Singapore</span>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-slate-800/50 p-6 rounded-2xl">
+                <h4 className="font-bold mb-4">Operating Hours</h4>
+                <div className="space-y-2 text-sm text-slate-300">
+                  <div className="flex justify-between">
+                    <span>Monday - Sunday</span>
+                    <span>9:00 AM - 9:00 PM</span>
+                  </div>
+                  
+                </div>
+                <div className="mt-4 p-3 bg-green-900/30 rounded-lg">
+                  <p className="text-green-300 text-xs">
+                    WhatsApp us anytime for immediate response!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
 
         {/* Final CTA Banner */}
         <section className="bg-red-500 text-white py-10 px-6 text-center">
