@@ -329,7 +329,6 @@ export default function TuitionAssignmentsPage() {
       });
   }, [allAssignments, levelFilter, subjectFilter, searchKeyword]);
 
-  // SEO and page metadata - ENHANCED
   const pageTitle = useMemo(() => {
     const count = filteredAssignments.length;
     const level = levelFilter ? ` ${levelFilter}` : '';
