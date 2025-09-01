@@ -312,6 +312,20 @@ export default function TuitionAssignmentsPage() {
 
   // Modal state
   const [showModal, setShowModal] = useState(false);
+  const [expandedDescriptions, setExpandedDescriptions] = useState(new Set());
+
+  const toggleDescription = (assignmentId, e) => {
+    e.stopPropagation();
+    setExpandedDescriptions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(assignmentId)) {
+        newSet.delete(assignmentId);
+      } else {
+        newSet.add(assignmentId);
+      }
+      return newSet;
+    });
+  };
 
   // --- Main Filtering Logic ---
   const filteredAssignments = useMemo(() => {
@@ -841,150 +855,246 @@ export default function TuitionAssignmentsPage() {
                         </div>
                       )}
                       
-                      <div className="p-6 flex items-start space-x-4">
-                        {/* Enhanced Checkbox */}
-                        <div className="relative mt-1 flex-shrink-0">
-                          <input
-                            type="checkbox"
-                            className="sr-only"
-                            checked={isSelected}
-                            onChange={() => handleAssignmentSelect(assignment._id)}
-                            onClick={(e) => e.stopPropagation()}
-                            aria-labelledby={`assignment-title-${assignment._id}`}
-                          />
-                          <div className={`h-6 w-6 border-2 rounded-lg transition-all duration-200 cursor-pointer flex items-center justify-center ${
-                            isSelected 
-                              ? 'bg-teal-600 border-teal-600 scale-110' 
-                              : 'border-gray-300 hover:border-teal-500 hover:scale-105'
-                          }`}>
-                            {isSelected && (
-                              <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                              </svg>
-                            )}
+                      <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-start space-y-4 sm:space-y-0 sm:space-x-4">
+                        {/* Enhanced Checkbox - Mobile friendly */}
+                        <div className="flex items-start space-x-3 sm:block sm:space-x-0">
+                          <div className="relative mt-1 flex-shrink-0">
+                            <input
+                              type="checkbox"
+                              className="sr-only"
+                              checked={isSelected}
+                              onChange={() => handleAssignmentSelect(assignment._id)}
+                              onClick={(e) => e.stopPropagation()}
+                              aria-labelledby={`assignment-title-${assignment._id}`}
+                            />
+                            <div className={`h-6 w-6 border-2 rounded-lg transition-all duration-200 cursor-pointer flex items-center justify-center ${
+                              isSelected 
+                                ? 'bg-teal-600 border-teal-600 scale-110' 
+                                : 'border-gray-300 hover:border-teal-500 hover:scale-105'
+                            }`}>
+                              {isSelected && (
+                                <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Mobile: Assignment ID Badge inline with checkbox */}
+                          <div className="sm:hidden">
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-orange-400 to-red-400 text-white shadow-sm">
+                              {getAssignmentId(assignment._id)}
+                            </span>
                           </div>
                         </div>
 
                         {/* Main Content */}
                         <div className="flex-1 min-w-0">
-                          {/* Header Section */}
-                          <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-                            <div className="min-w-0 flex-1">
-                              {/* Assignment ID Badge */}
-                              <div className="flex items-center gap-3 mb-3">
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-orange-400 to-red-400 text-white shadow-sm">
-                                  <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                    <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                                  </svg>
-                                  {getAssignmentId(assignment._id)}
-                                </span>
-                                
-                                {/* Urgency indicator */}
-                                {assignment.urgent && (
-                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 animate-pulse">
-                                    <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                                    </svg>
-                                    Urgent
-                                  </span>
-                                )}
-                              </div>
-                              
-                              {/* Title */}
-                              <h3 id={`assignment-title-${assignment._id}`} className="text-xl font-bold text-gray-900 mb-3 group-hover:text-teal-700 transition-colors line-clamp-2">
+                          {/* Mobile Layout */}
+                          <div className="sm:hidden space-y-3">
+                            {/* Title - Expandable on mobile */}
+                            <div>
+                              <h3 id={`assignment-title-${assignment._id}`} className="text-lg font-bold text-gray-900 group-hover:text-teal-700 transition-colors">
                                 {assignment.title}
                               </h3>
-                              
-                              {/* Level & Subject Pills */}
-                              <div className="flex flex-wrap gap-2 mb-4">
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
-                                  <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
-                                  </svg>
+                            </div>
+                            
+                            {/* Rate - Prominent on mobile */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex flex-wrap gap-1">
+                                <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800">
                                   {assignment.level}
                                 </span>
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 border border-purple-200">
-                                  <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                                  </svg>
+                                <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-purple-100 text-purple-800">
                                   {assignment.subject}
                                 </span>
                               </div>
-                            </div>
-                            
-                            {/* Rate Display */}
-                            <div className="text-right flex-shrink-0">
-                              <div className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                                {formatRate(assignment.rate)}
-                              </div>
-                              <div className="text-xs text-gray-500 mt-1">
-                                {assignment.rate && assignment.rate !== 'Tutor to propose' ? 'per hour' : 'Negotiable'}
+                              <div className="text-right">
+                                <div className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                                  {formatRate(assignment.rate)}
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-                          {/* Details Grid */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div className="flex items-center space-x-3 p-3 bg-gray-50/80 rounded-xl border border-gray-100">
-                              <div className="flex-shrink-0">
+                            {/* Location & Schedule - Compact */}
+                            <div className="space-y-2">
+                              <div className="flex items-center text-sm text-gray-600">
                                 <LocationIcon />
+                                <span className="truncate">{assignment.location}</span>
                               </div>
-                              <div className="min-w-0 flex-1">
-                                <p className="text-sm font-medium text-gray-900">Location</p>
-                                <p className="text-sm text-gray-600 truncate" title={assignment.location}>
-                                  {assignment.location}
-                                </p>
+                              <div className="flex items-center text-sm text-gray-600">
+                                <ScheduleIcon />
+                                <span className="truncate">{assignment.frequency}</span>
                               </div>
                             </div>
-                            
-                            <div className="flex items-center space-x-3 p-3 bg-gray-50/80 rounded-xl border border-gray-100">
-                              <div className="flex-shrink-0">
-                                <ScheduleIcon />
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <p className="text-sm font-medium text-gray-900">Schedule</p>
-                                <p className="text-sm text-gray-600 truncate" title={assignment.frequency}>
-                                  {assignment.frequency}
+
+                            {/* Description - Show more/less functionality */}
+                            {assignment.description && (
+                              <div className="p-3 bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg border border-gray-100">
+                                <p className="text-sm text-gray-700 leading-relaxed">
+                                  {expandedDescriptions.has(assignment._id) ? (
+                                    <>
+                                      {assignment.description}
+                                      <button 
+                                        onClick={(e) => toggleDescription(assignment._id, e)}
+                                        className="text-teal-600 hover:text-teal-700 font-medium ml-1 underline"
+                                      >
+                                        Show less
+                                      </button>
+                                    </>
+                                  ) : assignment.description.length > 90 ? (
+                                    <>
+                                      {assignment.description.substring(0,90)}...
+                                      <button 
+                                        onClick={(e) => toggleDescription(assignment._id, e)}
+                                        className="text-teal-600 hover:text-teal-700 font-medium ml-1 underline"
+                                      >
+                                        Show more
+                                      </button>
+                                    </>
+                                  ) : (
+                                    assignment.description
+                                  )}
                                 </p>
+                              </div>
+                            )}
+
+                            {/* Footer */}
+                            <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                              <div className="text-xs text-gray-500">
+                                Posted {new Date(assignment.createdAt).toLocaleDateString('en-SG', { 
+                                  month: 'short', 
+                                  day: 'numeric' 
+                                })}
+                              </div>
+                              <div className={`text-xs font-medium transition-all duration-200 ${
+                                isSelected ? 'text-teal-600' : 'text-gray-400'
+                              }`}>
+                                {isSelected ? 'Selected' : 'Tap to select'}
                               </div>
                             </div>
                           </div>
 
-                          {/* Description */}
-                          {assignment.description && (
-                            <div className="mb-4 p-4 bg-gradient-to-r from-slate-50 to-gray-50 rounded-xl border border-gray-100">
-                              <h4 className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
-                                <svg className="h-4 w-4 mr-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                                </svg>
-                                Assignment Details
-                              </h4>
-                              <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">
-                                {assignment.description}
-                              </p>
-                            </div>                           )}
-
-                          {/* Footer */}
-                          <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                            <div className="flex items-center text-xs text-gray-500">
-                              <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                              </svg>
-                              Posted {new Date(assignment.createdAt).toLocaleDateString('en-SG', { 
-                                year: 'numeric', 
-                                month: 'short', 
-                                day: 'numeric' 
-                              })}
+                          {/* Desktop Layout - Keep existing */}
+                          <div className="hidden sm:block">
+                            {/* Header Section */}
+                            <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+                              <div className="min-w-0 flex-1">
+                                {/* Assignment ID Badge */}
+                                <div className="flex items-center gap-3 mb-3">
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-orange-400 to-red-400 text-white shadow-sm">
+                                    <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                      <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                                    </svg>
+                                    {getAssignmentId(assignment._id)}
+                                  </span>
+                                  
+                                  {assignment.urgent && (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 animate-pulse">
+                                      <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                      </svg>
+                                      Urgent
+                                    </span>
+                                  )}
+                                </div>
+                                
+                                {/* Title - No truncation on desktop */}
+                                <h3 id={`assignment-title-${assignment._id}`} className="text-xl font-bold text-gray-900 mb-3 group-hover:text-teal-700 transition-colors">
+                                  {assignment.title}
+                                </h3>
+                                
+                                {/* Level & Subject Pills */}
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                                    <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                      <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                                    </svg>
+                                    {assignment.level}
+                                  </span>
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                                    <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                      <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                                    </svg>
+                                    {assignment.subject}
+                                  </span>
+                                </div>
+                              </div>
+                              
+                              {/* Rate Display */}
+                              <div className="text-right flex-shrink-0">
+                                <div className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                                  {formatRate(assignment.rate)}
+                                </div>
+                                <div className="text-xs text-gray-500 mt-1">
+                                  {assignment.rate && assignment.rate !== 'Tutor to propose' ? 'per hour' : 'Negotiable'}
+                                </div>
+                              </div>
                             </div>
-                            
-                            {/* Quick Action Indicator */}
-                            <div className={`flex items-center text-xs font-medium transition-all duration-200 ${
-                              isSelected ? 'text-teal-600' : 'text-gray-400 group-hover:text-teal-500'
-                            }`}>
-                              <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                              </svg>
-                              {isSelected ? 'Selected' : 'Click to select'}
+
+                            {/* Details Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                              <div className="flex items-center space-x-3 p-3 bg-gray-50/80 rounded-xl border border-gray-100">
+                                <div className="flex-shrink-0">
+                                  <LocationIcon />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-sm font-medium text-gray-900">Location</p>
+                                  <p className="text-sm text-gray-600" title={assignment.location}>
+                                    {assignment.location}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-center space-x-3 p-3 bg-gray-50/80 rounded-xl border border-gray-100">
+                                <div className="flex-shrink-0">
+                                  <ScheduleIcon />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-sm font-medium text-gray-900">Schedule</p>
+                                  <p className="text-sm text-gray-600" title={assignment.frequency}>
+                                    {assignment.frequency}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Description - Full on desktop */}
+                            {assignment.description && (
+                              <div className="mb-4 p-4 bg-gradient-to-r from-slate-50 to-gray-50 rounded-xl border border-gray-100">
+                                <h4 className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+                                  <svg className="h-4 w-4 mr-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                                  </svg>
+                                  Assignment Details
+                                </h4>
+                                <p className="text-sm text-gray-700 leading-relaxed">
+                                  {assignment.description}
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Footer */}
+                            <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                              <div className="flex items-center text-xs text-gray-500">
+                                <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                                </svg>
+                                Posted {new Date(assignment.createdAt).toLocaleDateString('en-SG', { 
+                                  year: 'numeric', 
+                                  month: 'short', 
+                                  day: 'numeric' 
+                                })}
+                              </div>
+                              
+                              <div className={`flex items-center text-xs font-medium transition-all duration-200 ${
+                                isSelected ? 'text-teal-600' : 'text-gray-400 group-hover:text-teal-500'
+                              }`}>
+                                <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                  <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                                </svg>
+                                {isSelected ? 'Selected' : 'Click to select'}
+                              </div>
                             </div>
                           </div>
                         </div>
