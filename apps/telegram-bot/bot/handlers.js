@@ -977,7 +977,7 @@ async function handleContact(bot, chatId, userId, contact, Tutor, userSessions, 
       const assignmentMsg = formatAssignment(assignment);
       
       await safeSend(bot, chatId, 
-        `📋 *${profileMsg}\n\n` +
+        `📋 ${profileMsg}\n\n` +
         `ℹ️ Your *Introduction* and *Teaching Experience* is not shown here to avoid long messages. If you want to review or edit them, please click *Update Profile* in the menu.\n\n` +
         `🎯 *Assignment Details*\n\n${assignmentMsg}\n\n` +
         `Please review your profile and the assignment details above. Would you like to update your profile or proceed with the application?`, 
