@@ -44,7 +44,7 @@ const assignmentSchema = new mongoose.Schema({
   },
   startDate: {
     type: String,
-    required: true
+    required: false
   },
   
   // Rate Information
