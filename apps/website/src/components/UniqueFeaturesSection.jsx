@@ -78,15 +78,20 @@ export default function UniqueFeaturesSection() {
   return (
     <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gradient-to-br from-blue-50 to-white">
       <div className="max-w-6xl mx-auto">
-        <motion.h2
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6 }}
-          className="text-2xl sm:text-3xl font-extrabold mb-8 sm:mb-12 text-center text-blue-800 leading-tight"
+          className="text-center mb-12"
         >
-          Discover the LionCity Tutors Advantage
-        </motion.h2>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-blue-800 leading-tight">
+            Why Parents in Singapore Choose Us
+          </h2>
+          <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
+            We go beyond just finding a tutor. We deliver a comprehensive, supportive, and results-driven experience.
+          </p>
+        </motion.div>
 
         <motion.div
           variants={containerVariants}

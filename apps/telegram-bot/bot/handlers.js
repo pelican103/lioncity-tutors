@@ -1,4 +1,4 @@
-import { EDUCATION_LEVELS, getSubjectsForLevel } from '../../../packages/shared/index.js';
+import { EDUCATION_LEVELS, getSubjectsForLevel, RATE_MAPPINGS } from '../../../packages/shared/index.js';
 
 /* global process */
 
@@ -199,9 +199,8 @@ function formatAssignment(assignment) {
   msg += `*Level:* ${assignment.level}\n`;
   msg += `*Subject:* ${assignment.subject}\n`;
   msg += `*Location:* ${assignment.location}\n`;
-  msg += `*Rate:* ${assignment.rate}\n`;
   msg += `*Frequency:* ${assignment.frequency}\n`;
-  msg += `*Start Date:* ${assignment.startDate}\n`;
+  msg += `*Rate:* ${assignment.rate}\n`;  
   
   if (assignment.description) {
     msg += `\n*Description:* ${assignment.description}\n`;
@@ -217,9 +216,9 @@ function formatAssignmentForChannel(assignment) {
   msg += `📚 *Level:* ${assignment.level}\n`;
   msg += `📖 *Subject:* ${assignment.subject}\n`;
   msg += `📍 *Location:* ${assignment.location}\n`;
-  msg += `💰 *Rate:* $${assignment.rate}/${assignment.rateType || 'hour'}\n`;
   msg += `📅 *Frequency:* ${assignment.frequency}\n`;
-  msg += `🚀 *Start Date:* ${assignment.startDate}\n`;
+  msg += `💰 *Rate:* ${assignment.rate}\n`;
+
   
   if (assignment.description) {
     msg += `\n📝 *Description:* ${assignment.description}\n`;
@@ -1134,7 +1133,6 @@ function createInlineKeyboard(options, callbackPrefix, columns = 2) {
   return keyboard;
 }
 
-
 // Handle assignment creation steps
 async function handleAssignmentStep(bot, chatId, text, userSessions) {
   const session = userSessions[chatId];
@@ -1165,21 +1163,9 @@ async function handleAssignmentStep(bot, chatId, text, userSessions) {
       
       case 'location':
         assignmentData.location = text.trim();
-        session.currentStep = 'rate';
-        
-        await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 5 of 7: Enter the rate\n\n*Examples:* 55-75/hr, 40/hr, etc.', {
-          parse_mode: 'Markdown',
-          reply_markup: {
-            inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
-          }
-        });
-        break;
-      
-      case 'rate':
-        assignmentData.rate = text.trim();
         session.currentStep = 'frequency';
         
-        await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 6 of 7: Enter the frequency\n\n*Examples:* Once a week, Twice a week, 3 times a week, Daily, Flexible, etc.', {
+        await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 5 of 7: Enter the frequency\n\n*Examples:* Once a week, Twice a week, 3 times a week, Daily, Flexible, etc.', {
           parse_mode: 'Markdown',
           reply_markup: {
             inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
@@ -1189,27 +1175,35 @@ async function handleAssignmentStep(bot, chatId, text, userSessions) {
       
       case 'frequency':
         assignmentData.frequency = text.trim();
-        session.currentStep = 'startDate';
-        
-        await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 7 of 7: Enter the start date\n\n*Examples:* ASAP, today, tomorrow, next Monday, 15 Dec 2024, etc.', {
+        session.currentStep = 'rate';
+
+        await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 6 of 7: Select the rate type:', {
           parse_mode: 'Markdown',
           reply_markup: {
-            inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
+            inline_keyboard: [
+              [{ text: '📈 Market Rate', callback_data: 'select_rate_market' }],
+              [{ text: '💰 Custom Amount', callback_data: 'select_rate_custom' }]
+            ]
           }
         });
+        session.currentStep = 'rate';
         break;
       
-      case 'startDate':
-        assignmentData.startDate = text.trim();
-        session.currentStep = 'description';
-        
-        await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nFinal Step: Enter additional description or requirements\n\n*Type "skip" to leave empty*\n\n*Examples:* Looking for MOE/Ex-MOE tutor, Student needs help with exam prep, etc.', {
-          parse_mode: 'Markdown',
-          reply_markup: {
-            inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
-          }
-        });
+      case 'rate':
+        if (session.waitingForCustomRate) {
+          assignmentData.rate = text.trim();
+          session.waitingForCustomRate = false;
+          session.currentStep = 'description';
+          
+          await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 7 of 7: Enter additional description or requirements\n\n*Type "skip" to leave empty*\n\n*Examples:* Looking for MOE/Ex-MOE tutor, Student needs help with exam prep, etc.', {
+            parse_mode: 'Markdown',
+            reply_markup: {
+              inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
+            }
+          });
+        }
         break;
+        
       
       case 'description': {
         if (text.toLowerCase().trim() !== 'skip') {
@@ -1285,6 +1279,48 @@ async function handleAssignmentCallbackQuery(bot, callbackQuery, userSessions) {
           inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
         }
       });
+    } else if (data.startsWith('select_rate_')) {
+
+        // User clicked "📈 Market Rate"
+        if (data === 'select_rate_market') {
+          const level = session.assignmentData.level;
+          const rates = RATE_MAPPINGS[level];
+          
+          // Build the combined rate string
+          const rateParts = Object.entries(rates).map(([type, rate]) => {
+            // Extracts the abbreviation, e.g., "PT" from "PT (Part-Time)"
+            const abbreviation = type.split(' ')[0]; 
+            return `${rate} (${abbreviation})`;
+          });
+          const finalRateString = rateParts.join(', ');
+
+          // Save the combined string and move to the next step
+          session.assignmentData.rate = finalRateString;
+          session.currentStep = 'description'; // Correctly move to description step
+          
+          await bot.editMessageText('🎯 *Creating New Assignment*\n\nStep 7 of 7: Enter additional description or requirements\n\n*Type "skip" to leave empty*', {
+            chat_id: chatId,
+            message_id: callbackQuery.message.message_id,
+            parse_mode: 'Markdown',
+            reply_markup: {
+              inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
+            }
+          });
+
+        // User clicked "💰 Custom Amount"
+        } else if (data === 'select_rate_custom') {
+          session.waitingForCustomRate = true;
+          session.currentStep = 'rate';
+          
+          await bot.editMessageText('🎯 *Creating New Assignment*\n\nStep 6 of 7: Enter your custom rate\n\n*Examples:* 55-75/hr, Negotiable\n\n*Please type your response:*', {
+            chat_id: chatId,
+            message_id: callbackQuery.message.message_id,
+            parse_mode: 'Markdown',
+            reply_markup: {
+              inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
+            }
+          });
+        } 
     }
     
     await bot.answerCallbackQuery(callbackQuery.id);
@@ -1301,10 +1337,9 @@ function formatAssignmentPreview(assignment) {
   msg += `*📚 Level:* ${assignment.level}\n`;
   msg += `*📖 Subject:* ${assignment.subject}\n`;
   msg += `*📍 Location:* ${assignment.location}\n`;
-  msg += `*💰 Rate:* ${assignment.rate}\n`;
   msg += `*📅 Frequency:* ${assignment.frequency}\n`;
-  msg += `*🚀 Start Date:* ${assignment.startDate}\n`;
-  
+  msg += `*💰 Rate:* ${assignment.rate}\n`;
+
   if (assignment.description) {
     msg += `\n*📝 Description:* ${assignment.description}\n`;
   }
@@ -1335,6 +1370,8 @@ async function confirmPostAssignment(bot, chatId, userSessions, Assignment, chan
     delete userSessions[chatId].state;
     delete userSessions[chatId].assignmentData;
     delete userSessions[chatId].currentStep;
+    delete userSessions[chatId].waitingForCustomRate;
+
     
     await safeSend(bot, chatId, `✅ *Assignment Posted Successfully!*\n\n📋 Assignment ID: ${savedAssignment._id}\n📢 Posted to channel\n📊 Status: Open for applications`, {
       parse_mode: 'Markdown',
@@ -1470,9 +1507,9 @@ async function viewAssignments(bot, chatId, page = 0, Assignment) {
       message += `📚 Level: ${assignment.level}\n`;
       message += `📖 Subject: ${assignment.subject}\n`;
       message += `📍 Location: ${assignment.location}\n`;
-      message += `💰 Rate: $${assignment.rate}/${assignment.rateType || 'hour'}\n`;
       message += `📅 Frequency: ${assignment.frequency}\n`;
-      message += `🚀 Start Date: ${assignment.startDate}\n\n`;
+      message += `💰 Rate: ${assignment.rate}\n`;
+
 
       buttons.push([{ text: `📝 Apply for Assignment ${index + 1}`, callback_data: `apply_assignment_${assignment._id}` }]);
     });

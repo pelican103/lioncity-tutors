@@ -14,25 +14,31 @@ import { Star, CheckCircle, Award, Users, Clock, Shield, Quote, TrendingUp, MapP
 // Lazy-loaded sections
 import dynamic from 'next/dynamic';
 import ReviewStrip from "@/components/ReviewStrip";
-const Testimonials = dynamic(() => import('@/components/TestimonialsSection'), { ssr: false });
 const SuccessStories = dynamic(() => import('@/components/SuccessStoriesSection'), { ssr: false });
 const FAQSection = dynamic(() => import('@/components/FAQSection'), { ssr: false });
 const HowitWorksSection = dynamic(() => import('@/components/HowItWorksSection'), { ssr: false });
 const TestimonialCard = ({ t }) => (
-  <article className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-  <div className="flex items-start gap-4">
-    <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-700 font-bold">{t.initials}</div>
-    <div>
-      <div className="flex items-center gap-2 mb-1">
-        <h4 className="font-semibold text-slate-900">{t.name}</h4>
-        <div className="text-xs text-slate-500">• {t.relation}</div>
-      </div>
-      <p className="text-slate-700 text-sm leading-relaxed">{t.text}</p>
-      <div className="mt-3 text-xs text-slate-500">{t.subject} · {t.location}</div>
+  <article className="bg-white p-6 rounded-2xl shadow-lg border border-slate-100 flex flex-col h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+    <div className="flex items-center gap-2 mb-3">
+      {[...Array(5)].map((_, i) => (
+        <Star key={i} className="w-5 h-5 text-amber-400 fill-current" />
+      ))}
     </div>
+    <div className="flex-grow">
+      <p className="text-slate-700 text-base leading-relaxed relative">
+        <Quote className="w-8 h-8 text-slate-100 absolute -top-2 -left-3" />
+        <span className="relative z-10">{t.text}</span>
+      </p>
+    </div>
+    <div className="mt-4 flex items-center gap-4 pt-4 border-t border-slate-100">
+      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-lg">{t.initials}</div>
+      <div>
+        <h4 className="font-semibold text-slate-900">{t.name}</h4>
+        <div className="text-sm text-slate-500">{t.relation} • {t.location}</div>
+      </div>
     </div>
   </article>
-  );
+);
 
 // Counter component
 const Counter = ({ end, duration = 2.5, suffix = "", decimals = 0 }) => {
@@ -140,69 +146,55 @@ export default function HomePageClient() {
         {/* Hero */}
         <section className="bg-white px-4 py-12 md:py-16">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+            
+            {/* Left Side: Content */}
             <div>
               <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-                Trusted PSLE, O-Level & JC Tutors —{" "}
-                <span className="text-emerald-600">100% Free for Parents</span>
+                Find the Right Tutor to Unlock Your Child's Potential.
+                <span className="text-emerald-600"> Expert Matches, Zero Agency Fees.</span>
               </h1>
+              
               <p className="mt-4 text-gray-700 text-lg">
-                MOE-trained & top-scoring tutors, matched in under 24 hours. No agency
-                fee for parents — we only charge tutors.
+                We connect you with top-rated, MOE-familiar tutors for PSLE, O-Level, and JC subjects. Get qualified profiles within 24 hours. Your child's success starts here.
               </p>
 
-              <div className="mt-6 flex items-center gap-4 mb-8">
+              <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                {/* PRIMARY CTA - Solid and Prominent */}
                 <Button
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-3 rounded-xl shadow"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8 py-6 rounded-xl shadow-lg text-xl w-full sm:w-auto"
                   onClick={() => {
                     formRef.current?.scrollIntoView({ behavior: "smooth" });
-                    gaEvent("lead_view", { form_id: "parent_request" });
+                    // gaEvent("lead_view", { form_id: "parent_request" }); // Uncomment if you have analytics setup
                   }}
                 >
-                  Request a Tutor
+                  Get Tutor Profiles Now
                 </Button>
+                
+                {/* SECONDARY CTA - Outline style, less prominent */}
                 <a
                   href="https://wa.me/6588701152?text=Hi%20LionCity%20Tutors%2C%20I%27m%20looking%20for%20a%20tutor."
                   target="_blank"
                   rel="noreferrer"
-                  onClick={() => gaEvent("lead_submit", { method: "whatsapp" })}
-                  className="text-emerald-700 underline font-medium flex items-center gap-2"
-                ><Phone className="w-4 h-4" /> 
-                  Prefer WhatsApp? Chat now
+                  // onClick={() => gaEvent("lead_submit", { method: "whatsapp" })} // Uncomment if you have analytics setup
+                  className="text-emerald-700 font-semibold flex items-center gap-2 border-2 border-emerald-600 px-4 py-2 text-sm rounded-xl hover:bg-emerald-50 transition-colors w-full sm:w-auto justify-center"
+                >
+                  <Phone className="w-5 h-5" />
+                  Chat on WhatsApp
                 </a>
               </div>
-
-              {/* Trust Indicators */}
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div className="flex items-center gap-2 text-slate-600">
-                  <Star className="w-4 h-4 text-amber-500 fill-current" />
-                  <span>4.9/5 from Singapore parents</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-600">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span>MOE-familiar curriculum</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-600">
-                  <Clock className="w-4 h-4 text-blue-500" />
-                  <span>Match within 24 hours</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-600">
-                  <Shield className="w-4 h-4 text-purple-500" />
-                  <span>No parent fees, ever</span>
-                </div>
-              </div>
             </div>
-            
-                  
-            {/* Optional placeholder illustration */}
-            <div className="rounded-2xl overflow-hidden shadow-inner h-64 md:h-80 relative">
+
+            {/* Right Side: Image */}
+            <div className="rounded-2xl overflow-hidden shadow-inner h-64 md:h-80 relative mt-8 md:mt-0">
               <Image
-                src="/final.webp"
-                alt="LionCity Tutors - Singapore Tuition Agency"
+                src="/final.webp" // Ensure you have this image in your /public folder
+                alt="A dedicated tutor from LionCity Tutors helping a student in Singapore excel."
                 fill
                 className="object-cover"
                 priority
               />
-            </div>                
+            </div>
+            
           </div>
         </section>
         
@@ -228,6 +220,30 @@ export default function HomePageClient() {
           </div>
         </section>
 
+        {/* How It Works Section */}
+        <HowitWorksSection formRef={formRef} />
+        
+        {/* Soical Proof */}
+        <section className="py-16 bg-slate-50">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold">Trusted by Parents Across Singapore</h2>
+              <p className="text-slate-600 mt-3 text-lg">Verified reviews from families who found success with our tutors.</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {testimonials.map((t, i) => <TestimonialCard key={i} t={t} />)}
+            </div>
+            <div className="mt-12 text-center">
+              <Button 
+                onClick={() => window.open('https://search.google.com/local/reviews?placeid=ChIJz5sczNYR2jERc_4Ka3tDwyY','_blank')} 
+                className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-3 rounded-xl shadow-md text-base"
+              >
+                Read More Google Reviews
+              </Button>
+            </div>
+          </div>
+        </section>
+            
         <section className="bg-blue-50 py-8">
           <div className="max-w-4xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-center md:text-left">
             <div className="flex items-center">
@@ -245,30 +261,7 @@ export default function HomePageClient() {
             </Button>
           </div>
         </section>
-
-        {/* How It Works Section */}
-        <HowitWorksSection formRef={formRef} />
         
-        {/* SOCIAL PROOF */}
-<section className="py-12 bg-slate-50">
-<div className="max-w-6xl mx-auto px-6">
-<div className="text-center mb-8">
-<h2 className="text-2xl md:text-3xl font-bold">Real Parents. Real Results.</h2>
-<p className="text-slate-600">Verified reviews from families who improved grades and confidence.</p>
-</div>
-
-
-<div className="grid md:grid-cols-3 gap-6">
-{testimonials.map((t, i) => <TestimonialCard key={i} t={t} />)}
-</div>
-
-
-<div className="mt-8 text-center">
-<Button onClick={() => window.open('https://search.google.com/local/reviews?placeid=ChIJz5sczNYR2jERc_4Ka3tDwyY','_blank')} className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl">View more reviews on Google</Button>
-</div>
-</div>
-</section>
-
         {/* Unique Features */}
         <UniqueFeaturesSection />
         
@@ -373,7 +366,7 @@ export default function HomePageClient() {
                 </div>
 
                 {/* Hover Effect Border */}
-                <div className="absolute inset-0 rounded-2xl border-2 border-amber-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 rounded-2xl border-2 border-amber-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.div>
 
               {/* Free Notes */}
@@ -423,50 +416,6 @@ export default function HomePageClient() {
         <div ref={faqRef}>
           <FAQSection />
         </div>
-        
-        {/* Contact Information Section for Local SEO */}
-        <section className="bg-slate-600 text-white py-16">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="md:col-span-2">
-                <h3 className="text-2xl font-bold mb-4">Get In Touch With Singapore's Top Tuition Agency</h3>
-                <p className="text-slate-300 mb-6 leading-relaxed">
-                  Ready to transform your child's academic journey? Our experienced team is here to help you find the perfect tutor for PSLE, O-Level, A-Level, or IB subjects.
-                </p>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-slate-300">
-                    <Phone className="w-5 h-5 text-blue-400" />
-                    <span>+65 8870 1152</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-slate-300">
-                    <Mail className="w-5 h-5 text-green-400" />
-                    <span>admin@lioncitytutors.com</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-slate-300">
-                    <MapPin className="w-5 h-5 text-orange-400" />
-                    <span>Serving all areas across Singapore</span>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-slate-800/50 p-6 rounded-2xl">
-                <h4 className="font-bold mb-4">Operating Hours</h4>
-                <div className="space-y-2 text-sm text-slate-300">
-                  <div className="flex justify-between">
-                    <span>Monday - Sunday</span>
-                    <span>9:00 AM - 9:00 PM</span>
-                  </div>
-                  
-                </div>
-                <div className="mt-4 p-3 bg-green-900/30 rounded-lg">
-                  <p className="text-green-300 text-xs">
-                    WhatsApp us anytime for immediate response!
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
 
         {/* Final CTA Banner */}
         <section className="bg-red-500 text-white py-10 px-6 text-center">

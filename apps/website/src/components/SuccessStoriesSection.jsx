@@ -7,30 +7,30 @@ export default function SuccessStoriesSection() {
   const stories = [
     {
       name: "Jonathan Goh",
-      role: "H2 Math, Raffles Institution",
-      before: "D (January)",
-      after: "A (Sept)",
-      quote: "Mrs Lim, the MOE teacher matched for my H2 Math was exceptional. Her teaching methods and practice materials were exactly what I needed.",
+      role: "JC2 Student, Raffles Institution",
+      before: "D Grade (Mid-Years)",
+      after: "A Grade (Prelims)",
+      quote: "The MOE teacher matched for my H2 Math was exceptional. Mrs. Lim's teaching methods and the targeted practice materials were exactly what I needed to grasp complex topics.",
       initial: "J",
-      improvement: "3 grades",
-      subject: "Mathematics"
+      improvement: "From D to A",
+      subject: "H2 Mathematics"
     },
     {
-      name: "Li Jie",
-      role: "PSLE Science, Nan Hua Primary",
-      before: "AL5 (March)",
-      after: "AL1 (Sept)",
-      quote: "Tutor James made Science fun and easy to understand. He helped my grades improve significantly!",
+      name: "Li Jie's Mother",
+      role: "Parent of a P6 Student, Nan Hua Primary",
+      before: "AL5 (Term 1)",
+      after: "AL1 (PSLE)",
+      quote: "Tutor James made Science engaging and easy to understand for my daughter. His patience and passion for teaching helped her grades improve significantly and boosted her confidence.",
       initial: "L",
-      improvement: "4 levels",
-      subject: "Science"
+      improvement: "From AL5 to AL1",
+      subject: "PSLE Science"
     }
   ];
 
   const stats = [
-    { number: "98%", label: "Success Rate", icon: TrendingUp },
-    { number: "100+", label: "Students Helped", icon: Award },
-    { number: "4.8/5", label: "Parent Rating", icon: Star }
+    { number: "98%", label: "Successful Matches", icon: TrendingUp },
+    { number: "Top 10%", label: "of Tutors Accepted", icon: Award },
+    { number: "4.8/5", label: "Average Parent Rating", icon: Star }
   ];
 
   return (
@@ -40,7 +40,7 @@ export default function SuccessStoriesSection() {
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-200/15 rounded-full blur-3xl"></div>
       </div>
-      
+
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header Section */}
         <motion.div
@@ -52,13 +52,13 @@ export default function SuccessStoriesSection() {
         >
           <div className="inline-flex items-center gap-2 bg-blue-100/80 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Award className="w-4 h-4" />
-            Proven Results
+            Proven Academic Results
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Student Success <span className="text-blue-600">Stories</span>
+            Stories of <span className="text-blue-600">Transformation and Success</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Real students, real improvements. See how our expert tutors help students achieve their academic goals.
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Discover how our dedicated tutors have helped students across Singapore not only improve their grades but also build lasting confidence.
           </p>
         </motion.div>
 
@@ -68,24 +68,24 @@ export default function SuccessStoriesSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-3 gap-4 md:gap-8 mb-16 max-w-2xl mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16 max-w-3xl mx-auto"
         >
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
             return (
-              <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-3 shadow-lg">
-                  <IconComponent className="w-6 h-6 md:w-8 md:h-8 text-white" />
+              <div key={index} className="text-center p-6 bg-white/50 rounded-2xl shadow-md">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-4 shadow-lg">
+                  <IconComponent className="w-8 h-8 text-white" />
                 </div>
-                <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{stat.number}</div>
-                <div className="text-sm md:text-base text-gray-600 font-medium">{stat.label}</div>
+                <div className="text-3xl font-bold text-gray-900 mb-1">{stat.number}</div>
+                <div className="text-base text-gray-600 font-medium">{stat.label}</div>
               </div>
             );
           })}
         </motion.div>
 
         {/* Success Stories Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {stories.map((story, index) => (
             <motion.div
               key={index}
@@ -95,71 +95,52 @@ export default function SuccessStoriesSection() {
               transition={{ duration: 0.7, delay: index * 0.2 }}
               className="group"
             >
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-white/20 h-full">
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-white/20 h-full flex flex-col">
                 {/* Card Header */}
-                <div className="p-6 md:p-8 pb-0">
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                      <div className="relative">
-                        <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                          <span className="text-white text-xl md:text-2xl font-bold">{story.initial}</span>
-                        </div>
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                          <TrendingUp className="w-3 h-3 text-white" />
-                        </div>
+                <div className="p-6 md:p-8">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="relative">
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <span className="text-white text-2xl font-bold">{story.initial}</span>
                       </div>
-                      <div>
-                        <h3 className="font-bold text-lg md:text-xl text-gray-900 mb-1">{story.name}</h3>
-                        <p className="text-sm md:text-base text-gray-600 font-medium">{story.role}</p>
-                        <div className="inline-flex items-center gap-1 mt-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
-                          <TrendingUp className="w-3 h-3" />
-                          {story.improvement} improvement
-                        </div>
+                      <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                        <TrendingUp className="w-4 h-4 text-white" />
                       </div>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-xl text-gray-900">{story.name}</h3>
+                      <p className="text-base text-gray-600 font-medium">{story.role}</p>
                     </div>
                   </div>
+                  <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
+                    <TrendingUp className="w-4 h-4" />
+                    Improvement: {story.improvement}
+                  </div>
+                </div>
 
-                  {/* Progress Section */}
-                  <div className="space-y-4 mb-6">
-                    <div className="flex items-center justify-between text-sm md:text-base">
-                      <span className="text-gray-500 font-medium">Before</span>
-                      <span className="bg-red-50 text-red-600 px-3 py-1 rounded-full font-bold text-sm">{story.before}</span>
+                {/* Progress Section */}
+                <div className="px-6 md:px-8">
+                    <div className="flex justify-between items-center mb-2">
+                        <span className="text-red-600 font-semibold bg-red-100 px-3 py-1 rounded-md text-sm">Before: {story.before}</span>
+                        <span className="text-green-600 font-semibold bg-green-100 px-3 py-1 rounded-md text-sm">After: {story.after}</span>
                     </div>
-                    
-                    <div className="relative">
-                      <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                        <motion.div 
-                          initial={{ width: "0%" }}
-                          whileInView={{ width: "100%" }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.5, delay: index * 0.3 + 0.5 }}
-                          className="h-full bg-gradient-to-r from-red-400 via-yellow-400 to-green-500 rounded-full relative"
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                        </motion.div>
-                      </div>
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        whileInView={{ scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.3 + 1.2 }}
-                        className="absolute right-0 -top-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white shadow-lg"
-                      ></motion.div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between text-sm md:text-base">
-                      <span className="text-gray-500 font-medium">After</span>
-                      <span className="bg-green-50 text-green-600 px-3 py-1 rounded-full font-bold text-sm">{story.after}</span>
-                    </div>
+                  <div className="relative h-2.5 w-full bg-gray-200 rounded-full">
+                    <motion.div
+                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-red-400 to-green-500 rounded-full"
+                      initial={{ width: "0%" }}
+                      whileInView={{ width: "100%" }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
+                    />
                   </div>
                 </div>
 
                 {/* Quote Section */}
-                <div className="p-6 md:p-8 pt-0">
-                  <div className="relative bg-gradient-to-br from-gray-50 to-blue-50/50 rounded-xl md:rounded-2xl p-4 md:p-6">
-                    <Quote className="w-6 h-6 text-blue-400 mb-2" />
-                    <p className="text-gray-700 leading-relaxed text-sm md:text-base italic">
-                      "{story.quote}"
+                <div className="p-6 md:p-8 mt-auto">
+                  <div className="relative bg-gradient-to-br from-gray-50 to-blue-50/50 rounded-xl md:rounded-2xl p-6">
+                    <Quote className="w-8 h-8 text-blue-300 absolute top-3 left-3" />
+                    <p className="text-gray-700 leading-relaxed text-base italic pl-4">
+                      {story.quote}
                     </p>
                   </div>
                 </div>

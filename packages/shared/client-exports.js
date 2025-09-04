@@ -604,3 +604,150 @@ export const getSubjectsForLevel = (level) => {
   const specialCategories = ['Multiple Subjects', 'All Subjects', 'Exam Preparation', 'Homework Support', 'Other'];
   return [...subjects, ...specialCategories];
 };
+
+
+// Rate mapping for each education level
+export const RATE_MAPPINGS = {
+  // Pre-School
+  'Pre-School': {
+    'PT (Part-Time)': '$25-40/hr',
+    'FT (Full-Time)': '$40-65/hr',
+    'MOE (Ex-MOE)': '$55-90/hr'
+  },
+  
+  // Primary
+  'Primary 1': {
+    'PT (Part-Time)': '$30-45/hr',
+    'FT (Full-Time)': '$45-70/hr',
+    'MOE (Ex-MOE)': '$60-100/hr'
+  },
+  'Primary 2': {
+    'PT (Part-Time)': '$30-45/hr',
+    'FT (Full-Time)': '$45-70/hr',
+    'MOE (Ex-MOE)': '$60-100/hr'
+  },
+  'Primary 3': {
+    'PT (Part-Time)': '$30-45/hr',
+    'FT (Full-Time)': '$45-70/hr',
+    'MOE (Ex-MOE)': '$60-100/hr'
+  },
+  'Primary 4': {
+    'PT (Part-Time)': '$30-50/hr',
+    'FT (Full-Time)': '$50-75/hr',
+    'MOE (Ex-MOE)': '$65-110/hr'
+  },
+  'Primary 5': {
+    'PT (Part-Time)': '$30-50/hr',
+    'FT (Full-Time)': '$50-75/hr',
+    'MOE (Ex-MOE)': '$65-110/hr'
+  },
+  'Primary 6': {
+    'PT (Part-Time)': '$30-50/hr',
+    'FT (Full-Time)': '$50-75/hr',
+    'MOE (Ex-MOE)': '$65-110/hr'
+  },
+  
+  // Secondary
+  'Secondary 1': {
+    'PT (Part-Time)': '$35-55/hr',
+    'FT (Full-Time)': '$55-85/hr',
+    'MOE (Ex-MOE)': '$70-120/hr'
+  },
+  'Secondary 2': {
+    'PT (Part-Time)': '$35-55/hr',
+    'FT (Full-Time)': '$55-85/hr',
+    'MOE (Ex-MOE)': '$70-120/hr'
+  },
+  'Secondary 3': {
+    'PT (Part-Time)': '$40-60/hr',
+    'FT (Full-Time)': '$60-90/hr',
+    'MOE (Ex-MOE)': '$75-130/hr'
+  },
+  'Secondary 4': {
+    'PT (Part-Time)': '$40-60/hr',
+    'FT (Full-Time)': '$60-90/hr',
+    'MOE (Ex-MOE)': '$75-130/hr'
+  },
+  'Secondary 5': {
+    'PT (Part-Time)': '$40-60/hr',
+    'FT (Full-Time)': '$60-90/hr',
+    'MOE (Ex-MOE)': '$75-130/hr'
+  },
+  
+  // Post-Secondary
+  'Junior College 1': {
+    'PT (Part-Time)': '$45-70/hr',
+    'FT (Full-Time)': '$70-100/hr',
+    'MOE (Ex-MOE)': '$85-150/hr'
+  },
+  'Junior College 2': {
+    'PT (Part-Time)': '$45-70/hr',
+    'FT (Full-Time)': '$70-100/hr',
+    'MOE (Ex-MOE)': '$85-150/hr'
+  },
+  'Polytechnic Year 1': {
+    'PT (Part-Time)': '$40-65/hr',
+    'FT (Full-Time)': '$65-95/hr',
+    'MOE (Ex-MOE)': '$80-140/hr'
+  },
+  'Polytechnic Year 2': {
+    'PT (Part-Time)': '$40-65/hr',
+    'FT (Full-Time)': '$65-95/hr',
+    'MOE (Ex-MOE)': '$80-140/hr'
+  },
+  'Polytechnic Year 3': {
+    'PT (Part-Time)': '$40-65/hr',
+    'FT (Full-Time)': '$65-95/hr',
+    'MOE (Ex-MOE)': '$80-140/hr'
+  },
+  'International Baccalaureate Year 1': {
+    'PT (Part-Time)': '$50-80/hr',
+    'FT (Full-Time)': '$80-120/hr',
+    'MOE (Ex-MOE)': '$100-180/hr'
+  },
+  'International Baccalaureate Year 2': {
+    'PT (Part-Time)': '$50-80/hr',
+    'FT (Full-Time)': '$80-120/hr',
+    'MOE (Ex-MOE)': '$100-180/hr'
+  },
+  
+  // Higher Education
+  'University Year 1': {
+    'PT (Part-Time)': '$50-80/hr',
+    'FT (Full-Time)': '$80-120/hr',
+    'MOE (Ex-MOE)': '$100-180/hr'
+  },
+  'University Year 2': {
+    'PT (Part-Time)': '$50-80/hr',
+    'FT (Full-Time)': '$80-120/hr',
+    'MOE (Ex-MOE)': '$100-180/hr'
+  },
+  'University Year 3': {
+    'PT (Part-Time)': '$55-85/hr',
+    'FT (Full-Time)': '$85-130/hr',
+    'MOE (Ex-MOE)': '$110-200/hr'
+  },
+  'University Year 4': {
+    'PT (Part-Time)': '$55-85/hr',
+    'FT (Full-Time)': '$85-130/hr',
+    'MOE (Ex-MOE)': '$110-200/hr'
+  },
+  'Graduate Studies': {
+    'PT (Part-Time)': '$60-100/hr',
+    'FT (Full-Time)': '$100-150/hr',
+    'MOE (Ex-MOE)': '$130-250/hr'
+  },
+  
+  // Others
+  'Music Academy': {
+    'PT (Part-Time)': '$40-70/hr',
+    'FT (Full-Time)': '$70-110/hr',
+    'MOE (Ex-MOE)': '$90-160/hr'
+  },
+  'Professional Development': {
+    'PT (Part-Time)': '$60-100/hr',
+    'FT (Full-Time)': '$100-150/hr',
+    'MOE (Ex-MOE)': '$130-250/hr'
+  }
+};
+
