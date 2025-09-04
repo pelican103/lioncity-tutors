@@ -1,7 +1,7 @@
 // app/page.jsx
 export const metadata = {
   title: 'LionCity Tutors – MOE-Certified PSLE, O-Level & JC Tutors',
-  description: 'LionCity Tutors connects Singapore parents with qualified MOE-certified tutors for PSLE, O-Level & JC. 100% free for parents.',
+  description: 'LionCity Tutors connects Singapore parents with qualified tutors for PSLE, O-Level & JC. 100% free for parents.',
   keywords: [
     'home tuition singapore',
     'private tutor singapore',
