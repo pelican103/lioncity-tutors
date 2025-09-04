@@ -1076,7 +1076,7 @@ async function startAssignmentCreation(bot, chatId, userSessions) {
     currentStep: 'title'
   };
   
-  await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 1 of 9: Enter the assignment title:', {
+  await safeSend(bot, chatId, '🎯 *Creating New Assignment*\n\nStep 1 of 7: Enter the assignment title:', {
     parse_mode: 'Markdown',
     reply_markup: {
       inline_keyboard: [[{ text: '❌ Cancel', callback_data: 'admin_panel' }]]
@@ -2146,7 +2146,7 @@ async function handleCallbackQuery(
       return await startAssignmentCreation(bot, chatId, userSessions);
     }
 
-    if (data.startsWith('select_level_') || data.startsWith('select_subject_')) {
+    if (data.startsWith('select_level_') || data.startsWith('select_subject_') || data.startsWith('select_rate_')) {
       return await handleAssignmentCallbackQuery(bot, callbackQuery, userSessions);
     }
 
