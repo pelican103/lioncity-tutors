@@ -1,8 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Award, Wallet, Headphones, CalendarCheck, TrendingUp } from 'lucide-react'; // Using TrendingUp for "Proven Success"
+import { Users, Award, Wallet, Headphones, CalendarCheck, TrendingUp } from 'lucide-react';
 
-// Define the unique features data with more impactful descriptions
 const uniqueFeatures = [
   {
     icon: Users,
@@ -30,39 +29,23 @@ const uniqueFeatures = [
     description: 'We understand busy schedules. Benefit from adaptable lesson timings, trial sessions, and customized learning plans designed to fit your family\'s lifestyle.'
   },
   {
-    icon: TrendingUp, // Changed icon for a more direct "success" visual
+    icon: TrendingUp,
     title: 'Proven Academic Transformations',
     description: 'Join a community of hundreds of students who have not only improved their grades but also developed confidence and a love for learning, thanks to our expert tutors.'
   }
 ];
 
 export default function UniqueFeaturesSection() {
-  // Container variants for staggered animation
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1 // Delay children animations
-      }
-    }
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
   };
 
-  // Item variants for individual feature cards
   const itemVariants = {
     hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: "easeOut" } }
   };
-
-  // Inner content variants for staggered text reveal
+  
   const contentVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -76,7 +59,7 @@ export default function UniqueFeaturesSection() {
   };
 
   return (
-    <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gradient-to-br from-blue-50 to-white">
+    <section className="py-12 sm:py-20 px-4 sm:px-6 bg-background-default">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -85,10 +68,10 @@ export default function UniqueFeaturesSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-blue-800 leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-primary leading-tight">
             Why Parents in Singapore Choose Us
           </h2>
-          <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-lg text-text-default/90 max-w-2xl mx-auto">
             We go beyond just finding a tutor. We deliver a comprehensive, supportive, and results-driven experience.
           </p>
         </motion.div>
@@ -105,29 +88,28 @@ export default function UniqueFeaturesSection() {
               key={index}
               variants={itemVariants}
               whileHover={{
-                y: -8, // Lift effect
-                boxShadow: "0 15px 30px rgba(0, 0, 0, 0.15)", // More pronounced shadow
+                y: -8,
+                boxShadow: "0 15px 30px rgba(0, 0, 0, 0.1)",
                 transition: { duration: 0.2 }
               }}
-              className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center border-b-4 border-transparent hover:border-blue-500 transition-all duration-300"
+              className="bg-background-card p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center border border-border border-b-4 border-b-transparent hover:border-b-primary transition-all duration-300"
             >
               <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: index * 0.1 + 0.3, duration: 0.5 }}
-                className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-5 transform hover:scale-110 transition-transform duration-300"
+                className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-5"
               >
-                <feature.icon className="w-9 h-9 text-blue-600" />
+                <feature.icon className="w-9 h-9 text-primary" />
               </motion.div>
+              
               <motion.h3
                 variants={contentVariants}
-                className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 leading-snug"
+                className="text-xl sm:text-2xl font-bold text-primary mb-2 leading-snug"
               >
                 {feature.title}
               </motion.h3>
+              
               <motion.p
                 variants={contentVariants}
-                className="text-sm text-gray-700 leading-relaxed"
+                className="text-sm text-text-default leading-relaxed"
               >
                 {feature.description}
               </motion.p>

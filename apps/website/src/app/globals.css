@@ -1,29 +1,207 @@
+/* src/app/globals.css */
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Colors */
+  --color-primary: #0474BA; /* Trustworthy Blue */
+  --color-accent: #F17720;  /* Action-driving Orange */
+  --color-text-default: #262626; /* Dark Gray for Readability */
+  --color-text-inverse: #FFFFFF; /* White for Contrast */
+  --color-background-default: #FFFFFF; /* Clean White Base */
+  --color-background-subtle: #F0F5FA; /* Subtle Blue Tint for Sections */
+  --color-background-card: #FFFFFF; /* White for Cards */
+  --color-border: #E0E0E0; /* Light Gray for Borders */
+  --color-rating: #FFA630;  /* Golden Yellow for Ratings */
+
+  /* Fonts & Radius */
+  --font-family-sans: "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --radius: 0.5rem;
 }
 
+/* Apply base styles */
+body {
+  background-color: theme(colors.background.default);
+  color: theme(colors.text.default);
+  font-family: theme(fontFamily.sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+
+/* Apply primary color to headings by default */
+h1, h2, h3, h4, h5, h6 {
+  color: theme(colors.primary);
+}
+
+/* Ensure headings on colored backgrounds have inverse text color */
+.bg-primary h1,
+.bg-primary h2,
+.bg-primary h3,
+.bg-primary h4,
+.bg-primary h5,
+.bg-primary h6,
+.bg-accent h1,
+.bg-accent h2,
+.bg-accent h3,
+.bg-accent h4,
+.bg-accent h5,
+.bg-accent h6 {
+  color: theme(colors.text.inverse);
+}
+
+.form-section-gradient {
+  background: radial-gradient(circle at 50% 50%, #f0f4ff, #ffffff);
+  position: relative;
+  overflow: hidden; /* Ensures the pseudo-elements don't bleed out */
+}
+
+/* Optional: Add a subtle glow effect for a more modern feel */
+.form-section-gradient::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 800px; /* Adjust size as needed */
+  height: 800px;
+  background-image: radial-gradient(circle, rgba(61, 107, 240, 0.1), transparent 70%);
+  transform: translate(-50%, -50%);
+  filter: blur(80px); /* Creates the soft glow */
+  z-index: 1;
+}
+
+/* This is where the form card will sit */
+.form-card-container {
+  position: relative;
+  z-index: 2;
+}
+
+
+.glow-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(61, 107, 240, 0.1), transparent 40%);
+  border-radius: inherit; /* Use the parent's border radius */
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.glow-card:hover::before {
+  opacity: 1;
+}
+
+.embla {
+  --slide-spacing: 1rem;
+  --slide-size: 90%; /* On mobile, one slide is 90% of the width */
+  --slide-height: auto;
+  padding: 1rem 0;
+}
+.embla__viewport {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-left: calc(var(--slide-spacing) * -1);
+}
+.embla__slide {
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  padding-left: var(--slide-spacing);
+}
+
+/* Responsive slide sizes */
+@media (min-width: 768px) {
+  .embla {
+    --slide-size: 50%;
+  }
+}
+@media (min-width: 1024px) {
+  .embla {
+    --slide-size: 33.333%;
+  }
+}
+
+.embla__controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.2rem;
+  margin-top: 1.8rem;
+  align-items: center;
+}
+.embla__buttons {
+  display: flex;
+  gap: 0.6rem;
+}
+.embla__button {
+  background-color: rgb(var(--color-background-card));
+  touch-action: manipulation;
+  cursor: pointer;
+  border: 1px solid rgb(var(--color-border));
+  width: 3rem;
+  height: 3rem;
+  z-index: 1;
+  border-radius: 50%;
+  color: rgb(var(--color-primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.embla__button:disabled {
+  opacity: 0.4;
+}
+.embla__button__svg {
+  width: 35%;
+  height: 35%;
+}
+.embla__play {
+  background-color: rgb(var(--color-background-card));
+  touch-action: manipulation;
+  cursor: pointer;
+  border: 1px solid rgb(var(--color-border));
+  border-radius: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: flex-end;
+  color: rgb(var(--color-primary));
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0 1.5rem;
+  height: 3rem;
+  min-width: 7rem;
+}
+
+@keyframes scroll-horizontal {
+  0% {
+    transform: translateX(-4px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(4px);
+    opacity: 0.7;
+  }
+}
+
+.animate-scroll-horizontal {
+  animation: scroll-horizontal 1.5s infinite alternate;
+}
+
+/* Smooth scrolling for the entire page */
 html {
   scroll-behavior: smooth;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Ensure proper sizing for horizontal scroller */
+.horizontal-scroller {
+  overflow: hidden;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
+.panel {
+  will-change: transform;
 }

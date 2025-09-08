@@ -1,11 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Step1, Step2, Step3 } from "@/components/FormSteps";
+import { CheckCircle } from "lucide-react";
+
+
+const validateStep = (step, data) => {
+    const newErrors = {};
+
+    if (step === 1) {
+        if (!data.name.trim()) newErrors.name = "Name is required.";
+        if (!data.mobile.trim()) {
+            newErrors.mobile = "Mobile number is required.";
+        } else if (!/^[689]\d{7}$/.test(data.mobile.trim())) {
+            newErrors.mobile = "Please enter a valid 8-digit Singapore mobile number.";
+        }
+        if (!data.level.trim()) newErrors.level = "Level & Subject are required.";
+        if (!data.location.trim()) newErrors.location = "Location is required.";
+    }
+    // Add validations for other steps if needed
+
+    return newErrors;
+};
+
 
 export default function PrimarySchoolTuition() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -19,17 +40,8 @@ export default function PrimarySchoolTuition() {
     lessonFrequency: '1 Lesson/Week',
     customFrequency: '',
     preferredTime: '',
-    tutorType: {
-      partTime: false,
-      fullTime: false,
-      moeTeacher: false
-    },
-    budget: {
-      type: 'marketRate', // 'marketRate' or 'custom'
-      customAmount: ''
-    },
-    genderPreference: 'No preference',
-    bilingualRequired: 'No',
+    tutorType: { partTime: true, fullTime: false, moeTeacher: false }, // Default to Part-Time
+    budget: { type: 'marketRate', customAmount: '' },
     preferences: ''
   };
   const [formData, setFormData] = useState(initialFormData);
@@ -38,81 +50,82 @@ export default function PrimarySchoolTuition() {
     submitted: false,
     error: null
   });
-  const nextStep = () => setCurrentStep(prev => prev + 1);
-  const prevStep = () => setCurrentStep(prev => prev - 1);
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    if (name.includes('.')) {
-      const [parent, child] = name.split('.');
-      setFormData(prevData => ({
-        ...prevData,
-        [parent]: {
-          ...prevData[parent],
-          [child]: value
-        }
-      }));
-    } else {
-      setFormData(prevData => ({
-        ...prevData,
-        [name]: value
-      }));
-    }
-  };
-  const handleNestedChange = (objectName, field, value) => {
-    setFormData(prevData => ({
-      ...prevData,
-      [objectName]: {
-        ...prevData[objectName],
-        [field]: value
+  const [errors, setErrors] = useState({});
+  const formRef = useRef(null);
+
+  const nextStep = () => {
+      const newErrors = validateStep(currentStep, formData);
+      setErrors(newErrors);
+
+      if (Object.keys(newErrors).length === 0) {
+          setCurrentStep(prev => prev + 1);
       }
-    }));
   };
 
-  // Handle checkbox changes
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    if (name.includes('.')) {
-      const [objectName, field] = name.split('.');
-      handleNestedChange(objectName, field, checked);
-    } else {
-      setFormData(prevData => ({
-        ...prevData,
-        [name]: checked
-      }));
-    }
+  const prevStep = () => {
+      setErrors({}); // Clear errors when going back
+      setCurrentStep(prev => prev - 1);
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus({ submitting: true, submitted: false, error: null });
-    const payload = {
-      ...formData,
-      budget: {
-        marketRate: formData.budget.type === 'marketRate',
-        custom: formData.budget.type === 'custom',
-        customAmount: formData.budget.type === 'custom' ? formData.budget.customAmount : ''
+
+  const handleChange = (e) => {
+      const { name, value, type, checked } = e.target;
+      const inputValue = type === 'checkbox' ? checked : value;
+
+      // Clear the specific error when the user starts typing
+      if (errors[name]) {
+          setErrors(prev => ({ ...prev, [name]: null }));
       }
-    };
-    try {
-      const response = await fetch('https://tuition-backend-afud.onrender.com/api/requestfortutor', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-      if (response.ok) {
-        const result = await response.json();
-        setFormData(initialFormData);
-        setCurrentStep(1);
-        setStatus({ submitting: false, submitted: true, error: null });
+
+      if (name.includes('.')) {
+          const [parent, child] = name.split('.');
+          setFormData(prev => ({
+              ...prev,
+              [parent]: { ...prev[parent], [child]: inputValue }
+          }));
       } else {
-        const errorText = await response.text();
-        throw new Error(errorText || 'Form submission failed');
+          setFormData(prev => ({ ...prev, [name]: inputValue }));
       }
-    } catch (error) {
-      setStatus({ submitting: false, submitted: false, error: error.message || 'Failed to submit the form. Please try again.' });
-    }
   };
+
+  const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      // Final validation check on all fields before submitting
+      const step1Errors = validateStep(1, formData);
+      const allErrors = { ...step1Errors }; // Combine errors from all steps if you add more validation
+
+      if (Object.keys(allErrors).length > 0) {
+          setErrors(allErrors);
+          // If there are errors from Step 1, automatically go back to it
+          if (Object.keys(step1Errors).length > 0) {
+              setCurrentStep(1);
+          }
+          return; // Stop submission
+      }
+
+      setStatus({ submitting: true, submitted: false, error: null });
+      try {
+          const response = await fetch('https://tuition-backend-afud.onrender.com/api/requestfortutor', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formData)
+          });
+          
+          if (!response.ok) {
+              const result = await response.json();
+              throw new Error(result.error || 'Form submission failed');
+          }
+
+          setFormData(initialFormData);
+          setCurrentStep(1);
+          setStatus({ submitting: false, submitted: true, error: null });
+          formRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+      } catch (error) {
+          setStatus({ submitting: false, submitted: false, error: error.message });
+      }
+  };
+  
   return (
     <>
       <div className="p-6 max-w-5xl mx-auto space-y-12">
@@ -138,8 +151,9 @@ export default function PrimarySchoolTuition() {
             Whether your child is just starting P1 or preparing for PSLE, our experienced tutors deliver structured, engaging lessons that build confidence and boost grades — at every level. Because strong foundations make all the difference.
           </p>
         </section>
+        
         {/* Tutor Request Form Section */}
-        <section className="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl shadow-lg">
+        <section ref={formRef} className="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl shadow-lg">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-center text-indigo-700 mb-4">Request a Primary School Tutor</h2>
             <div className="flex justify-center space-x-8 mb-8">
@@ -155,24 +169,23 @@ export default function PrimarySchoolTuition() {
             <div className="bg-white rounded-xl shadow-lg p-8">
               {status.submitted ? (
                 <div className="text-center py-10">
-                  <div className="text-green-500 text-5xl mb-4">✓</div>
+                  <CheckCircle className="text-green-500 w-16 h-16 mx-auto mb-4" />
                   <h2 className="text-2xl font-semibold mb-2">Thank you!</h2>
                   <p className="text-gray-600 mb-4">We'll send you tutor profiles shortly.</p>
-                  <button 
+                  <Button 
                     onClick={() => setStatus({ submitting: false, submitted: false, error: null })}
                     className="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition-colors"
                   >
                     Submit Another Request
-                  </button>
+                  </Button>
                 </div>
               ) : (
                 <form id="mainForm" onSubmit={handleSubmit}>
-                  {/* --- NEW: Progress Bar --- */}
                   <div className="mb-8">
                     <div className="flex justify-between mb-1">
-                      <span className={`text-sm font-medium ${currentStep >= 1 ? 'text-indigo-700' : 'text-gray-400'}`}>About You</span>
-                      <span className={`text-sm font-medium ${currentStep >= 2 ? 'text-indigo-700' : 'text-gray-400'}`}>Lesson Details</span>
-                      <span className={`text-sm font-medium ${currentStep >= 3 ? 'text-indigo-700' : 'text-gray-400'}`}>Tutor Preferences</span>
+                      {["Your Details", "Lesson Details", "Tutor Preferences"].map((step, i) => (
+                        <span key={i} className={`text-sm font-medium ${currentStep >= i + 1 ? 'text-indigo-700' : 'text-gray-400'}`}>{step}</span>
+                      ))}
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div 
@@ -187,31 +200,10 @@ export default function PrimarySchoolTuition() {
                       <p className="text-sm">{status.error}</p>
                     </div>
                   )}
-                  {/* --- NEW: Conditional Step Rendering --- */}
-                  {currentStep === 1 && (
-                    <Step1 
-                      nextStep={nextStep} 
-                      formData={formData} 
-                      handleChange={handleChange} 
-                    />
-                  )}
-                  {currentStep === 2 && (
-                    <Step2 
-                      nextStep={nextStep} 
-                      prevStep={prevStep} 
-                      formData={formData} 
-                      handleChange={handleChange} 
-                    />
-                  )}
-                  {currentStep === 3 && (
-                    <Step3 
-                      prevStep={prevStep} 
-                      formData={formData} 
-                      handleChange={handleChange}
-                      handleCheckboxChange={handleCheckboxChange}
-                      status={status}
-                    />
-                  )}
+                  {/* Pass the corrected props to all steps */}
+                  {currentStep === 1 && <Step1 nextStep={nextStep} formData={formData} handleChange={handleChange} errors={errors} />}
+                  {currentStep === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} formData={formData} handleChange={handleChange} errors={errors} />}
+                  {currentStep === 3 && <Step3 prevStep={prevStep} formData={formData} handleChange={handleChange} status={status} errors={errors} />}
                 </form>
               )}
             </div>
@@ -597,14 +589,17 @@ export default function PrimarySchoolTuition() {
           <p className="text-indigo-100 text-lg max-w-2xl mx-auto">
             Experience the difference with our handpicked tutors. We'll match you within 24 hours.
           </p>
-          <Link href="/request-tutor" className="block w-full md:w-auto">
-            <Button className="text-lg px-8 py-4 bg-white text-indigo-700 hover:bg-gray-100 font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
-              Request a PSLE Tutor now
-            </Button>
-          </Link>
+          <div className="inline-block">
+              <Button 
+                onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                className="text-lg px-8 py-4 bg-white text-indigo-700 hover:bg-gray-100 font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+              >
+                Request a PSLE Tutor now
+              </Button>
+          </div>
           <p className="text-sm text-indigo-100 mt-4">Improved grades • Expert tutors • Proven results</p>
         </section>
       </div>
     </>
   );
-} 
+}

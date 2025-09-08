@@ -1,9 +1,9 @@
+import './globals.css';
 import Script from 'next/script'; // 1. Make sure this import is here
 import { Toaster } from 'sonner';
 import Navbar from '../components/Navbar';
 import Footer from './Footer';
 import Whatsapp from './Whatsapp';
-import './globals.css';
 
 export const metadata = {
   metadataBase: new URL('https://lioncitytutors.com'),

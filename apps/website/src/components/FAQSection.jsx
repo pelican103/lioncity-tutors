@@ -29,18 +29,20 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="py-20 px-6 bg-gray-50">
+    <section className="py-20 px-6 bg-background-default">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-semibold mb-12 text-center">Frequently Asked Questions</h2>
+        <h2 className="text-3xl font-bold mb-12 text-center text-primary">
+          Frequently Asked Questions
+        </h2>
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div key={index} className="bg-background-card rounded-lg shadow-sm overflow-hidden border border-border">
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full flex justify-between items-center p-6 text-left focus:outline-none"
+                className="w-full flex justify-between items-center p-6 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
               >
-                <span className="text-lg font-semibold">{faq.question}</span>
-                {openIndex === index ? <ChevronUp /> : <ChevronDown />}
+                <span className="text-lg font-semibold text-primary">{faq.question}</span>
+                {openIndex === index ? <ChevronUp className="text-primary"/> : <ChevronDown className="text-primary"/>}
               </button>
               <AnimatePresence>
                 {openIndex === index && (
@@ -49,7 +51,7 @@ export default function FAQSection() {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="px-6 pb-6 text-gray-600"
+                    className="px-6 pb-6 text-text-default/90"
                   >
                     {faq.answer}
                   </motion.div>

@@ -1,11 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Step1, Step2, Step3 } from "@/components/FormSteps";
+import { CheckCircle } from "lucide-react"; // Imported for consistency in the success message
+
+// Validation logic for form steps - This is the new function added.
+const validateStep = (step, data) => {
+    const newErrors = {};
+
+    if (step === 1) {
+        if (!data.name.trim()) newErrors.name = "Name is required.";
+        if (!data.mobile.trim()) {
+            newErrors.mobile = "Mobile number is required.";
+        } else if (!/^[689]\d{7}$/.test(data.mobile.trim())) {
+            newErrors.mobile = "Please enter a valid 8-digit Singapore mobile number.";
+        }
+        if (!data.level.trim()) newErrors.level = "Level & Subject are required.";
+    }
+
+    if (step === 2) {
+        if (!data.location.trim()) newErrors.location = "Location is required.";
+    }
+    return newErrors;
+};
 
 export default function JCTuition() {
   const [activeStream, setActiveStream] = useState('science');
@@ -13,15 +34,15 @@ export default function JCTuition() {
   const initialFormData = {
     name: '',
     mobile: '',
-    level: '',
+    level: 'JC Level', // Set a default value as it's a JC page
     location: '',
-    lessonDuration: '1.5 Hours',
+    lessonDuration: '2 Hours', // Default for JC
     customDuration: '',
     lessonFrequency: '1 Lesson/Week',
     customFrequency: '',
     preferredTime: '',
     tutorType: {
-      partTime: false,
+      partTime: true, // Default to true as per previous working forms
       fullTime: false,
       moeTeacher: false
     },
@@ -33,16 +54,40 @@ export default function JCTuition() {
     bilingualRequired: 'No',
     preferences: ''
   };
+
   const [formData, setFormData] = useState(initialFormData);
   const [status, setStatus] = useState({
     submitting: false,
     submitted: false,
     error: null
   });
-  const nextStep = () => setCurrentStep(prev => prev + 1);
-  const prevStep = () => setCurrentStep(prev => prev - 1);
+
+  // --- Start of ADDED/MODIFIED LOGIC ---
+  const [errors, setErrors] = useState({});
+  const formRef = useRef(null); // Ref for scrolling into view
+
+  const nextStep = () => {
+      const newErrors = validateStep(currentStep, formData);
+      setErrors(newErrors);
+
+      if (Object.keys(newErrors).length === 0) {
+          setCurrentStep(prev => prev + 1);
+      }
+  };
+
+  const prevStep = () => {
+      setErrors({}); // Clear errors when going back
+      setCurrentStep(prev => prev - 1);
+  };
+
   const handleChange = (e) => {
     const { name, value, type } = e.target;
+    
+    // Clear error for the field being edited
+    if (errors[name]) {
+        setErrors(prev => ({ ...prev, [name]: null }));
+    }
+
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
       setFormData(prevData => ({
@@ -59,51 +104,54 @@ export default function JCTuition() {
       }));
     }
   };
-  const handleNestedChange = (objectName, field, value) => {
-    setFormData(prevData => ({
-      ...prevData,
-      [objectName]: {
-        ...prevData[objectName],
-        [field]: value
-      }
-    }));
-  };
+  
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     if (name.includes('.')) {
       const [objectName, field] = name.split('.');
-      handleNestedChange(objectName, field, checked);
-    } else {
       setFormData(prevData => ({
         ...prevData,
-        [name]: checked
+        [objectName]: { ...prevData[objectName], [field]: checked }
       }));
+    } else {
+      setFormData(prevData => ({ ...prevData, [name]: checked }));
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Full validation before submission
+    const step1Errors = validateStep(1, formData);
+    const step2Errors = validateStep(2, formData);
+    const allErrors = { ...step1Errors, ...step2Errors };
+
+    if (Object.keys(allErrors).length > 0) {
+        setErrors(allErrors);
+        // Go to the first step that has an error
+        if (Object.keys(step1Errors).length > 0) {
+            setCurrentStep(1);
+        } else if (Object.keys(step2Errors).length > 0) {
+            setCurrentStep(2);
+        }
+        return; // Stop submission if there are errors
+    }
+
     setStatus({ submitting: true, submitted: false, error: null });
-    const payload = {
-      ...formData,
-      budget: {
-        marketRate: formData.budget.type === 'marketRate',
-        custom: formData.budget.type === 'custom',
-        customAmount: formData.budget.type === 'custom' ? formData.budget.customAmount : ''
-      }
-    };
+    
     try {
       const response = await fetch('https://tuition-backend-afud.onrender.com/api/requestfortutor', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData) // Your existing payload structure is fine
       });
       if (response.ok) {
-        const result = await response.json();
         setFormData(initialFormData);
         setCurrentStep(1);
         setStatus({ submitting: false, submitted: true, error: null });
+        formRef.current?.scrollIntoView({ behavior: 'smooth' });
       } else {
         const errorText = await response.text();
         throw new Error(errorText || 'Form submission failed');
@@ -112,6 +160,8 @@ export default function JCTuition() {
       setStatus({ submitting: false, submitted: false, error: error.message || 'Failed to submit the form. Please try again.' });
     }
   };
+  // --- End of ADDED/MODIFIED LOGIC ---
+
 
   return (
     <>
@@ -141,13 +191,13 @@ export default function JCTuition() {
         </section>
 
         {/* Tutor Request Form Section */}
-        <section className="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl shadow-lg">
+        <section ref={formRef} className="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl shadow-lg">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-center text-indigo-700 mb-4">Request a JC Tutor</h2>
             <div className="bg-white rounded-xl shadow-lg p-8">
               {status.submitted ? (
                 <div className="text-center py-10">
-                  <div className="text-green-500 text-5xl mb-4">✓</div>
+                  <CheckCircle className="text-green-500 w-16 h-16 mx-auto mb-4" />
                   <h2 className="text-2xl font-semibold mb-2">Thank you!</h2>
                   <p className="text-gray-600 mb-4">We'll send you tutor profiles shortly.</p>
                   <button 
@@ -179,12 +229,13 @@ export default function JCTuition() {
                       <p className="text-sm">{status.error}</p>
                     </div>
                   )}
-                  {/* --- Conditional Step Rendering --- */}
+                  {/* --- Conditional Step Rendering (Now passing errors prop) --- */}
                   {currentStep === 1 && (
                     <Step1 
                       nextStep={nextStep} 
                       formData={formData} 
                       handleChange={handleChange} 
+                      errors={errors} 
                     />
                   )}
                   {currentStep === 2 && (
@@ -193,6 +244,7 @@ export default function JCTuition() {
                       prevStep={prevStep} 
                       formData={formData} 
                       handleChange={handleChange} 
+                      errors={errors}
                     />
                   )}
                   {currentStep === 3 && (
@@ -202,6 +254,7 @@ export default function JCTuition() {
                       handleChange={handleChange}
                       handleCheckboxChange={handleCheckboxChange}
                       status={status}
+                      errors={errors}
                     />
                   )}
                 </form>
@@ -269,7 +322,7 @@ export default function JCTuition() {
         {/* Section 4: Subjects We Cover */}
         <section>
           <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-indigo-700 text-center">Comprehensive A-Level Subjects Coverage</h2>
-          
+         
           {/* Stream Tabs */}
           <div className="flex justify-center mb-8">
             <div className="inline-flex rounded-lg border border-gray-200 p-1 bg-gray-50">
@@ -1059,221 +1112,6 @@ export default function JCTuition() {
                   </CardContent>
                 </Card>
 
-                {/* H2 Mother Tongue */}
-                <Card className="border-t-4 border-t-blue-500 shadow-lg">
-                  <CardContent className="p-8">
-                    <h3 className="font-bold text-xl text-blue-700 mb-6">H2 Mother Tongue Language & Literature</h3>
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="font-semibold text-blue-600 mb-3">Language Proficiency</h4>
-                        <ul className="text-gray-600 space-y-3">
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Advanced Grammar & Syntax</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Vocabulary & Idioms</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Writing Skills & Styles</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Oral Communication</span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-blue-600 mb-3">Literary Analysis</h4>
-                        <ul className="text-gray-600 space-y-3">
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Classical Literature</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Modern Literature</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Literary Devices & Techniques</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Critical Appreciation</span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-blue-600 mb-3">Cultural Studies</h4>
-                        <ul className="text-gray-600 space-y-3">
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Cultural Heritage</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Contemporary Culture</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Social Issues & Values</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                            <span>Media & Popular Culture</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* H2 Music */}
-                <Card className="border-t-4 border-t-purple-500 shadow-lg">
-                  <CardContent className="p-8">
-                    <h3 className="font-bold text-xl text-purple-700 mb-6">H2 Music</h3>
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="font-semibold text-purple-600 mb-3">Music Theory & Analysis</h4>
-                        <ul className="text-gray-600 space-y-3">
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Harmony & Counterpoint</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Musical Forms & Structures</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Score Reading & Analysis</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Aural Skills & Dictation</span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-purple-600 mb-3">Composition & Arrangement</h4>
-                        <ul className="text-gray-600 space-y-3">
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Composition Techniques</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Orchestration & Arrangement</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Digital Music Production</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Contemporary Composition</span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-purple-600 mb-3">Music History & Context</h4>
-                        <ul className="text-gray-600 space-y-3">
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Western Classical Music</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>World Music Traditions</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Popular Music & Jazz</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span>Contemporary Music</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* H2 Theatre Studies */}
-                <Card className="border-t-4 border-t-emerald-500 shadow-lg">
-                  <CardContent className="p-8">
-                    <h3 className="font-bold text-xl text-emerald-700 mb-6">H2 Theatre Studies and Drama</h3>
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="font-semibold text-emerald-600 mb-3">Performance Skills</h4>
-                        <ul className="text-gray-600 space-y-3">
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Acting Techniques</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Voice & Movement</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Character Development</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Stage Presence</span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-emerald-600 mb-3">Theatre History & Theory</h4>
-                        <ul className="text-gray-600 space-y-3">
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Classical Theatre</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Modern Theatre</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Theatre Movements</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Dramatic Theory</span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-emerald-600 mb-3">Production & Direction</h4>
-                        <ul className="text-gray-600 space-y-3">
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Directing & Staging</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Set & Costume Design</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Lighting & Sound</span>
-                          </li>
-                          <li className="flex items-center space-x-3">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>Stage Management</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </>
             )}
           </div>
@@ -1456,20 +1294,23 @@ export default function JCTuition() {
           </div>
         </section>
 
-        {/* Section 9: Final CTA */}
-        <section className="text-center space-y-8 bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-12 rounded-2xl shadow-xl">
-          <h2 className="text-3xl md:text-4xl font-bold">Start Your Journey To A-Level Success Today</h2>
-          <p className="text-indigo-100 text-lg max-w-2xl mx-auto">
-            Experience the difference with our handpicked tutors. We'll match you within 24 hours.
-          </p>
-          <Link href="/request-tutor" className="block w-full md:w-auto">
-            <Button className="text-lg px-8 py-4 bg-white text-indigo-700 hover:bg-gray-100 font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
-              Request a JC Tutor now
-            </Button>
-          </Link>
-          <p className="text-sm text-indigo-100 mt-4">Improved grades • Expert tutors • Proven results</p>
+        {/* Section 9: Final CTA - Option 3: High-Impact & Contrasting */}
+        <section className="text-center space-y-6 bg-accent text-white p-12 rounded-2xl shadow-xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-white">Start Your Journey To A-Level Success Today</h2>
+            <p className="text-text-inverse/80 text-lg max-w-2xl mx-auto">
+                Experience the difference with our handpicked tutors. We'll match you within 24 hours.
+            </p>
+            <div className="pt-4">
+                <Link href="/request-tutor">
+                    <Button 
+                        className="text-lg px-10 py-4 bg-white text-accent hover:bg-gray-100 font-bold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                    >
+                        Request a JC Tutor Now
+                    </Button>
+                </Link>
+            </div>
         </section>
       </div>
     </>
   );
-} 
+}

@@ -382,8 +382,6 @@ const contactSchema = new mongoose.Schema({
   },
   
   // Additional preferences
-  genderPreference: { type: String, default: "No preference" },
-  bilingualRequired: { type: String, default: "No" },
   preferences: { type: String }
 }, { timestamps: true }); // timestamps will auto add createdAt and updatedAt fields
 

@@ -1,87 +1,249 @@
-"use client";
-import Image from "next/image";
-import { FaWpforms, FaUserCheck, FaBookReader } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
-import React from "react";
-import { motion } from "framer-motion";
+'use client';
+
+import React, { useRef } from 'react';
+import { gsap } from "gsap";
+import { SplitText } from "gsap/SplitText";
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+import { Button } from '@/components/ui/button'; 
+import { motion } from 'framer-motion';
+import { ArrowDown } from 'lucide-react';
+
+// Register GSAP plugins only on the client side
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+}
 
 export default function HowItWorksSection({ formRef }) {
+  const containerRef = useRef(null);
+
   const steps = [
-    {
-      icon: <FaWpforms size={28} />,
-      title: "1. Tell Us Your Needs",
-      desc: "Complete our quick, 2-minute form detailing the subject, level, and your child's learning style. This service is completely free with no obligations."
+    { 
+      number: "01", 
+      title: "Submit Your Request", 
+      description: "Tell us exactly what you need—subject, level, location, and your goals. Our simple form takes less than three minutes to complete.", 
+      highlight: {
+        before: "Tell us exactly what you need—",
+        text: "subject, level, location. ",
+        after: "Our simple form takes less than three minutes to complete."
+      },
+      bgColor: "bg-slate-100", 
+      textColor: "text-white",
+      accentColor: "text-white",
+      bgImage: "url('/combined-chemistry-biology.webp')",
+      bgOverlay: "bg-black/40"       
     },
-    {
-      icon: <FaUserCheck size={28} />,
-      title: "2. Receive Tutor Profiles",
-      desc: "Within 24 hours, our coordinators will send you a curated list of highly qualified and verified tutors whose credentials and experience match your requirements."
+    { 
+      number: "02", 
+      title: "Receive Curated Profiles", 
+      description: "Within 24 hours, we send you a shortlist of 2-3 highly qualified tutors whose experience and teaching style are a perfect match.", 
+      highlight: {
+        before: "Within 24 hours, we send you a shortlist of 2-3 ",
+        text: "highly qualified tutors",
+        after: " whose experience and teaching style are a perfect match."
+      },
+      bgColor: "bg-primary", 
+      textColor: "text-white", 
+      accentColor: "text-white",
+      bgImage: "url('/jc-tuition_optimized.webp')",
+      bgOverlay: "bg-black/40"
     },
-    {
-      icon: <FaBookReader size={28} />,
-      title: "3. Begin Lessons with Confidence",
-      desc: "Select the ideal tutor for your child and schedule the first lesson. Payment is only required after the lesson is confirmed, ensuring a perfect match."
+    { 
+      number: "03", 
+      title: "Start Learning", 
+      description: "Choose the tutor you're most confident in and schedule your first lesson. We handle all the coordination, and our service is always free for you.",
+      highlight: {
+        before: "Choose the tutor you're most confident in and schedule your first lesson. We handle all the coordination, and our service is ",
+        text: "always free for you.",
+        after: ""
+      }, 
+      bgColor: "bg-[#FF6B00]", 
+      textColor: "text-white", 
+      accentColor: "text-white",
+      bgImage: "url('/english-tuition.webp')",
+      bgOverlay: "bg-black/50"
     }
   ];
 
-  const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: 'smooth' });
+  useGSAP(() => {
+  const panels = gsap.utils.toArray('.panel');
+  if (panels.length <= 1) return;
+
+  ScrollTrigger.matchMedia({
+    "(prefers-reduced-motion: no-preference)": function() {
+      const horizontalAnimation = gsap.to(panels, {
+        xPercent: -100 * (panels.length - 1),
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          pin: true,
+          scrub: 1,
+          snap: 1 / (panels.length - 1),
+          end: () => "+=" + (containerRef.current.offsetWidth * (panels.length - 1)),
+        }
+      });
+
+      panels.forEach((panel, i) => {
+        if (i === 0) return; // Skip intro panel
+
+        const title = panel.querySelector(".step-title");
+        const description = panel.querySelector(".step-description");
+        const ctaButton = panel.querySelector(".cta-button-container");
+
+        // Split both title + description into words
+        let splitTitle = new SplitText(title, { type: "words" });
+        let splitDesc = new SplitText(description, { type: "words" });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: panel,
+            containerAnimation: horizontalAnimation,
+            start: "left 50%",
+            end: "right 80%",
+            toggleActions: "play play play reverse",
+            onLeaveBack: () => {
+              splitTitle.revert();
+              splitDesc.revert();
+            },
+            onLeave: () => {
+              splitTitle.revert();
+              splitDesc.revert();
+            },
+          }
+        });
+
+        // Title falling words
+        tl.from(splitTitle.words, {
+          y: -80,
+          opacity: 0,
+          scale: 0.9,
+          rotationX: -60,
+          transformOrigin: "50% 100%",
+          duration: 0.8,
+          ease: "power2.out",
+          stagger: 0.1
+        });
+
+        // Description falling words (shorter stagger so it flows faster)
+        tl.from(splitDesc.words, {
+          y: -60,
+          opacity: 0,
+          scale: 0.95,
+          rotationX: -45,
+          transformOrigin: "50% 100%",
+          duration: 0.6,
+          ease: "power2.out",
+          stagger: 0.06
+        }, "-=0.3"); // start slightly before title finishes
+
+        // CTA button (only panel 3)
+        if (ctaButton) {
+          tl.from(ctaButton, {
+            y: 40,
+            opacity: 0,
+            duration: 0.7,
+            ease: "power2.out"
+          }, "-=0.2");
+        }
+      });
+    }
+  });
+}, { scope: containerRef });
+
+
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <section className="bg-gray-50 py-20">
-      <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-3xl font-bold mb-4 text-gray-800">Find Your Perfect Tutor in 3 Simple Steps</h2>
-        <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
-          Our streamlined process makes it easy to connect with Singapore's best tutors, hassle-free and with complete transparency.
+    <section className="relative overflow-hidden bg-white">
+      {/* Intro panel */}
+      <div className="w-full flex flex-col justify-center items-center text-center py-24 md:py-32 px-4">
+        <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+          Your Simple Path to the Perfect Tutor
+        </h2>
+        <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8">
+          Our process is designed to be transparent, efficient, and tailored to your needs. Scroll to see how we connect you with academic success in just three steps.
         </p>
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ArrowDown className="w-8 h-8 text-slate-500" />
+        </motion.div>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 px-6 items-center">
-        {/* Left Side: Image */}
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="relative w-full h-96 rounded-xl overflow-hidden shadow-xl order-last md:order-first"
-        >
-          <Image
-            src="/primary-tuition_optimized.webp"
-            alt="A friendly Singaporean tutor from LionCity Tutors helping a primary school student with their mathematics homework."
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            placeholder="blur"
-            blurDataURL="/primary-tuition_optimized.webp"
-          />
-        </motion.div>
+      {/* Horizontal scrolling section */}
+      <div ref={containerRef} className="h-screen w-full overflow-hidden">
+        <div className="flex h-full w-[300vw]">
+          {steps.map((step, index) => {
+            const isDarkBg = index > 0;
+            const activeDotClass = isDarkBg ? 'bg-white' : 'bg-primary';
+            const inactiveDotClass = isDarkBg ? 'bg-white/50' : 'bg-slate-400';
 
-        {/* Right Side: Steps */}
-        <div className="flex flex-col gap-8">
-          {steps.map((step, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.2 }}
-              className="flex items-start"
-            >
-              <div className="flex-shrink-0 bg-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center mr-5 shadow-lg">
-                {step.icon}
-              </div>
-              <div>
-                <h3 className="font-bold text-xl text-gray-900">{step.title}</h3>
-                <p className="text-gray-700 mt-1">{step.desc}</p>
-              </div>
-            </motion.div>
-          ))}
+            return (
+              <div 
+                key={index}
+                className="panel w-screen h-full flex-shrink-0 flex items-center justify-center p-8 bg-cover bg-center relative"
+                style={{ perspective: '1000px' }} // Add perspective for 3D rotation
+              >
+                {/* Background Image & Overlay */}
+                {step.bgImage && (
+                  <>
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: step.bgImage }}
+                    />
+                    <div className={`absolute inset-0 ${step.bgOverlay}`} />
+                  </>
+                )}
 
-          {/* Call-to-Action Button */}
-          <div className="mt-6 ml-20">
-            <Button onClick={scrollToForm} className="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md text-lg">
-              Start Your Search
-            </Button>
-          </div>
+                <div className={`absolute inset-0 flex items-center justify-center text-8xl lg:text-9xl font-extrabold ${step.accentColor} opacity-10 pointer-events-none`}>
+                  {step.number}
+                </div>
+                <div className="max-w-4xl mx-auto text-center z-10 px-4">
+                  <h2 className={`step-title text-5xl lg:text-7xl font-bold mb-6 leading-tight ${step.textColor}`}>
+                    {step.title}
+                  </h2>
+                  <p className={`step-description text-2xl lg:text-3xl leading-relaxed max-w-3xl mx-auto mb-8 ${step.textColor}`}>
+                    {step.highlight.text ? (
+                      <>
+                        {step.highlight.before}
+                        <span className="font-bold text-accent">{step.highlight.text}</span>
+                        {step.highlight.after}
+                      </>
+                    ) : (
+                      step.description
+                    )}
+                  </p>
+                  {index === 2 && (
+                    <div className="cta-button-container mt-8">
+                      <Button
+                        onClick={scrollToForm}
+                        size="lg"
+                        className="bg-white text-accent hover:bg-white/90 font-bold text-lg px-8 py-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105"
+                      >
+                        Request a Tutor Now
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Navigation indicator */}
+                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                  {steps.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        i === index ? `${activeDotClass} scale-125` : inactiveDotClass
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

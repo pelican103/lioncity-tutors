@@ -1,7 +1,48 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, animate } from "framer-motion";
 import { Star, TrendingUp, Award, Quote } from "lucide-react";
+
+// Helper component for animating numbers - CORRECTED VERSION
+const Counter = ({ end, duration = 2, suffix = "", decimals = 0 }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true; // Prevents re-animating on scroll away and back
+
+          // Use Framer Motion's animate function
+          animate(0, end, {
+            duration: duration,
+            ease: "easeOut",
+            onUpdate: (latest) => {
+              setCount(decimals > 0 ? Number(latest).toFixed(decimals) : Math.floor(latest));
+            }
+          });
+        }
+      },
+      {
+        threshold: 0.5 // Start animation when 50% of the element is visible
+      }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [end, duration, decimals]);
+
+  return (
+    <span ref={ref}>
+      {count}
+      {suffix}
+    </span>
+  );
+};
 
 export default function SuccessStoriesSection() {
   const stories = [
@@ -29,20 +70,18 @@ export default function SuccessStoriesSection() {
 
   const stats = [
     { number: "98%", label: "Successful Matches", icon: TrendingUp },
-    { number: "Top 10%", label: "of Tutors Accepted", icon: Award },
+    { number: "10%", label: "Top Tutors Accepted", icon: Award },
     { number: "4.8/5", label: "Average Parent Rating", icon: Star }
   ];
 
   return (
-    <section className="py-16 md:py-24 px-4 md:px-6 bg-blue-50 relative overflow-hidden">
-      {/* Background decoration */}
+    <section className="py-16 md:py-24 px-4 md:px-6 bg-background-subtle relative overflow-hidden">
       <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-200/15 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -50,96 +89,107 @@ export default function SuccessStoriesSection() {
           transition={{ duration: 0.7 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 bg-blue-100/80 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Award className="w-4 h-4" />
             Proven Academic Results
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Stories of <span className="text-blue-600">Transformation and Success</span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4">
+            Stories of Transformation and Success
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-text-default/90 max-w-3xl mx-auto leading-relaxed">
             Discover how our dedicated tutors have helped students across Singapore not only improve their grades but also build lasting confidence.
           </p>
         </motion.div>
 
-        {/* Stats Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16 max-w-3xl mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto"
         >
-          {stats.map((stat, index) => {
-            const IconComponent = stat.icon;
-            return (
-              <div key={index} className="text-center p-6 bg-white/50 rounded-2xl shadow-md">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-4 shadow-lg">
-                  <IconComponent className="w-8 h-8 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-gray-900 mb-1">{stat.number}</div>
-                <div className="text-base text-gray-600 font-medium">{stat.label}</div>
+          {stats.map((stat, index) => (
+            <div key={index} className="text-center p-6 bg-background-card rounded-2xl shadow-md border border-border">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-4 shadow-lg">
+                <stat.icon className="w-8 h-8 text-text-inverse" />
               </div>
-            );
-          })}
+              <div className="text-4xl font-bold text-primary mb-1">
+                {typeof stat.number === 'string' && stat.number.includes('/') ? stat.number : (
+                  <Counter end={parseFloat(stat.number)} suffix={stat.number.includes('%') ? '%' : ''} decimals={stat.number.includes('.') ? 1 : 0} />
+                )}
+              </div>
+              <div className="text-base text-text-default font-medium">{stat.label}</div>
+            </div>
+          ))}
         </motion.div>
 
-        {/* Success Stories Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-12">
           {stories.map((story, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: index * 0.2 }}
+              transition={{ duration: 0.7, delay: index * 0.2 + 0.3 }}
               className="group"
             >
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-white/20 h-full flex flex-col">
-                {/* Card Header */}
+              <div className="bg-background-card rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden border border-border h-full flex flex-col">
                 <div className="p-6 md:p-8">
-                  <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center gap-4 mb-6">
                     <div className="relative">
-                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <span className="text-white text-2xl font-bold">{story.initial}</span>
+                      <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <span className="text-text-inverse text-2xl font-bold">{story.initial}</span>
                       </div>
-                      <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                        <TrendingUp className="w-4 h-4 text-white" />
+                      <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-primary rounded-full border-2 border-white flex items-center justify-center">
+                        <TrendingUp className="w-4 h-4 text-text-inverse" />
                       </div>
                     </div>
                     <div>
-                      <h3 className="font-bold text-xl text-gray-900">{story.name}</h3>
-                      <p className="text-base text-gray-600 font-medium">{story.role}</p>
+                      <h3 className="font-bold text-xl text-text-default">{story.name}</h3>
+                      <p className="text-base text-text-default/80 font-medium">{story.role}</p>
                     </div>
-                  </div>
-                  <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
-                    <TrendingUp className="w-4 h-4" />
-                    Improvement: {story.improvement}
                   </div>
                 </div>
 
-                {/* Progress Section */}
                 <div className="px-6 md:px-8">
-                    <div className="flex justify-between items-center mb-2">
-                        <span className="text-red-600 font-semibold bg-red-100 px-3 py-1 rounded-md text-sm">Before: {story.before}</span>
-                        <span className="text-green-600 font-semibold bg-green-100 px-3 py-1 rounded-md text-sm">After: {story.after}</span>
+                    <div className="flex justify-between items-center mb-2 text-sm font-semibold">
+                        <div className="flex items-center gap-2">
+                            <span className="text-text-default/70">Before:</span>
+                            <span className="bg-red-100 text-red-700 px-2.5 py-1 rounded-full">
+                                {story.before}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-primary">After:</span>
+                            <span className="bg-primary/10 text-primary px-2.5 py-1 rounded-full">
+                                {story.after}
+                            </span>
+                        </div>
                     </div>
-                  <div className="relative h-2.5 w-full bg-gray-200 rounded-full">
+                  <div className="relative h-2.5 w-full bg-border rounded-full overflow-hidden">
                     <motion.div
-                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-red-400 to-green-500 rounded-full"
+                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-red-400 via-yellow-400 to-emerald-400 rounded-full"
                       initial={{ width: "0%" }}
                       whileInView={{ width: "100%" }}
                       viewport={{ once: true }}
                       transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
                     />
+                    <motion.div
+                        className="absolute top-0 h-full w-2"
+                        initial={{ left: "0%" }}
+                        whileInView={{ left: "100%" }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
+                    >
+                        <div className="w-2.5 h-2.5 bg-white rounded-full absolute -right-1 top-0 shadow-md"></div>
+                    </motion.div>
                   </div>
                 </div>
 
-                {/* Quote Section */}
                 <div className="p-6 md:p-8 mt-auto">
-                  <div className="relative bg-gradient-to-br from-gray-50 to-blue-50/50 rounded-xl md:rounded-2xl p-6">
-                    <Quote className="w-8 h-8 text-blue-300 absolute top-3 left-3" />
-                    <p className="text-gray-700 leading-relaxed text-base italic pl-4">
+                  <div className="relative bg-background-default rounded-xl md:rounded-2xl p-6">
+                    <Quote className="w-8 h-8 text-primary/30 absolute top-3 left-3" />
+                    <p className="text-text-default/90 leading-relaxed text-base italic pl-4">
                       {story.quote}
                     </p>
                   </div>
