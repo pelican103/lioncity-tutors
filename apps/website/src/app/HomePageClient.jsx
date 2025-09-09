@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion, useScroll, useTransform, useAnimation } from "framer-motion";
-import Head from 'next/head';
 import Image from 'next/image';
 import UniqueFeaturesSection from "@/components/UniqueFeaturesSection";
 import { Step1, Step2, Step3 } from "@/components/FormSteps";
