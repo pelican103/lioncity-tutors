@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Dropdown from "./Dropdown";
-import { subjects, levels, resources } from "../data/navigation";
+// MODIFIED: Import the new data arrays
+import { subjects, levels, resources, forParents, forTutors } from "../data/navigation";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -13,7 +14,7 @@ export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const navLinkStyle = (path) =>
-    `text-sm font-medium px-4 py-2 rounded hover:bg-gray-100 transition ${
+    `text-sm font-medium px-4 py-2 rounded hover:bg-gray-100 transition whitespace-nowrap ${
       pathname === path ? "bg-gray-200 font-semibold" : ""
     }`;
 
@@ -43,7 +44,7 @@ export default function Navbar() {
     
   return (
     <>
-      {/* Contact Banner */}
+      {/* Contact Banner (No changes) */}
       <div className="w-full bg-gradient-to-r from-red-50 to-red-100 border-b border-red-200 text-red-700 text-sm py-3 px-6 flex justify-center sm:justify-between items-center">
           <div className="hidden sm:flex items-center gap-2">
           <span className="text-red-500">✉️</span>
@@ -59,25 +60,17 @@ export default function Navbar() {
         </div>
       </div>
 
-      <nav ref={navRef} className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center relative">
-        {/* Logo */}
-        <Link href="/" className="flex flex-col items-center text-xl font-bold text-red-500">
+      <nav ref={navRef} className="w-full bg-white shadow-md px-4 py-4 flex justify-between items-center relative">
+        {/* Logo (No changes) */}
+        <Link href="/" className="flex flex-col items-center text-xl font-bold text-red-500 flex-shrink-0">
           <Image src="/favicon.png" alt="LionCity Logo" width={40} height={40} priority />
-          LionCity Tutors
+          <span className="whitespace-nowrap">LionCity Tutors</span>
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden sm:flex space-x-2 items-center">
+        {/* MODIFIED: Desktop Nav with new dropdowns */}
+        <div className="hidden sm:flex space-x-1 items-center ml-auto">
           <Link href="/" className={navLinkStyle("/")}>Home</Link>
-
-          <Link href="/register-tutor" className={navLinkStyle("/register-tutor")}>
-            Register As a Tutor
-          </Link>
           
-          <Link href="/tuition-assignments" className={navLinkStyle("/tuition-assignments")}>
-            Tuition Assignments
-          </Link>
-
           <Dropdown
             label="Levels & Exams"
             items={levels}
@@ -90,36 +83,48 @@ export default function Navbar() {
             open={openDropdown === "subjects"}
             onToggle={() => toggleDropdown("subjects")}
           />
+          {/* Use the new resources data */}
           <Dropdown
-            label="Free Resources"
+            label="Resources"
             items={resources}
             open={openDropdown === "resources"}
             onToggle={() => toggleDropdown("resources")}
           />
+          <Dropdown
+            label="For Parents"
+            items={forParents}
+            open={openDropdown === "parents"}
+            onToggle={() => toggleDropdown("parents")}
+          />
+          {/* Use the new forTutors data */}
+          <Dropdown
+            label="For Tutors"
+            items={forTutors}
+            open={openDropdown === "tutors"}
+            onToggle={() => toggleDropdown("tutors")}
+          />
 
           <Link href="/tuition-rates" className={navLinkStyle("/tuition-rates")}>Tuition Rates</Link>
-          <Link href="/contact-us" className={navLinkStyle("/contact-us")}>Contact Us</Link>
-          {/* Main CTA */}
+          
           <Link
             href="/request-tutor"
-            className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 shadow-md hover:shadow-lg transition font-semibold"
+            className="bg-red-500 text-white px-3 py-2 rounded-full hover:bg-red-600 shadow-md hover:shadow-lg transition font-semibold whitespace-nowrap ml-2"
           >
             📚 Get Free Tutor Matching
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button (No changes) */}
         <button className="sm:hidden text-gray-600" onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
 
-        {/* Mobile Nav */}
+        {/* MODIFIED: FULL Mobile Nav Code with new structure */}
         {menuOpen && (
           <div 
             className="mobile-menu absolute top-full left-0 w-full bg-white shadow-md flex flex-col items-center py-4 space-y-2 z-50"
             onClick={(e) => e.stopPropagation()} 
           >
-            {/* CTA First */}
             <Link
               href="/request-tutor"
               onClick={() => setMenuOpen(false)}
@@ -130,13 +135,6 @@ export default function Navbar() {
 
             <Link href="/" onClick={() => setMenuOpen(false)} className={navLinkStyle("/")}>
               Home
-            </Link>
-            <Link href="/register-tutor" onClick={() => setMenuOpen(false)} className={navLinkStyle("/register-tutor")}>
-              Register As a Tutor
-            </Link>
-            
-            <Link href="/tuition-assignments" onClick={() => setMenuOpen(false)} className={navLinkStyle("/tuition-assignments")}>
-              Tuition Assignments
             </Link>
 
             <Dropdown
@@ -154,18 +152,29 @@ export default function Navbar() {
               isMobile
             />
             <Dropdown
-              label="Free Resources"
+              label="Resources"
               items={resources}
               open={openDropdown === "resources"}
               onToggle={() => toggleDropdown("resources")}
               isMobile
             />
+             <Dropdown
+              label="For Parents"
+              items={forParents}
+              open={openDropdown === "parents"}
+              onToggle={() => toggleDropdown("parents")}
+              isMobile
+            />
+             <Dropdown
+              label="For Tutors"
+              items={forTutors}
+              open={openDropdown === "tutors"}
+              onToggle={() => toggleDropdown("tutors")}
+              isMobile
+            />
 
             <Link href="/tuition-rates" onClick={() => setMenuOpen(false)} className={navLinkStyle("/tuition-rates")}>
               Tuition Rates
-            </Link>
-            <Link href="/contact-us" onClick={() => setMenuOpen(false)} className={navLinkStyle("/contact-us")}>
-              Contact Us
             </Link>
           </div>
         )}

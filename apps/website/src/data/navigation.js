@@ -25,5 +25,18 @@ export const levels = [
 export const resources = [
   { name: "Free Notes", path: "/free-notes" },
   { name: "Free Test Papers", path: "/free-test-papers" },
-  { name: "Blog", path: "/blog" },
+  { name: "Exam Guides Hub", path: "/guides/" }
+
+];
+
+export const forParents = [
+  { name: "Exam Guides Hub", path: "/guides" },
+  { name: "Our Blog", path: "/blog" },
+  { name: "Request a Tutor", path: "/request-tutor" },
+]
+
+// NEW: A dedicated array for tutor-related links
+export const forTutors = [
+    { name: "Become a Tutor", path: "/register-tutor" },
+    { name: "Tuition Assignments", path: "/tuition-assignments" },
 ];

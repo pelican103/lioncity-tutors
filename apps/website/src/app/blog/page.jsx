@@ -4,6 +4,14 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 const blogPosts = [
+    {
+    slug: 'improve-primary-english-composition',
+    title: '5 Signs Your Child is Struggling with English Composition (and How to Help)',
+    description: 'A practical guide for parents to identify common writing weaknesses in their children and discover actionable strategies to help them improve.',
+    date: 'September 15, 2025',
+    directUrl: '/blog/improve-primary-english-composition',
+    categories: ['English', 'PSLE', 'Parent Guide'],
+  },
   {
     slug: 'psle-english',
     title: 'PSLE English Guide',
@@ -254,7 +262,7 @@ const blogPosts = [
   },
 ];
 
-const categories = ['All', 'PSLE', 'O-Level', 'N-Level', 'A-Level', 'English', 'Math', 'Science', 'Physics', 'Chemistry', 'Biology', 'IGCSE', 'IBDP', 'General'];
+const categories = ['All', 'Parent Guide', 'PSLE', 'O-Level', 'N-Level', 'A-Level', 'English', 'Math', 'Science', 'Physics', 'Chemistry', 'Biology', 'IGCSE', 'IBDP', 'General'];
 
 export default function Blog() {
   const [selectedCategory, setSelectedCategory] = useState('All');

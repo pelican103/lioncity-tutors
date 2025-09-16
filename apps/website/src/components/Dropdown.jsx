@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
 export default function Dropdown({ label, items, open, onToggle, isMobile = false }) {
-  // State to track which nested submenu is open
   const [activeSubmenu, setActiveSubmenu] = useState(null);
 
   useEffect(() => {
@@ -15,7 +14,7 @@ export default function Dropdown({ label, items, open, onToggle, isMobile = fals
 
   const handleSubmenuToggle = (e, path) => {
     e.preventDefault();
-    e.stopPropagation(); 
+    e.stopPropagation();
     setActiveSubmenu(activeSubmenu === path ? null : path);
   };
 
@@ -25,7 +24,7 @@ export default function Dropdown({ label, items, open, onToggle, isMobile = fals
         onClick={onToggle}
         aria-haspopup="true"
         aria-expanded={open}
-        className={`text-sm font-medium px-4 py-2 rounded hover:bg-gray-100 transition flex items-center gap-1 w-full justify-center`}
+        className={`text-sm font-medium px-2 py-2 rounded hover:bg-gray-100 transition flex items-center gap-1 whitespace-nowrap ${isMobile ? 'w-full justify-center' : ''}`}
       >
         {label}
         <ChevronDown size={16} className={`transition-transform ${open ? "rotate-180" : ""}`} />
@@ -34,19 +33,17 @@ export default function Dropdown({ label, items, open, onToggle, isMobile = fals
       {/* Dropdown Menu */}
       {open && (
         <div
-          className={`${isMobile ? "bg-gray-50 py-2" : "absolute left-0 pt-2 z-20"} animate-fadeIn`}
+          className={`${isMobile ? "bg-gray-50 py-2 w-full" : "absolute left-0 pt-2 z-20"} animate-fadeIn`}
         >
           <div className={`${isMobile ? "" : "bg-white rounded-md shadow-lg py-1 min-w-[220px]"}`}>
             {items.map((item) => {
               const hasSubmenu = item.submenu && item.submenu.length > 0;
               const isSubmenuOpen = activeSubmenu === item.path;
 
-              // If an item has a submenu, render it with both clickable link and submenu toggle
               if (hasSubmenu) {
                 return (
                   <div key={item.path} className="relative">
                     <div className="flex">
-                      {/* Main clickable link - takes up most of the space */}
                       <Link
                         href={item.path}
                         className="flex-1 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
@@ -54,7 +51,6 @@ export default function Dropdown({ label, items, open, onToggle, isMobile = fals
                         {item.name}
                       </Link>
                       
-                      {/* Submenu toggle button - small area on the right */}
                       <button
                         onClick={(e) => handleSubmenuToggle(e, item.path)}
                         className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 border-l border-gray-200"
@@ -64,14 +60,13 @@ export default function Dropdown({ label, items, open, onToggle, isMobile = fals
                       </button>
                     </div>
 
-                    {/* Submenu */}
                     {isSubmenuOpen && (
                       <div className={isMobile ? "pl-4 bg-gray-100" : "absolute left-full -top-1 bg-white rounded-md shadow-lg py-1 min-w-[180px]"}>
                         {item.submenu.map((subItem) => (
                           <Link
                             key={subItem.path}
                             href={subItem.path}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           >
                             {subItem.name}
                           </Link>
@@ -82,12 +77,11 @@ export default function Dropdown({ label, items, open, onToggle, isMobile = fals
                 );
               }
 
-              // Regular menu item without submenu
               return (
                 <Link
                   key={item.path}
                   href={item.path}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   {item.name}
                 </Link>
