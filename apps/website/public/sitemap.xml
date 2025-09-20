@@ -244,17 +244,17 @@
   </url>
   <url>
     <loc>https://www.lioncitytutors.com/blog/psle-preparation-guide</loc>
-    <lastmod>2025-06-15T10:58:01+01:00</lastmod>
+    <lastmod>2025-09-20T10:58:01+01:00</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.lioncitytutors.com/blog/o-level-preparation-guide</loc>
-    <lastmod>2025-06-15T10:58:01+01:00</lastmod>
+    <lastmod>2025-09-20T10:58:01+01:00</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.lioncitytutors.com/blog/a-level-preparation-guide</loc>
-    <lastmod>2025-06-15T10:58:01+01:00</lastmod>
+    <lastmod>2025-09-20T10:58:01+01:00</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
@@ -266,5 +266,32 @@
     <loc>https://www.lioncitytutors.com/blog/benefits-of-private-tuition</loc>
     <lastmod>2025-06-15T10:58:01+01:00</lastmod>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.lioncitytutors.com/blog/navigating-psle-anxiety</loc>
+    <lastmod>2025-09-20T10:58:01+01:00</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.lioncitytutors.com/blog/focus-and-concentration-issues</loc>
+    <lastmod>2025-09-20T10:58:01+01:00</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.lioncitytutors.com/blog/pinpointing-learning-gaps</loc>
+    <lastmod>2025-09-20T10:58:01+01:00</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.lioncitytutors.com/blog/improve-primary-english-composition</loc>
+    <lastmod>2025-09-20T10:58:01+01:00</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <!-- Guide Pages -->
+  <url>
+    <loc>https://www.lioncitytutors.com/guides</loc>
+    <lastmod>2025-09-20T10:58:01+01:00</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
   </url>
 </urlset>
