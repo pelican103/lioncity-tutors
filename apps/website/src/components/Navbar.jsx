@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Dropdown from "./Dropdown";
-// MODIFIED: Import the new data arrays
 import { subjects, levels, resources, forParents, forTutors } from "../data/navigation";
 
 export default function Navbar() {
@@ -44,7 +43,7 @@ export default function Navbar() {
     
   return (
     <>
-      {/* Contact Banner (No changes) */}
+      {/* Contact Banner */}
       <div className="w-full bg-gradient-to-r from-red-50 to-red-100 border-b border-red-200 text-red-700 text-sm py-3 px-6 flex justify-center sm:justify-between items-center">
           <div className="hidden sm:flex items-center gap-2">
           <span className="text-red-500">✉️</span>
@@ -61,14 +60,14 @@ export default function Navbar() {
       </div>
 
       <nav ref={navRef} className="w-full bg-white shadow-md px-4 py-4 flex justify-between items-center relative">
-        {/* Logo (No changes) */}
+        {/* Logo */}
         <Link href="/" className="flex flex-col items-center text-xl font-bold text-red-500 flex-shrink-0">
           <Image src="/favicon.png" alt="LionCity Logo" width={40} height={40} priority />
           <span className="whitespace-nowrap">LionCity Tutors</span>
         </Link>
-
-        {/* MODIFIED: Desktop Nav with new dropdowns */}
-        <div className="hidden sm:flex space-x-1 items-center ml-auto">
+        
+        {/* Desktop Menu */}
+        <div className="hidden sm:flex space-x-3 items-center ml-auto">
           <Link href="/" className={navLinkStyle("/")}>Home</Link>
           
           <Dropdown
@@ -85,7 +84,7 @@ export default function Navbar() {
           />
           {/* Use the new resources data */}
           <Dropdown
-            label="Resources"
+            label="Free Resources"
             items={resources}
             open={openDropdown === "resources"}
             onToggle={() => toggleDropdown("resources")}

@@ -28,7 +28,7 @@ export const guidesData = [
     level: "PSLE",
     title: "The Ultimate PSLE Preparation Hub",
     description: "Your complete roadmap to PSLE success. This central guide covers scoring, timelines, and links to all our subject-specific strategies.",
-    href: "/guides/psle-guide", // This is the main pillar page we created
+    href: "/blog/psle-preparation-guide", // This is the main pillar page we created
     icon: "🎯",
   },
   {
