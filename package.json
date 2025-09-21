@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@tanstack/react-virtual": "^3.13.12",
     "embla-carousel-auto-scroll": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "gsap": "^3.13.0",
