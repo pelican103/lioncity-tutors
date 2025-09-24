@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
@@ -424,7 +425,14 @@ const NLevelPrepClient = () => {
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.7 }}
             >
-              <img src="/jc-tuition_optimized.webp" alt="Tutor helping a student with N-Level preparation" className="rounded-xl shadow-2xl" />
+            <Image 
+              src="/jc-tuition_optimized.webp" 
+              alt="Tutor helping a student for N-Level preparation" 
+              className="rounded-xl shadow-2xl"
+              width={800}
+              height={533} 
+              style={{ width: '100%', height: 'auto' }}
+            />
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 50 }}

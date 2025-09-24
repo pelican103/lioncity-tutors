@@ -66,95 +66,109 @@ export default function HowItWorksSection({ formRef }) {
   ];
 
   useGSAP(() => {
-  const panels = gsap.utils.toArray('.panel');
-  if (panels.length <= 1) return;
+    const panels = gsap.utils.toArray('.panel');
+    if (panels.length <= 1) return;
 
-  ScrollTrigger.matchMedia({
-    "(prefers-reduced-motion: no-preference)": function() {
-      const horizontalAnimation = gsap.to(panels, {
-        xPercent: -100 * (panels.length - 1),
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          pin: true,
-          scrub: 1,
-          snap: 1 / (panels.length - 1),
-          end: () => "+=" + (containerRef.current.offsetWidth * (panels.length - 1)),
-        }
-      });
-
-      panels.forEach((panel, i) => {
-        if (i === 0) return; // Skip intro panel
-
-        const title = panel.querySelector(".step-title");
-        const description = panel.querySelector(".step-description");
-        const ctaButton = panel.querySelector(".cta-button-container");
-
-        // Split both title + description into words
-        let splitTitle = new SplitText(title, { type: "words" });
-        let splitDesc = new SplitText(description, { type: "words" });
-
-        const tl = gsap.timeline({
+    ScrollTrigger.matchMedia({
+      "(min-width: 768px) and (prefers-reduced-motion: no-preference)": function() {
+        const horizontalAnimation = gsap.to(panels, {
+          xPercent: -100 * (panels.length - 1),
+          ease: "none",
           scrollTrigger: {
-            trigger: panel,
-            containerAnimation: horizontalAnimation,
-            start: "left 50%",
-            end: "right 80%",
-            toggleActions: "play play play reverse",
-            onLeaveBack: () => {
-              splitTitle.revert();
-              splitDesc.revert();
-            },
-            onLeave: () => {
-              splitTitle.revert();
-              splitDesc.revert();
-            },
+            trigger: containerRef.current,
+            pin: true,
+            scrub: 0.5, 
+            snap: 1 / (panels.length - 1),
+            end: () => "+=" + (containerRef.current.offsetWidth * (panels.length - 1)),
+            invalidateOnRefresh: true, 
           }
         });
 
-        // Title falling words
-        tl.from(splitTitle.words, {
-          y: -80,
-          opacity: 0,
-          scale: 0.9,
-          rotationX: -60,
-          transformOrigin: "50% 100%",
-          duration: 0.8,
-          ease: "power2.out",
-          stagger: 0.1
+        panels.forEach((panel, i) => {
+          const title = panel.querySelector(".step-title");
+          const description = panel.querySelector(".step-description");
+
+          // ✨ NEW LOGIC: Animate the first panel based on vertical scroll
+          if (i === 0) {
+            let splitTitle = new SplitText(title, { type: "words,chars" });
+            let splitDesc = new SplitText(description, { type: "words" });
+
+            const tl = gsap.timeline({
+              scrollTrigger: {
+                trigger: panel,
+                start: "top 60%", // Start when panel top hits 60% from top of viewport
+                end: "bottom 70%",
+                toggleActions: "play reverse play reverse",
+              }
+            });
+
+            tl.from(splitTitle.chars, {
+                opacity: 0,
+                y: 20,
+                duration: 0.5,
+                ease: "power2.out",
+                stagger: 0.02
+              })
+              .from(splitDesc.words, {
+                opacity: 0,
+                y: 20,
+                duration: 0.8,
+                ease: "power2.out",
+                stagger: 0.05
+              }, "-=0.4");
+
+          } else {
+            // ✨ ORIGINAL LOGIC: Animate other panels based on horizontal scroll
+            const ctaButton = panel.querySelector(".cta-button-container");
+            let splitTitle = new SplitText(title, { type: "words,chars" });
+            let splitDesc = new SplitText(description, { type: "words" });
+            
+            const tl = gsap.timeline({
+              scrollTrigger: {
+                trigger: panel,
+                containerAnimation: horizontalAnimation,
+                start: "left 60%",
+                end: "right 80%",
+                toggleActions: "play reverse play reverse",
+              }
+            });
+
+            tl.from(splitTitle.chars, {
+                opacity: 0,
+                y: 20,
+                duration: 0.5,
+                ease: "power2.out",
+                stagger: 0.02
+              })
+              .from(splitDesc.words, {
+                opacity: 0,
+                y: 20,
+                duration: 0.8,
+                ease: "power2.out",
+                stagger: 0.05
+              }, "-=0.4");
+
+            if (ctaButton) {
+              tl.from(ctaButton, {
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                ease: "power2.out"
+              }, "-=0.3");
+            }
+          }
         });
-
-        // Description falling words (shorter stagger so it flows faster)
-        tl.from(splitDesc.words, {
-          y: -60,
-          opacity: 0,
-          scale: 0.95,
-          rotationX: -45,
-          transformOrigin: "50% 100%",
-          duration: 0.6,
-          ease: "power2.out",
-          stagger: 0.06
-        }, "-=0.3"); // start slightly before title finishes
-
-        // CTA button (only panel 3)
-        if (ctaButton) {
-          tl.from(ctaButton, {
-            y: 40,
-            opacity: 0,
-            duration: 0.7,
-            ease: "power2.out"
-          }, "-=0.2");
-        }
-      });
-    }
-  });
+      }
+    });
 }, { scope: containerRef });
-
-
 
   const scrollToForm = () => {
     formRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+  
+  // Use CSS classes for elements that will be animated for performance
+  const animatedTextClass = "will-change-transform-opacity";
+
 
   return (
     <section className="relative overflow-hidden bg-white">
@@ -246,6 +260,11 @@ export default function HowItWorksSection({ formRef }) {
           })}
         </div>
       </div>
+      <style jsx global>{`
+        .will-change-transform-opacity {
+          will-change: transform, opacity;
+        }
+      `}</style>
     </section>
   );
 }
