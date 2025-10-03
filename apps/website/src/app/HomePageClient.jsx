@@ -10,12 +10,14 @@ import Image from 'next/image';
 import UniqueFeaturesSection from "@/components/UniqueFeaturesSection";
 import { Step1, Step2, Step3 } from "@/components/FormSteps";
 import TutorPopup from "@/components/TutorPopup";
+import useTuitionRequestForm from "@/components/useTuitionRequestForm";
 import { Star, CheckCircle, Award, Users, Clock, Shield, Quote, TrendingUp, MapPin, Phone, Mail } from "lucide-react";
 
 // Lazy-loaded sections
 import dynamic from 'next/dynamic';
 import ReviewStrip from "@/components/ReviewStrip";
 import TestimonialAutoScroller from "@/components/TestimonialAutoScroller";
+import SubjectSpotlightSection from "@/components/SubjectSpotlightSection";
 const SuccessStories = dynamic(() => import('@/components/SuccessStoriesSection'), { ssr: false });
 const FAQSection = dynamic(() => import('@/components/FAQSection'), { ssr: false });
 const HowitWorksSection = dynamic(() => import('@/components/HowItWorksSection'), { ssr: false });
@@ -34,25 +36,6 @@ const Counter = ({ end, duration = 2.5, suffix = "", decimals = 0 }) => {
     requestAnimationFrame(animate);
   }, [end, duration, decimals]);
   return <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{count}{suffix}</motion.span>;
-};
-
-const validateStep = (step, data) => {
-    const newErrors = {};
-
-    if (step === 1) {
-        if (!data.name.trim()) newErrors.name = "Name is required.";
-        if (!data.mobile.trim()) {
-            newErrors.mobile = "Mobile number is required.";
-        } else if (!/^[689]\d{7}$/.test(data.mobile.trim())) {
-            newErrors.mobile = "Please enter a valid 8-digit Singapore mobile number.";
-        }
-        if (!data.level.trim()) newErrors.level = "Level & Subject are required.";
-    }
-
-    if (step === 2) {
-        if (!data.location.trim()) newErrors.location = "Location is required.";
-    }
-    return newErrors;
 };
 
 
@@ -111,96 +94,25 @@ export default function HomePageClient() {
 
   const scrollToResources = () => resourcesRef.current?.scrollIntoView({ behavior: 'smooth' });
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const initialFormData = {
-      name: '',
-      mobile: '',
-      level: '',
-      location: '',
-      lessonDuration: '1.5 Hours',
-      customDuration: '',
-      lessonFrequency: '1 Lesson/Week',
-      customFrequency: '',
+  const {
+    currentStep,
+    formData,
+    errors,
+    status,
+    nextStep,
+    prevStep,
+    handleChange,
+    handleSubmit,
+    resetForm
+  } = useTuitionRequestForm({
+      name: '', mobile: '', level: '', location: '',
+      lessonDuration: '1.5 Hours', customDuration: '',
+      lessonFrequency: '1 Lesson/Week', customFrequency: '',
       preferredTime: '',
-      tutorType: { partTime: true, fullTime: false, moeTeacher: false }, // Default to Part-Time
+      tutorType: { partTime: true, fullTime: false, moeTeacher: false },
       budget: { type: 'marketRate', customAmount: '' },
       preferences: ''
-  };
-  const [formData, setFormData] = useState(initialFormData);
-  const [status, setStatus] = useState({ submitting: false, submitted: false, error: null });
-  const [errors, setErrors] = useState({});
-
-  // --- CORRECTED STEP TRANSITION LOGIC ---
-  const nextStep = () => {
-      const newErrors = validateStep(currentStep, formData);
-      setErrors(newErrors);
-
-      if (Object.keys(newErrors).length === 0) {
-          setCurrentStep(prev => prev + 1);
-      }
-  };
-
-  const prevStep = () => {
-      setErrors({}); // Clear errors when going back
-      setCurrentStep(prev => prev - 1);
-  };
-
-  // --- CONSOLIDATED & ROBUST handleChange LOGIC ---
-  const handleChange = (e) => {
-      const { name, value, type, checked } = e.target;
-      const inputValue = type === 'checkbox' ? checked : value;
-
-      // Clear the specific error when the user starts typing
-      if (errors[name]) {
-          setErrors(prev => ({ ...prev, [name]: null }));
-      }
-
-      if (name.includes('.')) {
-          const [parent, child] = name.split('.');
-          setFormData(prev => ({
-              ...prev,
-              [parent]: { ...prev[parent], [child]: inputValue }
-          }));
-      } else {
-          setFormData(prev => ({ ...prev, [name]: inputValue }));
-      }
-  };
-
-  const handleSubmit = async (e) => {
-      e.preventDefault();
-
-      // Final validation check on all fields before submitting
-      const step1Errors = validateStep(1, formData);
-      const allErrors = { ...step1Errors };
-
-      if (Object.keys(allErrors).length > 0) {
-          setErrors(allErrors);
-          // If there are errors from Step 1, automatically go back to it
-          if (Object.keys(step1Errors).length > 0) {
-              setCurrentStep(1);
-          }
-          return; // Stop submission if there are any errors
-      }
-
-      setStatus({ submitting: true, submitted: false, error: null });
-      try {
-          const response = await fetch('https://tuition-backend-afud.onrender.com/api/requestfortutor', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(formData)
-          });
-          const result = await response.json();
-          if (!response.ok) throw new Error(result.error || 'Form submission failed');
-
-          setFormData(initialFormData);
-          setCurrentStep(1);
-          setStatus({ submitting: false, submitted: true, error: null });
-          formRef.current?.scrollIntoView({ behavior: 'smooth' });
-
-      } catch (error) {
-          setStatus({ submitting: false, submitted: false, error: error.message });
-      }
-  };
+  });
 
   const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: 'smooth' });
   const scrollToFAQ = () => faqRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -361,7 +273,8 @@ export default function HomePageClient() {
         
         <UniqueFeaturesSection />
         <SuccessStories />
-  
+        <SubjectSpotlightSection/>
+
     {/* --- Form Section with Corrected Props --- */}
     <section ref={formRef} className="form-section-gradient"> 
       <div className="max-w-4xl mx-auto px-6 py-16 sm:py-24"> 
@@ -396,10 +309,10 @@ export default function HomePageClient() {
                     <div className="text-center py-10">
                         <CheckCircle className="text-green-500 w-16 h-16 mx-auto mb-4" />
                         <h2 className="text-2xl font-semibold mb-2">Thank you!</h2>
-                        <p className="text-text-default/80 mb-4">We'll send you tutor profiles shortly.</p>
+                        <p className="text-text-default/80 mb-4">Our team will be in touch with suitable tutor profiles shortly via WhatsApp.</p>
                         <Button 
                             className="bg-accent text-text-inverse hover:bg-accent/90" 
-                            onClick={() => setStatus({ submitting: false, submitted: false, error: null })}
+                            onClick={resetForm}
                         >
                             Submit Another Request
                         </Button>

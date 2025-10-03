@@ -21,9 +21,9 @@
 
 /* Apply base styles */
 body {
-  background-color: theme(colors.background.default);
-  color: theme(colors.text.default);
-  font-family: theme(fontFamily.sans);
+  background-color: var(--color-background-default);
+  color: var(--color-text-default);
+  font-family: var(--font-family-sans);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -32,7 +32,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Apply primary color to headings by default */
 h1, h2, h3, h4, h5, h6 {
-  color: theme(colors.primary);
+  color: var(--color-primary);
 }
 
 /* Ensure headings on colored backgrounds have inverse text color */
@@ -48,7 +48,7 @@ h1, h2, h3, h4, h5, h6 {
 .bg-accent h4,
 .bg-accent h5,
 .bg-accent h6 {
-  color: theme(colors.text.inverse);
+  color: var(--color-text-inverse);
 }
 
 .form-section-gradient {
@@ -177,31 +177,7 @@ h1, h2, h3, h4, h5, h6 {
   min-width: 7rem;
 }
 
-@keyframes scroll-horizontal {
-  0% {
-    transform: translateX(-4px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(4px);
-    opacity: 0.7;
-  }
-}
-
-.animate-scroll-horizontal {
-  animation: scroll-horizontal 1.5s infinite alternate;
-}
-
 /* Smooth scrolling for the entire page */
 html {
   scroll-behavior: smooth;
-}
-
-/* Ensure proper sizing for horizontal scroller */
-.horizontal-scroller {
-  overflow: hidden;
-}
-
-.panel {
-  will-change: transform;
 }
