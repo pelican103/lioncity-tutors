@@ -215,10 +215,10 @@ export default function HomePageClient() {
               className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
             >
             {[
-              { icon: <TrendingUp className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 100, suffix: "+", label: "Successful Matches", sub: "Every month across SG" },
-              { icon: <Users className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 200, suffix: "+", label: "Qualified Tutors", sub: "Carefully vetted professionals" },
+              { icon: <TrendingUp className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 100, suffix: "+", label: "Successful Matches", sub: "In the last 3 months across SG" },
+              { icon: <Users className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 150, suffix: "+", label: "Qualified Tutors", sub: "Carefully vetted professionals" },
               { icon: <Clock className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 24, suffix: "h", label: "Response Time", sub: "Most matched within 6h" },
-              { icon: <Star className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 4.8, suffix: "/5", label: "Client Rating", sub: "From hundreds of parents", decimals: 1 }
+              { icon: <Star className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 4.8, suffix: "/5", label: "Client Rating", sub: "From happy parents", decimals: 1 }
             ].map((stat, i) => (
               <motion.div key={i} whileHover={{ scale: 1.05 }} viewport={{ once: true }} className="p-6 bg-background-card rounded-lg shadow-sm border border-border">
                 {stat.icon}

@@ -38,7 +38,8 @@ const SubjectSpotlightSection = () => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-primary">Find a Tutor for Your Subject</h2>
-          <p className="text-text-default mt-3 text-lg max-w-2xl mx-auto">We have specialists for all core subjects and levels. Get started with one of our most requested areas.</p>
+          <p className="text-text-default mt-3 text-lg max-w-2xl mx-auto">We have specialists for all core subjects and levels. 
+            <p></p>Get started with 1 of our 4 most requested subjects.</p>
         </motion.div>
 
         <motion.div 
