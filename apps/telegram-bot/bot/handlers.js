@@ -1545,51 +1545,77 @@ async function viewAssignments(bot, chatId, page = 0, Assignment) {
 }
 
 // View user's applications
+// View user's applications (robust version)
 async function viewMyApplications(bot, chatId, userSessions, Assignment) {
   try {
-    const tutorId = userSessions[chatId].tutorId;
-    if (!tutorId) {
-      return await safeSend(bot, chatId, '❌ Please start with /start and share your contact before viewing applications.');
+    // Safely get session
+    const session = userSessions[chatId];
+
+    if (!session || !session.tutorId) {
+      return await safeSend(
+        bot,
+        chatId,
+        '❌ Please start with /start and share your contact before viewing applications.',
+        {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '🏠 Back to Main Menu', callback_data: 'main_menu' }]
+            ]
+          }
+        }
+      );
     }
+
+    const tutorId = session.tutorId;
 
     // Find assignments where this tutor has applied
     const assignments = await Assignment.find({
       'applicants.tutorId': tutorId
     }).sort({ createdAt: -1 });
-    
-    if (assignments.length === 0) {
-      await safeSend(bot, chatId, '📋 You haven\'t applied for any assignments yet.', {
-        reply_markup: {
-          inline_keyboard: [
-            [{ text: '📋 View Available Assignments', callback_data: 'view_assignments' }],
-            [{ text: '🏠 Back to Main Menu', callback_data: 'main_menu' }]
-          ]
+
+    if (!assignments.length) {
+      return await safeSend(
+        bot,
+        chatId,
+        "📋 You haven't applied for any assignments yet.",
+        {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '📋 View Available Assignments', callback_data: 'view_assignments' }],
+              [{ text: '🏠 Back to Main Menu', callback_data: 'main_menu' }]
+            ]
+          }
         }
-      });
-      return;
+      );
     }
-    
+
+    // Build the applications message
     let message = `📋 *My Applications*\n\n`;
-    
+
     assignments.forEach((assignment, index) => {
-      const myApplication = assignment.applicants.find(app => app.tutorId.toString() === tutorId.toString());
-      
+      const myApplication = assignment.applicants.find(
+        app => app.tutorId.toString() === tutorId.toString()
+      );
+
+      // If for some reason myApplication is missing, skip it safely
+      if (!myApplication) return;
+
       message += `*${index + 1}. ${assignment.title || 'Assignment'}*\n`;
       message += `📚 Level: ${assignment.level}\n`;
       message += `📖 Subject: ${assignment.subject}\n`;
       message += `📍 Location: ${assignment.location}\n`;
       message += `💰 Rate: ${assignment.rate}\n`;
-      message += `📅 Applied: ${myApplication.appliedAt.toLocaleDateString('en-SG')}\n`;
+      message += `📅 Applied: ${new Date(myApplication.appliedAt).toLocaleDateString('en-SG')}\n`;
       message += `🔄 Status: ${myApplication.status}\n\n`;
     });
-    
+
     await safeSend(bot, chatId, message, {
       parse_mode: 'Markdown',
       reply_markup: {
         inline_keyboard: [[{ text: '🏠 Back to Main Menu', callback_data: 'main_menu' }]]
       }
     });
-    
+
   } catch (error) {
     console.error('Error viewing applications:', error);
     await safeSend(bot, chatId, '❌ An error occurred while loading your applications. Please try again.');
