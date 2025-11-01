@@ -32,9 +32,6 @@ This README covers how to run and develop the project locally, environment varia
 - [Common scripts](#common-scripts)
 - [Local development](#local-development)
 - [Building & deployment](#building--deployment)
-- [Troubleshooting & notes](#troubleshooting--notes)
-- [Contributing](#contributing)
-- [License & acknowledgements](#license--acknowledgements)
 
 
 ## Quick start
