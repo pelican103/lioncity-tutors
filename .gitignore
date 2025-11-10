@@ -25,6 +25,7 @@ apps/website/out/
 apps/backend/dist/
 
 # OS generated files
+.vscode
 .DS_Store
 .DS_Store?
 ._*
