@@ -12,7 +12,7 @@ const TestimonialCard = ({ t }) => (
         {[...Array(5)].map((_, i) => (<Star key={i} className="w-5 h-5 text-rating fill-current" />))}
       </div>
       <div className="flex-grow">
-        <p className="text-text-default text-base leading-relaxed relative">
+        <p className="testimonial-text text-text-default text-base leading-relaxed relative">
           <Quote className="w-8 h-8 text-border absolute -top-2 -left-3" />
           <span className="relative z-10">{t.text}</span>
         </p>

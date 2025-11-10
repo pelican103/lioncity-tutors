@@ -24,6 +24,7 @@ export default function Dropdown({ label, items, open, onToggle, isMobile = fals
         onClick={onToggle}
         aria-haspopup="true"
         aria-expanded={open}
+        aria-controls={`dropdown-${label}`}
         className={`text-sm font-medium px-2 py-2 rounded hover:bg-gray-100 transition flex items-center gap-1 whitespace-nowrap ${isMobile ? 'w-full justify-center' : ''}`}
       >
         {label}

@@ -39,3 +39,12 @@ env/
 .env/
 virtualenv/
 .env*/
+
+# Tests
+test-*.html
+test-runner.html
+TEST-SUMMARY.md
+TESTING-COMPLETE.md
+lighthouse-audit-summary.md
+lighthouse-report.report.
+lighthouse-report.report.json

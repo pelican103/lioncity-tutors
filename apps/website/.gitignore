@@ -55,3 +55,9 @@ venv/
 env/
 .env/
 virtualenv/
+
+# Tests
+test-*.html
+test-runner.html
+TEST-SUMMARY.md
+TESTING-COMPLETE.md

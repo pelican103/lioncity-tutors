@@ -1,8 +1,36 @@
 // src/hooks/useTuitionRequestForm.js
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+
+// Safe localStorage wrapper with error handling
+const safeLocalStorage = {
+    getItem: (key) => {
+        try {
+            return localStorage.getItem(key);
+        } catch (error) {
+            console.warn('localStorage.getItem failed:', error);
+            return null;
+        }
+    },
+    setItem: (key, value) => {
+        try {
+            localStorage.setItem(key, value);
+        } catch (error) {
+            console.warn('localStorage.setItem failed:', error);
+        }
+    },
+    removeItem: (key) => {
+        try {
+            localStorage.removeItem(key);
+        } catch (error) {
+            console.warn('localStorage.removeItem failed:', error);
+        }
+    }
+};
+
+const STORAGE_KEY = 'tutorRequestDraft';
 
 const validateStep = (step, data) => {
     const newErrors = {};
@@ -27,6 +55,32 @@ const useTuitionRequestForm = (initialFormData) => {
     const [formData, setFormData] = useState(initialFormData);
     const [errors, setErrors] = useState({});
     const [status, setStatus] = useState({ submitting: false, submitted: false, error: null });
+
+    // Load saved draft from localStorage on component mount
+    useEffect(() => {
+        const savedDraft = safeLocalStorage.getItem(STORAGE_KEY);
+        if (savedDraft) {
+            try {
+                const parsed = JSON.parse(savedDraft);
+                setFormData(parsed);
+            } catch (error) {
+                console.error('Failed to parse form draft:', error);
+                // If parsing fails, remove the corrupted data
+                safeLocalStorage.removeItem(STORAGE_KEY);
+            }
+        }
+    }, []);
+
+    // Save form data to localStorage on changes (only if not submitted)
+    useEffect(() => {
+        if (!status.submitted) {
+            try {
+                safeLocalStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+            } catch (error) {
+                console.error('Failed to save form draft:', error);
+            }
+        }
+    }, [formData, status.submitted]);
 
     const nextStep = () => {
         const newErrors = validateStep(currentStep, formData);
@@ -87,6 +141,9 @@ const useTuitionRequestForm = (initialFormData) => {
                 throw new Error(result.error || 'Form submission failed');
             }
             setStatus({ submitting: false, submitted: true, error: null });
+            
+            // Clear the saved draft from localStorage after successful submission
+            safeLocalStorage.removeItem(STORAGE_KEY);
         } catch (error) {
             setStatus({ submitting: false, submitted: false, error: error.message });
         }

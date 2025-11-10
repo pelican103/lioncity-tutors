@@ -479,12 +479,17 @@ function generatePhoneVariations(phone) {
   
   // Generate all possible variations that might exist in your DB
   const variations = [
-    normalized,                    // 91234567
-    `65${normalized}`,            // 6591234567
-    `+65${normalized}`,           // +6591234567
-    // Add formatted versions if you might have stored them
-    normalized.replace(/(\d{4})(\d{4})/, '$1 $2'), // 9123 4567
-    `65 ${normalized.replace(/(\d{4})(\d{4})/, '$1 $2')}` // 65 9123 4567
+    normalized,                                      // 96571013
+    `65${normalized}`,                              // 6596571013
+    `+65${normalized}`,                             // +6596571013
+    `+65 ${normalized}`,                            // +65 96571013
+    normalized.replace(/(\d{4})(\d{4})/, '$1 $2'), // 9657 1013
+    normalized.replace(/(\d{4})(\d{4})/, '$1-$2'), // 9657-1013
+    `65${normalized.replace(/(\d{4})(\d{4})/, '$1 $2')}`, // 659657 1013
+    `65 ${normalized}`,                             // 65 96571013
+    `65 ${normalized.replace(/(\d{4})(\d{4})/, '$1 $2')}`, // 65 9657 1013
+    `+65${normalized.replace(/(\d{4})(\d{4})/, '$1 $2')}`, // +659657 1013
+    `+65 ${normalized.replace(/(\d{4})(\d{4})/, '$1 $2')}` // +65 9657 1013
   ];
   
   // Remove duplicates and empty strings

@@ -51,6 +51,10 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-text-inverse);
 }
 
+.hero-image {
+  will-change: transform;
+}
+
 .form-section-gradient {
   background: radial-gradient(circle at 50% 50%, #f0f4ff, #ffffff);
   position: relative;
@@ -180,4 +184,21 @@ h1, h2, h3, h4, h5, h6 {
 /* Smooth scrolling for the entire page */
 html {
   scroll-behavior: smooth;
+}
+
+/* Section spacing utility */
+.section-padding {
+  @apply py-16 md:py-24;
+}
+
+.section-padding-sm {
+  @apply py-12 md:py-16;
+}
+
+/* Testimonial text truncation */
+.testimonial-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

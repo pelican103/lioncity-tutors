@@ -1,7 +1,5 @@
 'use client';
 import React, { useState, useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,9 +16,32 @@ import dynamic from 'next/dynamic';
 import ReviewStrip from "@/components/ReviewStrip";
 import TestimonialAutoScroller from "@/components/TestimonialAutoScroller";
 import SubjectSpotlightSection from "@/components/SubjectSpotlightSection";
-const SuccessStories = dynamic(() => import('@/components/SuccessStoriesSection'), { ssr: false });
-const FAQSection = dynamic(() => import('@/components/FAQSection'), { ssr: false });
-const HowitWorksSection = dynamic(() => import('@/components/HowItWorksSection'), { ssr: false });
+
+// Loading spinner component
+const LoadingSpinner = () => (
+  <div className="section-padding flex items-center justify-center">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+  </div>
+);
+
+const SuccessStories = dynamic(
+  () => import('@/components/SuccessStoriesSection'), 
+  { 
+    ssr: false,
+    loading: () => <LoadingSpinner />
+  }
+);
+
+// Remove lazy loading from FAQSection (import directly)
+import FAQSection from '@/components/FAQSection';
+
+const HowitWorksSection = dynamic(
+  () => import('@/components/HowItWorksSection'),
+  {
+    ssr: false,
+    loading: () => <LoadingSpinner />
+  }
+);
 
 const Counter = ({ end, duration = 2.5, suffix = "", decimals = 0 }) => {
   const [count, setCount] = useState(0);
@@ -45,52 +66,6 @@ export default function HomePageClient() {
   const faqRef = useRef(null);
   const resourcesRef = useRef(null);
   const main = useRef(null);
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    
-    // Use a context for safe cleanup
-    const ctx = gsap.context(() => {
-      const heroSpans = gsap.utils.toArray('.hero-headline-span');
-      gsap.set(heroSpans, { y: 30, opacity: 0 }); // Set initial state
-
-      // 1. Text reveal on load
-      gsap.to(heroSpans, {
-        y: 0,
-        opacity: 1,
-        stagger: 0.2,
-        duration: 0.8,
-        ease: 'power3.out',
-        delay: 0.2,
-      });
-
-      gsap.from('.hero-subheadline, .hero-cta', {
-        opacity: 0,
-        y: 20,
-        duration: 0.8,
-        ease: 'power3.out',
-        delay: 0.6,
-      });
-
-
-      // 2. Parallax and Fade on Scroll
-      ScrollTrigger.create({
-        trigger: ".hero-section",
-        start: "top top",
-        end: "bottom top",
-        onUpdate: self => {
-          // Parallax for the image
-          gsap.to(".hero-image", { y: self.progress * -100, ease: "none" }); 
-          // Fade out for the text content
-          gsap.to(".hero-content", { opacity: 1 - self.progress * 1.5, ease: "none" }); 
-        }
-      });
-
-      
-    }, main); // Scope the animations to the <main> element
-
-    // Cleanup function
-    return () => ctx.revert();
-  }, []);
 
   const scrollToResources = () => resourcesRef.current?.scrollIntoView({ behavior: 'smooth' });
 
@@ -132,7 +107,7 @@ export default function HomePageClient() {
       <main ref={main} className="bg-background-default text-text-default">
         <TutorPopup />
         {/* Hero Section */}
-        <section className="bg-background-card px-4 py-16 md:py-20 overflow-hidden">
+        <section className="hero-section section-padding bg-background-card px-4 overflow-hidden">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
             <div className="hero-content">
             {/* Animated Text Content */}
@@ -154,9 +129,29 @@ export default function HomePageClient() {
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className="text-4xl md:text-5xl font-bold text-primary leading-tight"
               >
-                Find the Right Tutor to Unlock Your Child's Potential.
-                <span className="text-text-default"> Expert Matches, Zero Agency Fees.</span>
+                Find Your Perfect Tutor.
+                <span className="text-text-default"> Zero Agency Fees.</span>
               </motion.h1>
+              
+              <motion.div
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="mt-4 flex flex-wrap items-center gap-4 justify-center sm:justify-start"
+              >
+                <div className="flex items-center gap-2 bg-background-subtle px-4 py-2 rounded-full">
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <span className="text-sm font-semibold text-text-default">4.8/5 on Google</span>
+                </div>
+                
+                <div className="flex items-center gap-2 text-sm text-text-default/70">
+                  <CheckCircle className="w-4 h-4 text-primary" />
+                  <span>100+ families matched</span>
+                </div>
+              </motion.div>
               
               <motion.p
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
@@ -182,10 +177,10 @@ export default function HomePageClient() {
                   href="https://wa.me/6588701152?text=Hi%20LionCity%20Tutors%2C%20I%27m%20looking%20for%20a%20tutor."
                   target="_blank"
                   rel="noreferrer"
-                  className="text-primary font-semibold flex items-center gap-2 border-2 border-primary px-4 py-2 text-sm rounded-xl hover:bg-primary hover:text-text-inverse transition-colors w-full sm:w-auto justify-center"
+                  className="text-primary font-medium flex items-center gap-2 hover:underline w-full sm:w-auto justify-center transition-all"
                 >
                   <Phone className="w-5 h-5" />
-                  Chat on WhatsApp
+                  Or chat on WhatsApp
                 </a>
               </motion.div>
             </motion.div>
@@ -198,7 +193,14 @@ export default function HomePageClient() {
               transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
               className="rounded-2xl overflow-hidden shadow-inner h-64 md:h-80 relative mt-8 md:mt-0 hero-image"
             >
-              <Image src="/final.webp" alt="A dedicated tutor helping a student." fill className="object-cover" priority />
+              <Image 
+                src="/final.webp" 
+                alt="A dedicated tutor helping a student." 
+                fill 
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
             </motion.div>
           </div>
         </section>
@@ -206,7 +208,7 @@ export default function HomePageClient() {
         <ReviewStrip />
         
         {/* Stats */}
-        <section className="bg-background-subtle py-12">
+        <section className="section-padding-sm bg-background-subtle">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -235,7 +237,7 @@ export default function HomePageClient() {
         <HowitWorksSection formRef={formRef} />
         
         {/* Social Proof */}
-        <section className="py-16 bg-background-subtle">
+        <section className="section-padding bg-background-subtle">
           <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-primary">Trusted by Parents Across Singapore</h2>
@@ -276,8 +278,8 @@ export default function HomePageClient() {
         <SubjectSpotlightSection/>
 
     {/* --- Form Section with Corrected Props --- */}
-    <section ref={formRef} className="form-section-gradient"> 
-      <div className="max-w-4xl mx-auto px-6 py-16 sm:py-24"> 
+    <section ref={formRef} className="section-padding form-section-gradient"> 
+      <div className="max-w-4xl mx-auto px-6"> 
   
       <motion.div
           className="form-card-container"
@@ -320,11 +322,27 @@ export default function HomePageClient() {
                 ) : (
                     <form onSubmit={handleSubmit}>
                         <div className="mb-8">
-                            <div className="flex justify-between mb-1">
+                            {/* Desktop: Text labels */}
+                            <div className="hidden sm:flex justify-between mb-1">
                                 {["Your Details", "Lesson Details", "Tutor Preferences"].map((step, i) => (
                                     <span key={i} className={`text-sm font-medium ${currentStep >= i + 1 ? 'text-primary' : 'text-gray-400'}`}>{step}</span>
                                 ))}
                             </div>
+                            
+                            {/* Mobile: Numbered circles */}
+                            <div className="flex sm:hidden justify-between px-4 mb-4">
+                                {[1, 2, 3].map((num) => (
+                                    <div key={num} className="flex flex-col items-center gap-1">
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
+                                            currentStep >= num ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500'
+                                        }`}>
+                                            {num}
+                                        </div>
+                                        <span className="text-xs text-gray-500">Step {num}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            
                             <div className="w-full bg-gray-200 rounded-full h-2">
                                 <div className="bg-primary h-2 rounded-full transition-all duration-500" style={{ width: `${((currentStep - 1) / 2) * 100}%` }} />
                             </div>
@@ -344,7 +362,7 @@ export default function HomePageClient() {
         
         {/* Enhanced Quick Links Section */}
 
-          <section ref={resourcesRef} className="relative overflow-hidden bg-background-default py-16 px-4 sm:px-6">
+          <section ref={resourcesRef} className="section-padding relative overflow-hidden bg-background-default px-4 sm:px-6">
            {/* Background Pattern */}
           <div className="absolute inset-0 opacity-5">
             <div className="absolute top-10 left-10 w-20 h-20 bg-blue-600 rounded-full blur-xl"></div>

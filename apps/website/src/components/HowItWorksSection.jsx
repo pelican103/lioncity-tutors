@@ -173,14 +173,15 @@ export default function HowItWorksSection({ formRef }) {
   return (
     <section className="relative overflow-hidden bg-white">
       {/* Intro panel */}
-      <div className="w-full flex flex-col justify-center items-center text-center py-24 md:py-32 px-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+      <div className="w-full flex flex-col justify-center items-center text-center py-16 md:py-32 px-4">
+        <h2 className="text-3xl md:text-5xl font-bold text-slate-800 mb-3 md:mb-4">
           Your Simple Path to the Perfect Tutor
         </h2>
-        <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8">
-          Our process is designed to be transparent, efficient, and tailored to your needs. Scroll to see how we connect you with academic success in just three steps.
+        <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto mb-6 md:mb-8">
+          Our process is designed to be transparent, efficient, and tailored to your needs.
         </p>
         <motion.div
+          className="hidden md:block"
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
@@ -188,9 +189,66 @@ export default function HowItWorksSection({ formRef }) {
         </motion.div>
       </div>
 
-      {/* Horizontal scrolling section */}
-      <div ref={containerRef} className="h-screen w-full overflow-hidden">
-        <div className="flex h-full w-[300vw]">
+      {/* Mobile: Card-based layout, Desktop: Horizontal scrolling */}
+      <div ref={containerRef} className="md:h-screen w-full md:overflow-hidden">
+        {/* Mobile Layout */}
+        <div className="md:hidden px-4 pb-12 space-y-6">
+          {steps.map((step, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="bg-white rounded-2xl overflow-hidden shadow-lg border border-slate-200"
+            >
+              {/* Image Section */}
+              {step.bgImage && (
+                <div className="relative h-48 w-full overflow-hidden">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center scale-105"
+                    style={{ backgroundImage: step.bgImage }}
+                  />
+                  <div className={`absolute inset-0 ${step.bgOverlay}`} />
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center">
+                    <span className="text-primary font-bold text-lg">{step.number}</span>
+                  </div>
+                </div>
+              )}
+              
+              {/* Content Section */}
+              <div className="p-6">
+                <h3 className="text-2xl font-bold text-slate-900 mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-base text-slate-600 leading-relaxed">
+                  {step.highlight.text ? (
+                    <>
+                      {step.highlight.before}
+                      <span className="font-semibold text-primary">{step.highlight.text}</span>
+                      {step.highlight.after}
+                    </>
+                  ) : (
+                    step.description
+                  )}
+                </p>
+                {index === 2 && (
+                  <div className="mt-6">
+                    <Button
+                      onClick={scrollToForm}
+                      className="w-full bg-accent hover:bg-accent/90 text-white font-semibold py-3 rounded-xl"
+                    >
+                      Request a Tutor Now
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Desktop Layout - Horizontal Scroll */}
+        <div className="hidden md:flex md:h-full md:w-[300vw]">
           {steps.map((step, index) => {
             const isDarkBg = index > 0;
             const activeDotClass = isDarkBg ? 'bg-white' : 'bg-primary';
@@ -200,7 +258,7 @@ export default function HowItWorksSection({ formRef }) {
               <div 
                 key={index}
                 className="panel w-screen h-full flex-shrink-0 flex items-center justify-center p-8 bg-cover bg-center relative"
-                style={{ perspective: '1000px' }} // Add perspective for 3D rotation
+                style={{ perspective: '1000px' }} 
               >
                 {/* Background Image & Overlay */}
                 {step.bgImage && (
@@ -213,14 +271,14 @@ export default function HowItWorksSection({ formRef }) {
                   </>
                 )}
 
-                <div className={`absolute inset-0 flex items-center justify-center text-8xl lg:text-9xl font-extrabold ${step.accentColor} opacity-10 pointer-events-none`}>
+                <div className={`absolute inset-0 flex items-center justify-center text-9xl font-extrabold ${step.accentColor} opacity-10 pointer-events-none`}>
                   {step.number}
                 </div>
                 <div className="max-w-4xl mx-auto text-center z-10 px-4">
-                  <h2 className={`step-title text-5xl lg:text-7xl font-bold mb-6 leading-tight ${step.textColor}`}>
+                  <h2 className={`step-title text-7xl font-bold mb-6 leading-tight ${step.textColor}`}>
                     {step.title}
                   </h2>
-                  <p className={`step-description text-2xl lg:text-3xl leading-relaxed max-w-3xl mx-auto mb-8 ${step.textColor}`}>
+                  <p className={`step-description text-3xl leading-relaxed max-w-3xl mx-auto mb-8 ${step.textColor}`}>
                     {step.highlight.text ? (
                       <>
                         {step.highlight.before}
@@ -260,11 +318,6 @@ export default function HowItWorksSection({ formRef }) {
           })}
         </div>
       </div>
-      <style jsx global>{`
-        .will-change-transform-opacity {
-          will-change: transform, opacity;
-        }
-      `}</style>
     </section>
   );
 }
