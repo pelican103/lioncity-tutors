@@ -4,26 +4,36 @@ import { EDUCATION_LEVELS, getSubjectsForLevel, RATE_MAPPINGS } from '../../../p
 
 function normalizePhone(phone) {
   console.log('normalizePhone - Input:', phone);
-  const cleaned = phone.replace(/\D/g, ''); // Remove non-digits
-  const variations = [cleaned, phone]; // Include raw input
-  if (cleaned.startsWith('65') && cleaned.length === 10) {
-    variations.push(cleaned.slice(2)); // '65XXXXXXXX' -> 'XXXXXXXX'
-    variations.push(`+${cleaned}`); // '65XXXXXXXX' -> '+65XXXXXXXX'
-  } else if (cleaned.length === 8) {
-    variations.push(`65${cleaned}`); // 'XXXXXXXX' -> '65XXXXXXXX'
-    variations.push(`+65${cleaned}`); // 'XXXXXXXX' -> '+65XXXXXXXX'
-  } else if (cleaned.startsWith('1') && cleaned.length === 11) {
-    variations.push(cleaned.slice(1)); // '1XXXXXXXXXX' -> 'XXXXXXXXXX'
+  
+  if (!phone || typeof phone !== 'string') {
+    return [];
   }
-  // Handle formats like +65-XXXXXXXX, +65 XXXXXXXX, or +65-XXXX-XXXX
-  if (phone.includes('-') || phone.includes(' ') || phone.includes('+')) {
-    variations.push(cleaned.startsWith('65') ? cleaned.slice(2) : cleaned);
-    variations.push(`+65${cleaned.startsWith('65') ? cleaned.slice(2) : cleaned}`);
-    variations.push(`65${cleaned.startsWith('65') ? cleaned.slice(2) : cleaned}`);
-    variations.push(cleaned.replace(/^65/, '+65')); // Ensure +65XXXXXXXX
-  }
-  console.log('normalizePhone - Variations:', variations);
-  return [...new Set(variations)]; // Remove duplicates
+  
+  // Remove all non-digits, then remove leading 65 if present
+  const normalized = phone.replace(/\D/g, '').replace(/^65/, '');
+  
+  if (!normalized) return [];
+  
+  // Generate all possible variations that might exist in your DB
+  const variations = [
+    normalized,                                      // 96571013
+    `65${normalized}`,                              // 6596571013
+    `+65${normalized}`,                             // +6596571013
+    `+65 ${normalized}`,                            // +65 96571013
+    normalized.replace(/(\d{4})(\d{4})/, '$1 $2'), // 9657 1013
+    normalized.replace(/(\d{4})(\d{4})/, '$1-$2'), // 9657-1013
+    `65${normalized.replace(/(\d{4})(\d{4})/, '$1 $2')}`, // 659657 1013
+    `65 ${normalized}`,                             // 65 96571013
+    `65 ${normalized.replace(/(\d{4})(\d{4})/, '$1 $2')}`, // 65 9657 1013
+    `+65${normalized.replace(/(\d{4})(\d{4})/, '$1 $2')}`, // +659657 1013
+    `+65 ${normalized.replace(/(\d{4})(\d{4})/, '$1 $2')}`, // +65 9657 1013
+    phone // Include original input as well
+  ];
+  
+  // Remove duplicates and empty strings
+  const uniqueVariations = [...new Set(variations)].filter(v => v.length > 0);
+  console.log('normalizePhone - Variations:', uniqueVariations);
+  return uniqueVariations;
 }
 
 function initializeTeachingLevels(tutor) {
