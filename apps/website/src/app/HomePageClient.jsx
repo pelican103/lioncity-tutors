@@ -16,6 +16,9 @@ import dynamic from 'next/dynamic';
 import ReviewStrip from "@/components/ReviewStrip";
 import TestimonialAutoScroller from "@/components/TestimonialAutoScroller";
 import SubjectSpotlightSection from "@/components/SubjectSpotlightSection";
+import FloatingTrustBadge from "@/components/FloatingTrustBadge";
+import ScrollProgress from "@/components/ScrollProgress";
+import BackToTop from "@/components/BackToTop";
 
 // Loading spinner component
 const LoadingSpinner = () => (
@@ -104,95 +107,125 @@ export default function HomePageClient() {
 
   return (
     <>
+      <ScrollProgress />
+      <BackToTop />
       <main ref={main} className="bg-background-default text-text-default">
         <TutorPopup />
+        <FloatingTrustBadge />
         {/* Hero Section */}
-        <section className="hero-section section-padding bg-background-card px-4 overflow-hidden">
-          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
-            <div className="hero-content">
-            {/* Animated Text Content */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.2, // This will animate children one by one
+        {/* Hero Section - Enhanced Mobile */}
+        <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center bg-background-default px-4 sm:px-6 overflow-hidden">
+          {/* Subtle gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background-subtle/30 to-background-default pointer-events-none" />
+          
+          <div className="relative max-w-7xl mx-auto w-full py-12 sm:py-16 md:py-20">
+            <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+              {/* Text Content */}
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.15,
+                    },
                   },
-                },
-              }}
-            >
-              <motion.h1
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="text-4xl md:text-5xl font-bold text-primary leading-tight"
+                }}
+                className="text-center lg:text-left order-2 lg:order-1"
               >
-                Find Your Perfect Tutor.
-                <span className="text-text-default"> Zero Agency Fees.</span>
-              </motion.h1>
-              
-              <motion.div
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="mt-4 flex flex-wrap items-center gap-4 justify-center sm:justify-start"
-              >
-                <div className="flex items-center gap-2 bg-background-subtle px-4 py-2 rounded-full">
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                    ))}
+                <motion.h1
+                  variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary leading-[1.1] tracking-tight mb-4 sm:mb-6"
+                >
+                  Find Your Perfect Tutor.
+                  <span className="block text-text-default/80 mt-2">Zero Agency Fees.</span>
+                </motion.h1>
+                
+                <motion.p
+                  variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-lg sm:text-xl md:text-2xl text-text-default/80 leading-relaxed mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0"
+                >
+                  Connect with top-rated, MOE-familiar tutors for PSLE, O-Level, and JC subjects. Get qualified profiles within 24 hours.
+                </motion.p>
+
+                <motion.div
+                  variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 justify-center lg:justify-start mb-6 sm:mb-8"
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-full sm:w-auto"
+                  >
+                    <Button
+                      className="relative bg-accent hover:bg-accent/90 text-white font-semibold px-6 sm:px-8 py-4 sm:py-5 rounded-full text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto overflow-hidden group"
+                      onClick={scrollToForm}
+                    >
+                      <span className="relative z-10">Get Started</span>
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-accent to-primary"
+                        initial={{ x: '-100%' }}
+                        whileHover={{ x: 0 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    </Button>
+                  </motion.div>
+                  
+                  <motion.a
+                    href="https://wa.me/6588701152?text=Hi%20LionCity%20Tutors%2C%20I%27m%20looking%20for%20a%20tutor."
+                    target="_blank"
+                    rel="noreferrer"
+                    whileHover={{ x: 5 }}
+                    className="text-accent font-medium flex items-center gap-2 transition-all duration-300 text-base sm:text-lg w-full sm:w-auto justify-center group"
+                  >
+                    <Phone className="w-5 h-5" />
+                    <span>Chat on WhatsApp</span>
+                    <motion.svg 
+                      className="w-5 h-5" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </motion.svg>
+                  </motion.a>
+                </motion.div>
+                
+                <motion.div
+                  variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex flex-wrap items-center gap-4 sm:gap-6 justify-center lg:justify-start text-sm sm:text-base"
+                >
+                  <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm">
+                    <div className="flex items-center gap-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                    <span className="text-text-default font-medium">4.8/5 on Google</span>
                   </div>
-                  <span className="text-sm font-semibold text-text-default">4.8/5 on Google</span>
-                </div>
-                
-                <div className="flex items-center gap-2 text-sm text-text-default/70">
-                  <CheckCircle className="w-4 h-4 text-primary" />
-                  <span>100+ families matched</span>
-                </div>
+                  
+                  <div className="flex items-center gap-2 text-text-default/70">
+                    <CheckCircle className="w-4 h-4 text-accent" />
+                    <span>100+ families matched</span>
+                  </div>
+                </motion.div>
               </motion.div>
-              
-              <motion.p
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="mt-4 text-text-default text-lg"
-              >
-                We connect you with top-rated, MOE-familiar tutors for PSLE, O-Level, and JC subjects. Get qualified profiles within 24 hours. Your child's success starts here.
-              </motion.p>
 
+              {/* Image */}
               <motion.div
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="relative h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl order-1 lg:order-2"
               >
-                <Button
-                  className="bg-accent hover:opacity-90 text-text-inverse font-semibold px-8 py-6 rounded-xl shadow-lg text-xl w-full sm:w-auto"
-                  onClick={scrollToForm}
-                >
-                  Get Tutor Profiles Now
-                </Button>
-                
-                <a
-                  href="https://wa.me/6588701152?text=Hi%20LionCity%20Tutors%2C%20I%27m%20looking%20for%20a%20tutor."
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-primary font-medium flex items-center gap-2 hover:underline w-full sm:w-auto justify-center transition-all"
-                >
-                  <Phone className="w-5 h-5" />
-                  Or chat on WhatsApp
-                </a>
-              </motion.div>
-            </motion.div>
-            </div>
-
-            {/* Animated Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-              className="rounded-2xl overflow-hidden shadow-inner h-64 md:h-80 relative mt-8 md:mt-0 hero-image"
-            >
               <Image 
                 src="/final.webp" 
                 alt="A dedicated tutor helping a student." 
@@ -203,35 +236,59 @@ export default function HomePageClient() {
               />
             </motion.div>
           </div>
+        </div>
         </section>
         
         <ReviewStrip />
         
-        {/* Stats */}
-        <section className="section-padding-sm bg-background-subtle">
+        {/* Stats - Enhanced Mobile */}
+        <section className="py-16 sm:py-20 md:py-24 bg-background-default">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              viewport={{ once: true, amount: 0.5 }} // Triggers when 20% of the section is visible
-              className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true, amount: 0.2 }}
+              className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
             >
-            {[
-              { icon: <TrendingUp className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 100, suffix: "+", label: "Successful Matches", sub: "In the last 3 months across SG" },
-              { icon: <Users className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 150, suffix: "+", label: "Qualified Tutors", sub: "Carefully vetted professionals" },
-              { icon: <Clock className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 24, suffix: "h", label: "Response Time", sub: "Most matched within 6h" },
-              { icon: <Star className="w-8 h-8 mx-auto mb-2 text-primary" />, end: 4.8, suffix: "/5", label: "Client Rating", sub: "From happy parents", decimals: 1 }
-            ].map((stat, i) => (
-              <motion.div key={i} whileHover={{ scale: 1.05 }} viewport={{ once: true }} className="p-6 bg-background-card rounded-lg shadow-sm border border-border">
-                {stat.icon}
-                <div className="text-4xl font-bold text-primary mb-2">
-                  <Counter end={stat.end} suffix={stat.suffix} decimals={stat.decimals || 0} />
-                </div>
-                <p className="text-text-default font-semibold">{stat.label}</p>
-                <p className="text-text-default/70 text-sm">{stat.sub}</p>
-              </motion.div>
-            ))}
-          </motion.div>
+              {[
+                { icon: TrendingUp, end: 100, suffix: "+", label: "Successful Matches", sub: "Last 3 months", color: "from-blue-500/10 to-primary/10" },
+                { icon: Users, end: 150, suffix: "+", label: "Qualified Tutors", sub: "Vetted professionals", color: "from-purple-500/10 to-accent/10" },
+                { icon: Clock, end: 24, suffix: "h", label: "Response Time", sub: "Average match time", color: "from-green-500/10 to-primary/10" },
+                { icon: Star, end: 4.8, suffix: "/5", label: "Client Rating", sub: "From happy parents", decimals: 1, color: "from-yellow-500/10 to-accent/10" }
+              ].map((stat, i) => {
+                const Icon = stat.icon;
+                return (
+                  <motion.div 
+                    key={i} 
+                    initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -4, scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="relative bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-md hover:shadow-xl border border-border/50 transition-all duration-300 overflow-hidden group"
+                  >
+                    {/* Gradient background on hover */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    
+                    <div className="relative z-10 text-center">
+                      <div className="mb-3 sm:mb-4 flex justify-center">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl sm:rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                          <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary group-hover:text-accent transition-colors duration-300" />
+                        </div>
+                      </div>
+                      <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-2 sm:mb-3 tracking-tight">
+                        <Counter end={stat.end} suffix={stat.suffix} decimals={stat.decimals || 0} />
+                      </div>
+                      <p className="text-sm sm:text-base md:text-lg font-semibold text-primary mb-1">{stat.label}</p>
+                      <p className="text-xs sm:text-sm text-text-default/70">{stat.sub}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
         </section>
 
         <HowitWorksSection formRef={formRef} />

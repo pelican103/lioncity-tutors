@@ -47,7 +47,7 @@ export default function TutorPopup() {
   if (!showPopup) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[100] animate-fadeIn">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg relative transform animate-scaleIn">
         {/* Close button */}
         <button aria-label="Close popup"

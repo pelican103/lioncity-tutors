@@ -28,41 +28,49 @@ function FAQItem({ faq, isOpen, onClick }) {
     open: {
       opacity: 1,
       height: "auto",
-      transition: { duration: 0.3, ease: "easeOut" }
+      transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
     },
     closed: {
       opacity: 0,
       height: 0,
-      transition: { duration: 0.3, ease: "easeIn" }
+      transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
     }
   };
 
   return (
-    // SEO & Accessibility: Using <details> and <summary> is semantically correct for accordions.
-    // It's accessible by default (keyboard navigable, screen-reader friendly).
-    // We prevent the default toggle behavior to let our state and animation handle it.
-    <details
-      className="bg-background-card rounded-lg shadow-sm overflow-hidden border border-border"
+    <motion.details
+      className={`bg-white rounded-2xl sm:rounded-3xl shadow-md hover:shadow-lg overflow-hidden border transition-all duration-300 ${
+        isOpen ? 'border-primary/50' : 'border-border/50'
+      }`}
       open={isOpen}
       onClick={(e) => {
-        e.preventDefault(); // Prevent default browser toggle
+        e.preventDefault();
         onClick();
       }}
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.2 }}
     >
       <summary
-        className="w-full flex justify-between items-center p-6 text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        className="w-full flex justify-between items-start sm:items-center gap-4 p-5 sm:p-6 md:p-8 text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 group"
       >
-        {/* SEO: The question is now a proper heading, improving the document outline. */}
-        <h3 className="text-lg font-semibold text-primary">{faq.question}</h3>
+        <h3 className="text-base sm:text-lg md:text-xl font-semibold text-primary group-hover:text-accent transition-colors duration-300 leading-snug">
+          {faq.question}
+        </h3>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="flex-shrink-0"
         >
-          <ChevronDown className="text-primary" />
+          <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-colors duration-300 ${
+            isOpen ? 'bg-primary/10' : 'bg-background-subtle'
+          }`}>
+            <ChevronDown className={`w-5 h-5 transition-colors duration-300 ${
+              isOpen ? 'text-primary' : 'text-text-default/60'
+            }`} />
+          </div>
         </motion.div>
       </summary>
       
-      {/* Performance Fix: AnimatePresence controls the enter/exit animations. */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
@@ -71,16 +79,15 @@ function FAQItem({ faq, isOpen, onClick }) {
             animate="open"
             exit="closed"
             variants={itemVariants}
-            className="px-6 text-text-default/90"
+            className="px-5 sm:px-6 md:px-8 text-text-default/90"
           >
-            {/* The padding-bottom is now part of the content div to be included in the animation */}
-            <div className="pb-6">
+            <div className="pb-5 sm:pb-6 md:pb-8 pt-2 text-base sm:text-lg leading-relaxed border-t border-border/30">
               {faq.answer}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </details>
+    </motion.details>
   );
 }
 
@@ -107,17 +114,34 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="py-20 px-6 bg-background-default">
+    <section className="py-20 md:py-32 px-4 sm:px-6 bg-background-subtle">
       {/* Add the schema script to the head of your document */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold mb-12 text-center text-primary">
-          Frequently Asked Questions
-        </h2>
-        <div className="space-y-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true }}
+          className="text-center mb-12 md:mb-16"
+        >
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-primary mb-4 tracking-tight">
+            Frequently Asked<br className="sm:hidden" /> Questions
+          </h2>
+          <p className="text-lg md:text-xl text-text-default/80 max-w-2xl mx-auto">
+            Everything you need to know about our tuition matching service
+          </p>
+        </motion.div>
+        <motion.div 
+          className="space-y-3 sm:space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, staggerChildren: 0.1 }}
+          viewport={{ once: true }}
+        >
           {faqs.map((faq, index) => (
             <FAQItem
               key={index}
@@ -126,7 +150,7 @@ export default function FAQSection() {
               onClick={() => toggleFAQ(index)}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

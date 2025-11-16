@@ -38,40 +38,40 @@ const uniqueFeatures = [
 export default function UniqueFeaturesSection() {
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+    visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: "easeOut" } }
-  };
-  
-  const contentVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.4,
-        ease: "easeOut"
-      }
+    hidden: { opacity: 0, y: 60, scale: 0.9 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1, 
+      transition: { 
+        duration: 0.7, 
+        ease: [0.16, 1, 0.3, 1] 
+      } 
     }
   };
 
   return (
-    <section className="py-12 sm:py-20 px-4 sm:px-6 bg-background-default">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-20 sm:py-32 px-6 bg-gradient-to-b from-background-default to-background-subtle relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute top-20 right-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+      
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-primary leading-tight">
-            Why Parents in Singapore Choose Us
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-primary leading-tight tracking-tight mb-6">
+            Why Parents in Singapore<br />Choose Us
           </h2>
-          <p className="mt-4 text-lg text-text-default/90 max-w-2xl mx-auto">
+          <p className="text-xl text-text-default/80 max-w-3xl mx-auto leading-relaxed">
             We go beyond just finding a tutor. We deliver a comprehensive, supportive, and results-driven experience.
           </p>
         </motion.div>
@@ -80,39 +80,41 @@ export default function UniqueFeaturesSection() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {uniqueFeatures.map((feature, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
               whileHover={{
-                y: -8,
-                boxShadow: "0 15px 30px rgba(0, 0, 0, 0.1)",
-                transition: { duration: 0.2 }
+                y: -12,
+                transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
               }}
-              className="bg-background-card p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center border border-border border-b-4 border-b-transparent hover:border-b-primary transition-all duration-300"
+              className="group relative bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl flex flex-col items-start text-left border border-border/50 transition-all duration-500 overflow-hidden"
             >
+              {/* Gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Icon with animated background */}
               <motion.div
-                className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-5"
+                whileHover={{ rotate: 360, scale: 1.1 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+                className="relative w-16 h-16 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center mb-6 group-hover:shadow-lg transition-shadow duration-300"
               >
-                <feature.icon className="w-9 h-9 text-primary" />
+                <feature.icon className="w-8 h-8 text-primary group-hover:text-accent transition-colors duration-300" />
               </motion.div>
               
-              <motion.h3
-                variants={contentVariants}
-                className="text-xl sm:text-2xl font-bold text-primary mb-2 leading-snug"
-              >
+              <h3 className="relative text-2xl font-semibold text-primary mb-3 leading-tight group-hover:text-accent transition-colors duration-300">
                 {feature.title}
-              </motion.h3>
+              </h3>
               
-              <motion.p
-                variants={contentVariants}
-                className="text-sm text-text-default leading-relaxed"
-              >
+              <p className="relative text-base text-text-default/80 leading-relaxed">
                 {feature.description}
-              </motion.p>
+              </p>
+              
+              {/* Bottom accent line */}
+              <div className="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-500" />
             </motion.div>
           ))}
         </motion.div>
